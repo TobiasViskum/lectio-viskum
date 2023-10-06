@@ -6,6 +6,7 @@ export const revalidate = 86400;
 export const getSchools = cache(async () => {
   const browser = await puppeteer.launch({
     headless: "new",
+    args: ["--no-sandbox"],
   });
   const page = await browser.newPage();
   await page.goto("https://www.lectio.dk/lectio/login_list.aspx?showall=1");

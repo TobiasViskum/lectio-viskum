@@ -5,6 +5,7 @@ type Props = { targetPage: string };
 export async function getAuthenticatedPage({ username, password, targetPage }: StandardProps & Props) {
   const browser = await puppeteer.launch({
     headless: "new",
+    args: ["--no-sandbox"],
   });
   const page = await browser.newPage();
   await page.goto("https://www.lectio.dk/lectio/243/login.aspx");
