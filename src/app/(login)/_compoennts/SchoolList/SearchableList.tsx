@@ -15,28 +15,19 @@ export function SearchableList({ strSchools }: { strSchools: string }) {
     });
   }, []);
 
+  const items = schools.filter((school) => school.name.toLowerCase().includes(search.toLowerCase()));
+
   return (
     <>
-      {schools.map((school, index) => {
-        if (search === "") {
-          return (
-            <>
-              <div key={school.name} className="text-sm font-semibold">
-                {school.name}
-              </div>
-              <Separator className="my-2" />
-            </>
-          );
-        } else if (school.name.toLowerCase().includes(search.toLowerCase())) {
-          return (
-            <>
-              <div key={school.name} className="text-sm font-semibold">
-                {school.name}
-              </div>
-              <Separator className="my-2" />
-            </>
-          );
-        }
+      {items.map((school, index) => {
+        return (
+          <>
+            <div key={school.name} className="text-sm font-semibold">
+              {school.name}
+            </div>
+            {items.length !== 1 ? <Separator className="my-2" /> : null}
+          </>
+        );
       })}
     </>
   );
