@@ -24,12 +24,13 @@ function TitleSkeleton() {
 }
 
 export default async function SchoolCodePage({ params, searchParams }: Props) {
-  const schoolPromise = getSchool({ schoolCode: params.schoolCode });
+  // const schoolPromise = getSchool({ schoolCode: params.schoolCode });
 
   return (
     <div className="grid place-items-center pt-8 gap-y-8 sm:gap-y-12">
       <Suspense fallback={<TitleSkeleton />}>
-        <Title name={searchParams.name} schoolPromise={schoolPromise} />
+        {/* <Title name={searchParams.name} schoolPromise={schoolPromise} /> */}
+        {searchParams.name}
       </Suspense>
 
       <div className="w-full flex items-center flex-col gap-y-4">
