@@ -8,9 +8,6 @@ type Props = {
   params: {
     schoolCode: string;
   };
-  searchParams: {
-    name?: string;
-  };
 };
 
 function TitleSkeleton() {
@@ -23,14 +20,11 @@ function TitleSkeleton() {
   );
 }
 
-export default async function SchoolCodePage({ params, searchParams }: Props) {
-  // const schoolPromise = getSchool({ schoolCode: params.schoolCode });
-
+export default async function SchoolCodePage({ params }: Props) {
   return (
     <div className="grid place-items-center pt-8 gap-y-8 sm:gap-y-12">
       <Suspense fallback={<TitleSkeleton />}>
-        {/* <Title name={searchParams.name} schoolPromise={schoolPromise} /> */}
-        {searchParams.name}
+        <Title schoolCode={params.schoolCode} />
       </Suspense>
 
       <div className="w-full flex items-center flex-col gap-y-4">

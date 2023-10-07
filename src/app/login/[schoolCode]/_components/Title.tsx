@@ -1,24 +1,20 @@
+import { lectioAPI } from "@/lib/lectio-api";
+import { cn } from "@/lib/utils";
+
 type Props = {
-  schoolPromise?: Promise<School | null>;
-  name?: string;
+  schoolCode: string;
 };
 
-export async function Title({ name, schoolPromise }: Props) {
+export async function Title({ schoolCode }: Props) {
   const titleTw = "sm:text-4xl text-3xl leading-snug font-semibold flex flex-col [text-wrap:balance] text-center";
 
-  if (name) {
-    return (
-      <>
-        <h1 className={titleTw}>{name}</h1>
-      </>
-    );
-  } else if (schoolPromise) {
-    const school = await schoolPromise;
-    if (school === null) return <>Error</>;
-    return (
-      <>
-        <h1 className={titleTw}>{school.name}</h1>
-      </>
-    );
-  }
+  const school = await lectioAPI.getSchool({ schoolCode: schoolCode });
+
+  if (school === null) return <p className={cn(titleTw, "text-red-400")}>Error</p>;
+
+  return (
+    <>
+      <h1 className={titleTw}>{school.name}</h1>
+    </>
+  );
 }
