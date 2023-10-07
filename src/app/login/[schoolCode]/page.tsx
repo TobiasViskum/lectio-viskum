@@ -9,7 +9,6 @@ type Props = {
     schoolCode: string;
   };
   searchParams: {
-    href?: string;
     name?: string;
   };
 };
