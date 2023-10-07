@@ -8,7 +8,7 @@ export function SidebarWrapper({ children }: Props) {
   const path = usePathname();
 
   if (path.includes("/login")) {
-    return <div className="w-full flex justify-center">{children}</div>;
+    return <div className="w-full">{children}</div>;
   }
 
   return (

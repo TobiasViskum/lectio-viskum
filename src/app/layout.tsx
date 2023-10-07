@@ -18,6 +18,9 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scaleable=no" />
+      </head>
       <body className={cn(inter.className, "overflow-x-hidden overflow-y-auto flex flex-col items-center")}>
         <ThemeProvider defaultTheme="dark" forcedTheme="dark">
           <Navbar />

@@ -9,7 +9,8 @@ type Props = {
 export async function Title({ schoolCode }: Props) {
   const titleTw = "sm:text-4xl text-3xl leading-snug font-semibold flex flex-col [text-wrap:balance] text-center";
 
-  const school = await getSchool({ schoolCode: schoolCode });
+  const school = await lectioAPI.getSchool({ schoolCode: schoolCode });
+  console.log(school);
 
   if (school === null) return <p className={cn(titleTw, "text-red-400")}>Error</p>;
 

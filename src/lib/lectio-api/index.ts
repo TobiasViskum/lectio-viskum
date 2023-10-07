@@ -1,6 +1,6 @@
 "server-only";
 
-const baseUrl = "https://lectio-api.vercel.app";
+const baseUrl = "https://dev07.reactprojects.mywire.org";
 
 type DefaultObject = { [key: string]: string };
 type APIResponse<T> = { message: string } & ({ status: "error" } | { status: "success"; data: T | null });
