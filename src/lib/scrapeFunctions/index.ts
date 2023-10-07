@@ -6,5 +6,6 @@ import { getClassInformation } from "./getClassInformation";
 import { getAllMessages } from "./getAllMessages";
 import { getMessages } from "./getMessages";
 import { getSchools } from "./getSchools";
+import { getSchool } from "./getSchool";
 
-export { getAssignments, getSchedule, getAllTeachers, getTeacherByInitials, getClassInformation, getAllMessages, getMessages, getSchools };
+export { getAssignments, getSchedule, getAllTeachers, getTeacherByInitials, getClassInformation, getAllMessages, getMessages, getSchools, getSchool };

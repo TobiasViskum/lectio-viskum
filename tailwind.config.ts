@@ -1,5 +1,5 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from "tailwindcss";
+const tailwindConfig: Config = {
   darkMode: ["class"],
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   theme: {
@@ -72,19 +72,30 @@ module.exports = {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: 0 },
+          from: { height: "0px" },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
+          to: { height: "0px" },
+        },
+        "dot-flashing": {
+          "0%": {
+            backgroundColor: "rgb(113, 113, 122)",
+          },
+          "50%, 100%": {
+            backgroundColor: "rgba(113, 113, 122, 0.2)",
+          },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "dot-flashing": "dot-flashing 1s infinite alternate",
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
 };
+
+module.exports = tailwindConfig;

@@ -9,7 +9,7 @@ export const getSchools = cache(async () => {
     args: ["--no-sandbox"],
   });
   const page = await browser.newPage();
-  await page.goto("https://www.lectio.dk/lectio/login_list.aspx?showall=1");
+  await page.goto("https://www.lectio.dk/lectio/login_list.aspx");
 
   let schools: School[] = [];
   try {
@@ -25,5 +25,8 @@ export const getSchools = cache(async () => {
   await page.browser().close();
 
   if (schools.length === 0) return null;
+
+  schools = schools.filter((school) => school.name !== "Vis alle skoler");
+
   return schools;
 });

@@ -1,22 +1,17 @@
-import { getSchools } from "@/lib/scrapeFunctions";
 import { RetryButton } from "../RetryButton";
-import { Separator } from "@/components/ui/separator";
 import { SearchableList } from "./SearchableList";
+import { lectioAPI } from "@/lib/lectio-api";
 
 export async function SchoolList() {
-  const schools = await getSchools();
+  const schools = await lectioAPI.getAllSchools();
 
-  if (schools === null) {
-    return (
-      <div>
+  return (
+    <>
+      <div className={schools === null ? "block" : "hidden"}>
         <p className="pt-4 font-medium  text-red-400 text-sm">An error happened</p>
         <RetryButton />
       </div>
-    );
-  }
-  return (
-    <>
-      <div>
+      <div className={schools === null ? "hidden" : "block"}>
         <SearchableList strSchools={JSON.stringify(schools)} />
       </div>
     </>
