@@ -1,6 +1,6 @@
 import { getAuthenticatedPage } from "../getAuthenticatedPage";
 
-type MessageTypes = "All" | "Newest" | "Unread" | "Deleted" | "Personal";
+type MessageTypes = "all" | "newest" | "unread" | "deleted" | "personal";
 type Message = {
   title: string;
   latestSender: string;
@@ -10,7 +10,7 @@ type Message = {
 };
 type Props = { type: MessageTypes };
 
-export async function getMessages({ username, password, type, gym }: StandardProps & Props): Promise<
+export async function getMessages({ username, password, type, schoolCode }: StandardProps & Props): Promise<
   | {
       title: string;
       latestSender: string;
@@ -18,15 +18,14 @@ export async function getMessages({ username, password, type, gym }: StandardPro
       receivers: string;
       latestChange: string;
     }[]
-  | Promise<"No messages">
   | null
 > {
   const typeMap: { [key in MessageTypes]: string } = {
-    Personal: `https://www.lectio.dk/lectio/${gym}/beskeder2.aspx?type=&selectedfolderid=-10`,
-    All: `https://www.lectio.dk/lectio/${gym}/beskeder2.aspx?type=&selectedfolderid=-30`,
-    Deleted: `https://www.lectio.dk/lectio/${gym}/beskeder2.aspx?type=&selectedfolderid=-60`,
-    Newest: `https://www.lectio.dk/lectio/${gym}/beskeder2.aspx?type=&selectedfolderid=-70`,
-    Unread: `https://www.lectio.dk/lectio/${gym}/beskeder2.aspx?type=&selectedfolderid=-40`,
+    personal: `https://www.lectio.dk/lectio/${schoolCode}/beskeder2.aspx?type=&selectedfolderid=-10`,
+    all: `https://www.lectio.dk/lectio/${schoolCode}/beskeder2.aspx?type=&selectedfolderid=-30`,
+    deleted: `https://www.lectio.dk/lectio/${schoolCode}/beskeder2.aspx?type=&selectedfolderid=-60`,
+    newest: `https://www.lectio.dk/lectio/${schoolCode}/beskeder2.aspx?type=&selectedfolderid=-70`,
+    unread: `https://www.lectio.dk/lectio/${schoolCode}/beskeder2.aspx?type=&selectedfolderid=-40`,
   } as const;
 
   try {
@@ -36,15 +35,15 @@ export async function getMessages({ username, password, type, gym }: StandardPro
       username: username,
       password: password,
       targetPage: targetPage,
-      gym: gym,
+      schoolCode: schoolCode,
     });
 
-    if (type === "All") {
+    if (type === "all") {
       await Promise.all([page.waitForNavigation(), page.click('div[lec-node-id="-30"] > div[lec-role="ltv-sublist"] > div:first-child > div > a')]);
       await Promise.all([page.waitForNavigation(), page.click('td[colspan="9"] > table > tbody > tr > td:last-child > a')]);
     }
 
-    let messages: Message[] | "No messages" = "No messages";
+    let messages: Message[] = [];
     try {
       messages = await page.$$eval("#s_m_Content_Content_threadGV_ctl00 > tbody > tr:not([class])", (elements) => {
         const allReceiversElement = Array.from(document.querySelectorAll('div[lec-node-id="-20"] > div[lec-role="ltv-sublist"] > div > div > a > div'));
@@ -94,7 +93,7 @@ export async function getMessages({ username, password, type, gym }: StandardPro
     await page.browser().close();
 
     if (messages.length === 0) {
-      return "No messages";
+      return null;
     }
 
     return messages;

@@ -1,30 +1,15 @@
-import puppeteer from "puppeteer";
-import { cache } from "react";
-
-export const revalidate = 86400;
+import { getAllSchools } from ".";
 
 type Props = { schoolCode: string };
 
-export const getSchool = cache(async ({ schoolCode }: Props) => {
-  const browser = await puppeteer.launch({
-    headless: "new",
-    args: ["--no-sandbox"],
-  });
-  const page = await browser.newPage();
-  await page.goto("https://www.lectio.dk/lectio/login_list.aspx");
+export async function getSchool({ schoolCode }: Props) {
+  const schools = await getAllSchools("sdgsg");
+  if (schools === null) return null;
+  if (schools === null) return null;
 
-  let school: School | null = null;
-  try {
-    school = await page.$eval(`a[href*="${schoolCode}"]`, (a) => {
-      return { href: a.href, schoolCode: a.href.match(/[0-9]+/)![0], name: a.text };
-    });
-  } catch {
-    return null;
-  }
+  const school = schools.find((obj) => obj.schoolCode === schoolCode);
 
-  await page.browser().close();
-
-  if (school === null) return null;
+  if (school === undefined) return null;
 
   return school;
-});
+}

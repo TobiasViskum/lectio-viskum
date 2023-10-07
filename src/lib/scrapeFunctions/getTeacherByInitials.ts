@@ -5,12 +5,12 @@ type Props = {
   initials: string;
 };
 
-export async function getTeacherByInitials({ username, password, initials, gym }: StandardProps & Props) {
+export async function getTeacherByInitials({ username, password, initials, schoolCode }: StandardProps & Props) {
   try {
-    const teachers = await getAllTeachers({ username: username, password: password, gym: gym });
+    const teachers = await getAllTeachers({ username: username, password: password, schoolCode: schoolCode });
 
     if (teachers === null) return null;
-    if (teachers.length === 0) return null;
+    if (teachers === null) return null;
 
     const foundTeacher = teachers.find((teacher) => {
       return teacher.initials === initials;
@@ -18,13 +18,13 @@ export async function getTeacherByInitials({ username, password, initials, gym }
 
     if (foundTeacher) {
       if (foundTeacher.img === "") {
-        const teacherId = foundTeacher.href.split("laererid=")[1];
+        const teacherId = foundTeacher.teacherId;
 
         const page = await getAuthenticatedPage({
           username: username,
           password: password,
-          gym: gym,
-          targetPage: `https://www.lectio.dk/lectio/${gym}/DokumentOversigt.aspx?laererid=${teacherId}&folderid=T${teacherId}__5`,
+          schoolCode: schoolCode,
+          targetPage: `https://www.lectio.dk/lectio/${schoolCode}/DokumentOversigt.aspx?laererid=${teacherId}&folderid=T${teacherId}__5`,
         });
         const imageHref = await page.$eval("#s_m_HeaderContent_picctrlthumbimage", (elem) => {
           return elem.getAttribute("src") as string;

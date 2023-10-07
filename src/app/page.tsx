@@ -1,4 +1,4 @@
-import { getAssignments, getSchools } from "@/lib/scrapeFunctions";
+import { getAssignments } from "@/lib/scrapeFunctions";
 
 export default async function Home() {
   return <div>d</div>;

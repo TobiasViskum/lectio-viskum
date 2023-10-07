@@ -1,7 +1,7 @@
 type StandardProps = {
   username: string;
   password: string;
-  gym: number;
+  schoolCode: number;
 };
 
 type School = {

@@ -5,6 +5,8 @@ import { Navbar } from "./_components/Navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { SidebarWrapper } from "./_components/SidebarWrapper";
+import { CacheResetter } from "./_components/CacheResetter";
+import { revalidatePath } from "next/cache";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +27,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </SidebarWrapper>
           </div>
         </ThemeProvider>
+        {/* <CacheResetter /> */}
       </body>
     </html>
   );
