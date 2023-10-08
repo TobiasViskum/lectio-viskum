@@ -1,4 +1,3 @@
-import { getAllSchools } from "@/lib/scrapeFunctions";
 import { RetryButton } from "../RetryButton";
 import { SearchableList } from "./SearchableList";
 import { lectioAPI } from "@/lib/lectio-api";

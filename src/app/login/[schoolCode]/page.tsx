@@ -1,10 +1,8 @@
 import { Label } from "@/components/ui/label";
-import { getSchool } from "@/lib/scrapeFunctions";
 import { Title } from "./_components/Title";
-import { Suspense } from "react";
-import { LoadingDots } from "@/components/loading-components/LoadingDots";
 import { lectioAPI } from "@/lib/lectio-api";
 import { Input } from "@/components/ui/input";
+import { LoginForm } from "./_components/LoginForm";
 
 type Props = {
   params: {
@@ -22,10 +20,10 @@ export default async function SchoolCodePage({ params, searchParams }: Props) {
     <div className="grid place-items-center pt-8 gap-y-8 sm:gap-y-12">
       <Title schoolPromise={promise} name={searchParams.name} />
 
-      <div className="w-full flex items-center flex-col gap-y-4">
+      <div className="w-full flex items-center flex-col gap-y-8 max-w-sm">
         <Label className="text-muted-foreground">Log ind:</Label>
 
-        <Input className="" type="password" />
+        <LoginForm />
       </div>
     </div>
   );
