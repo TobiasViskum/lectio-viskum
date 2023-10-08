@@ -8,3 +8,7 @@ type School = {
   schoolCode: string;
   name: string;
 };
+
+type LectioAuth = {
+  isAuthenticated: boolean;
+};

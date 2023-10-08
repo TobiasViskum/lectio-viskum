@@ -21,7 +21,7 @@ export default async function SchoolCodePage({ params, searchParams }: Props) {
       <Title schoolPromise={promise} name={searchParams.name} />
 
       <div className="w-full flex items-center flex-col gap-y-8 max-w-sm">
-        <Label className="text-muted-foreground">Log ind:</Label>
+        <Label className="text-muted-foreground">Log ind for at tilgå Lectio</Label>
 
         <LoginForm />
       </div>

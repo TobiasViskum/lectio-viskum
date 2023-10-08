@@ -5,9 +5,7 @@ import { Navbar } from "./_components/Navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { SidebarWrapper } from "./_components/SidebarWrapper";
-import { CacheResetter } from "./_components/CacheResetter";
-import { revalidatePath } from "next/cache";
-
+import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -23,6 +21,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body className={cn(inter.className, "overflow-x-hidden overflow-y-auto flex flex-col items-center")}>
         <ThemeProvider defaultTheme="dark" forcedTheme="dark">
+          <Toaster richColors />
           <Navbar />
           <div className="py-16 w-full">
             <SidebarWrapper>

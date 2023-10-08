@@ -14,12 +14,6 @@ const tailwindConfig: Config = {
       screens: {
         xxs: "320px",
         xs: "480px",
-        short: { raw: "(max-height: 400px)" },
-        desktop: { raw: "(hover: hover)" },
-        touch: { raw: "(hover: none)" },
-        "w-autofill": { raw: ":-webkit-autofill" },
-        standalone: { raw: "(display-mode: standalone)" },
-        browser: { raw: "(display-mode: browser)" },
       },
       fontSize: {
         "2xs": "0.7rem",
