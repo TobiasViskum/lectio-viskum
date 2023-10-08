@@ -16,7 +16,7 @@ export default function LoginPage() {
         <ScrollArea className="h-[512px] max-h-[55svh] w-full max-w-lg relative flex flex-col items-center justify-center text-center pt-4">
           <Suspense fallback={<LoadingSpinner className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2" />}>
             <div className="w-full h-full grid place-items-center">
-              <div className="w-[calc(100%-32px)] h-full">
+              <div className="h-full w-[calc(100%-32px)]">
                 <SchoolList />
               </div>
             </div>
