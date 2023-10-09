@@ -10,6 +10,7 @@ import { RetryButton } from "./RetryButton";
 import { Button } from "@/components/ui/button";
 import { lectioAPI } from "@/lib/lectio-api";
 import { getAllSchools } from "../_actions/getAllSchools";
+import { toast } from "sonner";
 
 type Props = {
   allSchoolsPromise: Promise<School[] | null>;
@@ -24,10 +25,10 @@ export function SchoolList({ allSchoolsPromise }: Props) {
     async function verifyAllSchools() {
       const schools = await allSchoolsPromise;
       if (schools === null) {
+        toast.error("Der skete en fejl");
         setAllSchools(null);
       } else if (JSON.stringify(schools) !== JSON.stringify(optimisticAllSchools)) {
         setAllSchools(schools);
-        console.log("I run");
       }
     }
     verifyAllSchools();

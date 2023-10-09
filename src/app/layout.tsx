@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { SidebarWrapper } from "./_components/SidebarWrapper";
 import { Toaster } from "sonner";
+import { MainClientHandler } from "./_components/MainClientHandler";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -29,7 +30,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </SidebarWrapper>
           </div>
         </ThemeProvider>
-        {/* <CacheResetter /> */}
+        <MainClientHandler />
       </body>
     </html>
   );

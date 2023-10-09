@@ -1,7 +1,7 @@
 import { makeRequest } from ".";
 
 type MainType = School;
-type FunctionProps = { schoolCode: string };
+type FunctionProps = APIProps<{ schoolCode: string }>;
 
 export async function getSchool(props: FunctionProps, getFullResponse?: false | undefined): Promise<MainType | null>;
 export async function getSchool(props: FunctionProps, getFullResponse: true): Promise<APIResponse<MainType> | APIResponse<null>>;

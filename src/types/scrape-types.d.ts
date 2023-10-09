@@ -1,7 +1,7 @@
 type StandardProps = {
   username: string;
   password: string;
-  schoolCode: number;
+  schoolCode: string;
 };
 
 type School = {
@@ -11,4 +11,10 @@ type School = {
 
 type LectioAuth = {
   isAuthenticated: boolean;
+};
+
+type Student = {
+  name: string;
+  studentClass: string;
+  img: string;
 };

@@ -1,7 +1,7 @@
 import { StandardProps, makeRequest } from ".";
 
 type MainType = LectioAuth;
-type FunctionProps = StandardProps;
+type FunctionProps = APIProps<StandardProps>;
 
 export async function getIsAuthenticated(props: FunctionProps, getFullResponse?: false | undefined): Promise<MainType | null>;
 export async function getIsAuthenticated(props: FunctionProps, getFullResponse: true): Promise<APIResponse<MainType> | APIResponse<null>>;

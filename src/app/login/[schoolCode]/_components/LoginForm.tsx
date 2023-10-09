@@ -4,13 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRef, useState } from "react";
 import { handleLogin } from "../_actions/handleLogin";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { setAuthCookies } from "@/lib/auth/setAuthCookies";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 export function LoginForm() {
   const params: { schoolCode: string } = useParams();
+  const router = useRouter();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isShowingPassword, setIsShowingPassword] = useState(false);
 
   const usernameRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -42,6 +46,12 @@ export function LoginForm() {
         } else if (res.data === null) {
           toast.error(res.message);
         } else if (res.data.isAuthenticated) {
+          setAuthCookies({
+            username: username,
+            password: password,
+            schoolCode: params.schoolCode,
+          });
+          router.push("/");
           toast.success("Loggede dig ind!");
         } else {
           toast.error("Elev findes ikke");
@@ -60,7 +70,7 @@ export function LoginForm() {
           <Input
             ref={usernameRef}
             spellCheck={false}
-            className="border-0 focus-visible:ring-0 placeholder:opacity-50"
+            className="border-0 focus-visible:ring-0 placeholder:opacity-50 rounded-none"
             placeholder="Brugernavn"
             name="username"
             onKeyDown={(e) => {
@@ -70,13 +80,13 @@ export function LoginForm() {
             }}
           />
         </div>
-        <div className="border-b w-full relative">
+        <div className="border-b w-full flex">
           <Input
             ref={passwordRef}
             spellCheck={false}
-            className="border-0 focus-visible:ring-0 placeholder:opacity-50"
+            className="border-0 focus-visible:ring-0 placeholder:opacity-50 rounded-none"
             placeholder="Adgangskode"
-            type="password"
+            type={isShowingPassword ? "text" : "password"}
             name="password"
             onKeyDown={(e) => {
               if (e.key === "Enter" && submitRef.current) {
@@ -84,9 +94,31 @@ export function LoginForm() {
               }
             }}
           />
+          <button
+            className="h-9 w-9 top-0 grid place-items-center p-1.5"
+            onClick={() => {
+              setIsShowingPassword((prev) => !prev);
+            }}
+          >
+            {isShowingPassword ? (
+              <EyeIcon
+                className="w-full h-full"
+                onClick={() => {
+                  setIsShowingPassword(false);
+                }}
+              />
+            ) : (
+              <EyeOffIcon
+                className="w-full h-full"
+                onClick={() => {
+                  setIsShowingPassword(true);
+                }}
+              />
+            )}
+          </button>
         </div>
         <Button loading={isSubmitting} disabled={isSubmitting} className="mt-2 gap-x-2" ref={submitRef} onClick={handleSubmit}>
-          {isSubmitting ? "Logger ind..." : "Log ind"}
+          {isSubmitting ? "Logger dig ind..." : "Log ind"}
         </Button>
       </div>
     </>
