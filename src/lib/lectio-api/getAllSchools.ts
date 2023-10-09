@@ -8,7 +8,7 @@ export async function getAllSchools<K extends boolean | undefined>(getFullRespon
   type ReturnType = (K extends false ? APIResponse<MainType> : MainType) | (K extends false ? APIResponse<null> : null);
 
   const result = await makeRequest<MainType>({
-    path: "/get-school/by-school-code",
+    path: "/get-school/all",
     // @ts-ignore
     getFullResponse: getFullResponse,
   });
