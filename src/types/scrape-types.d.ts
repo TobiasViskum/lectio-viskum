@@ -16,5 +16,5 @@ type LectioAuth = {
 type Student = {
   name: string;
   studentClass: string;
-  img: string;
+  imgSrc: string;
 };

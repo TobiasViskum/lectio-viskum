@@ -51,6 +51,7 @@ export function LoginForm() {
             password: password,
             schoolCode: params.schoolCode,
           });
+          router.refresh();
           router.push("/");
           toast.success("Loggede dig ind!");
         } else {

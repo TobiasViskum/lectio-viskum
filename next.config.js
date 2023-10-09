@@ -4,7 +4,12 @@ const nextConfig = {
     serverActions: true,
   },
   images: {
-    domains: ["lectio.dk"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "www.lectio.dk",
+      },
+    ],
   },
 };
 
