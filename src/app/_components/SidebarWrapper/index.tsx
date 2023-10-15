@@ -7,7 +7,7 @@ type Props = { children: React.ReactNode };
 export function SidebarWrapper({ children }: Props) {
   const path = usePathname();
 
-  if (path.includes("/login")) {
+  if (path.includes("/log-ind")) {
     return <div className="w-full flex justify-center">{children}</div>;
   }
 

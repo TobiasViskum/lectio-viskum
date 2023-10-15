@@ -65,7 +65,7 @@ export function SchoolList({ allSchoolsPromise }: Props) {
       <h2 className="w-full text-left font-medium pb-4">Skoler</h2>
       {items.map((school, index) => {
         return (
-          <Link href={{ pathname: `/login/${school.schoolCode}`, query: { name: school.name } }} key={school.name} className={cn("w-full rounded-md flex flex-col items-center", index === items.length - 1 ? "mb-4" : "", school.name.length >= 35 ? "max-sm:pt-1" : "")}>
+          <Link href={{ pathname: `/log-ind/${school.schoolCode}`, query: { name: school.name } }} key={school.name} className={cn("w-full rounded-md flex flex-col items-center", index === items.length - 1 ? "mb-4" : "", school.name.length >= 35 ? "max-sm:pt-1" : "")}>
             <div className={cn("text-sm font-semibold text-left whitespace-nowrap pt-2 w-full hover:bg-accent rounded-md pl-2", school.name.length >= 35 ? "max-sm:text-xs" : "")}>
               {school.name}
               {index !== items.length ? <Separator className={cn("mt-2 w-[calc(100%-16px)]", school.name.length >= 35 ? "max-sm:mt-3" : "")} /> : null}

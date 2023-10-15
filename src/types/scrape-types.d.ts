@@ -1,20 +1,39 @@
-type StandardProps = {
+type StandardProps = Prettify<{
   username: string;
   password: string;
   schoolCode: string;
-};
+}>;
 
-type School = {
+type School = Prettify<{
   schoolCode: string;
   name: string;
-};
+}>;
 
-type LectioAuth = {
+type LectioAuth = Prettify<{
   isAuthenticated: boolean;
-};
+}>;
 
-type Student = {
+type Student = Prettify<{
   name: string;
   studentClass: string;
   imgSrc: string;
-};
+}>;
+
+type LessonStatus = Prettify<"changed" | "cancelled" | "normal">;
+type LessonTime = Prettify<{ date: string; startTime: string; endTime: string }>;
+type Lesson = Prettify<{
+  href: string;
+  status: LessonStatus;
+  time: LessonTime;
+  teachers: Teacher[];
+  classrooms: string[];
+  classes: string[];
+  title: string;
+  subjects: string[];
+  hasNote: boolean;
+  hasHomework: boolean;
+  hasOtherContent: boolean;
+  hasPresentation: boolean;
+  overlappingLessons: number;
+}>;
+type Week = Prettify<{ lessons: Lesson[]; notes: string[] }>;

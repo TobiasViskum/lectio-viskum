@@ -1,6 +1,6 @@
 import { makeRequest } from ".";
 
-type MainType = School[];
+type MainType = Prettify<School[]>;
 
 export async function getAllSchools(getFullResponse?: false | undefined): Promise<MainType | null>;
 export async function getAllSchools(getFullResponse: true): Promise<APIResponse<MainType> | APIResponse<null>>;

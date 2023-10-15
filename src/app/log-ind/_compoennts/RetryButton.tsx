@@ -8,7 +8,7 @@ export function RetryButton() {
   const router = useRouter();
 
   return (
-    <Link href="/login">
+    <Link href="/log-ind">
       <Button>Retry</Button>
     </Link>
   );

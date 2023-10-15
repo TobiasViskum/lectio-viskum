@@ -22,7 +22,7 @@ export function Account({ strUser }: Props) {
     await clearUserCache({ username: "tobi688c" });
     router.refresh();
     setAuthCookies({ username: "", password: "", schoolCode: "" });
-    router.push("/login");
+    router.push("/log-ind");
   }
 
   return (

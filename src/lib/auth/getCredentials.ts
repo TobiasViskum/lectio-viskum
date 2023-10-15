@@ -15,5 +15,5 @@ export function getCredentials() {
       schoolCode: schoolCode.value,
     } as StandardProps;
   }
-  redirect("/login?redirected=true");
+  redirect("/log-ind?redirected=true");
 }

@@ -17,17 +17,17 @@ export async function middleware(request: NextRequest) {
       schoolCode: z.string().min(1),
     }).parse(obj);
 
-    if (request.url.includes("/login")) {
+    if (request.url.includes("/log-ind")) {
       return NextResponse.redirect(new URL("/", request.url));
     }
 
     return NextResponse.next();
   } catch {
-    if (request.url.includes("/login")) {
+    if (request.url.includes("/log-ind")) {
       return NextResponse.next();
     }
 
-    return NextResponse.redirect(new URL("/login?redirected=true", request.url));
+    return NextResponse.redirect(new URL("/log-ind?redirected=true", request.url));
   }
 }
 

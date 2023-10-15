@@ -30,7 +30,7 @@ export function Title({ schoolPromise, name }: Props) {
     async function verifySchool() {
       const school = await schoolPromise;
       if (school === null) {
-        router.push("/login");
+        router.push("/log-ind");
       } else if (school.name !== name) {
         setSchoolName(school.name);
       }

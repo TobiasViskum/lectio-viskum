@@ -4,8 +4,9 @@ import { getAllSchools } from "./getAllSchools";
 import { getIsAuthenticated } from "./getIsAuthenticated";
 import { redirect } from "next/navigation";
 import { getStudentByCredentials } from "./getStudentByCredentials";
+import { getScheduleByCredentials } from "./getScheduleByCredentials";
 
-const baseUrl = "https://dev07.reactprojects.mywire.org";
+const baseUrl = "http://localhost:3001";
 
 export type StandardProps = {
   username: string;
@@ -38,7 +39,7 @@ export async function makeRequest<T, K extends boolean | undefined>({ path, para
   }
   if (result.status === "error") {
     if (result.message.includes("auth")) {
-      redirect("/login?redirected=true");
+      redirect("/log-ind?redirected=true");
     }
     if (getFullResponse) {
       return result as ReturnType;
@@ -57,7 +58,10 @@ const lectioAPI = {
   getIsAuthenticated: getIsAuthenticated,
   getStudent: {
     byCredentials: getStudentByCredentials,
-  } as const,
+  },
+  getSchedule: {
+    byCredentials: getScheduleByCredentials,
+  },
 };
 
 export { lectioAPI };
