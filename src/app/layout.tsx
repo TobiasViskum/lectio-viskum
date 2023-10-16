@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { SidebarWrapper } from "./_components/SidebarWrapper";
 import { Toaster } from "sonner";
 import { MainClientHandler } from "./_components/MainClientHandler";
+import { KeyHandler } from "./_components/KeyHandler";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -29,6 +30,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </div>
         </ThemeProvider>
         <MainClientHandler />
+        <KeyHandler />
       </body>
     </html>
   );

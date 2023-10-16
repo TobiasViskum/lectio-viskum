@@ -37,3 +37,20 @@ type Lesson = Prettify<{
   overlappingLessons: number;
 }>;
 type Week = Prettify<{ lessons: Lesson[]; notes: string[] }>;
+
+type Assignment = Prettify<{
+  week: string;
+  class: string;
+  href: string;
+  subject: string;
+  title: string;
+  dueTo: string;
+  assignmentTime: string;
+  assignmentDescription: string;
+  status: string;
+  absence: string;
+  awaiter: string;
+  grade: string;
+  gradeNote: string;
+  id: string;
+}>;

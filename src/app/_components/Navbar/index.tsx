@@ -1,7 +1,7 @@
 import { Logo, profileLoading } from "@/assets";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { CalendarIcon } from "@radix-ui/react-icons";
+import { CalendarIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu } from "./Menu";
@@ -23,6 +23,10 @@ export async function Navbar() {
         <Link href={{ pathname: "/skema", query: getCurrWeekAndYear() }} className="flex gap-x-2 items-center font-semibold text-sm rounded-md hover:bg-accent py-2 px-4">
           Skema
           <CalendarIcon />
+        </Link>
+        <Link href={"/afleveringer"} className="flex gap-x-2 items-center font-semibold text-sm rounded-md hover:bg-accent py-2 px-4">
+          Afleveringer
+          <PaperPlaneIcon className="-rotate-45" />
         </Link>
         <Menu />
         <div className="ml-auto grid place-items-center rounded-full">

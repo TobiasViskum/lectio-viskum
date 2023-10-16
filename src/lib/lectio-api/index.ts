@@ -5,6 +5,7 @@ import { getIsAuthenticated } from "./getIsAuthenticated";
 import { redirect } from "next/navigation";
 import { getStudentByCredentials } from "./getStudentByCredentials";
 import { getScheduleByCredentials } from "./getScheduleByCredentials";
+import { getAssignments } from "./getAssignments";
 
 const developmentUrl = "http://localhost:3001";
 const productionUrl = "https://lectio-api.vercel.app";
@@ -67,6 +68,7 @@ const lectioAPI = {
   getSchedule: {
     byCredentials: getScheduleByCredentials,
   },
+  getAssignments: getAssignments,
 };
 
 export { lectioAPI };

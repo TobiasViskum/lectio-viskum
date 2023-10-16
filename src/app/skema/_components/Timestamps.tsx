@@ -3,7 +3,7 @@ type Props = { timestamps: number[] };
 export function Timestamps({ timestamps }: Props) {
   return (
     <>
-      {timestamps.map((timeStamp) => {
+      {timestamps.map((timeStamp, index) => {
         const strTimeStamp = timeStamp.toString();
         let strTime = "";
         if (timeStamp < 10) {
@@ -14,7 +14,7 @@ export function Timestamps({ timestamps }: Props) {
         }
 
         return (
-          <p className="text-sm" key={strTimeStamp} style={{ height: "var(--height-hour)" }}>
+          <p className="text-sm" key={index} style={{ height: "var(--height-hour)" }}>
             {strTime}
           </p>
         );

@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils";
 
-export function HomeworkIcon({ className, fillTw }: { className?: string; fillTw?: string }) {
+type Props = { className?: string; fillTw?: string };
+
+export function HomeworkIcon({ className, fillTw }: Props) {
   return (
     <>
       <svg className={cn("h-8 w-8", className)} viewBox="0 0 15 15" fill="none">
