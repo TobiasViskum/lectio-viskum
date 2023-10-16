@@ -44,3 +44,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+#schedule-main {
+  --multi: 0.8;
+  --offset-top-text: calc(18px * var(--multi));
+  --offset-top-lesson: calc(30px * var(--multi));
+  --height-hour: calc(70px * var(--multi));
+  --lesson-width: calc(256px * var(--multi));
+}
+
+/* @media screen and (min-width: 1000px) {
+  #schedule-main {
+    --multi: 0.9;
+  }
+} */
+
+@media screen and (min-width: 1500px) {
+  #schedule-main {
+    --multi: 1;
+  }
+}

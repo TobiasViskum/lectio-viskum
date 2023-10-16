@@ -6,7 +6,12 @@ import { redirect } from "next/navigation";
 import { getStudentByCredentials } from "./getStudentByCredentials";
 import { getScheduleByCredentials } from "./getScheduleByCredentials";
 
-const baseUrl = "https://lectio-api.vercel.app";
+const developmentUrl = "http://localhost:3001";
+const productionUrl = "https://lectio-api.vercel.app";
+let baseUrl = developmentUrl;
+if (process.env.NODE_ENV === "production") {
+  baseUrl = productionUrl;
+}
 
 export type StandardProps = {
   username: string;

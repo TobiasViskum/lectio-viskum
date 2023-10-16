@@ -8,6 +8,7 @@ import { Menu } from "./Menu";
 import { HomeIcon2 } from "@/components/icons/HomeIcon";
 import { AccountWrapper } from "./AccountWrapper";
 import { Suspense } from "react";
+import { getCurrWeekAndYear } from "@/lib/utils";
 
 export async function Navbar() {
   return (
@@ -19,7 +20,7 @@ export async function Navbar() {
         <Link href={"/"} className="block sm:hidden aspect-[1_/_1] h-9 p-1">
           <HomeIcon2 className="h-7 w-7"></HomeIcon2>
         </Link>
-        <Link href={"/skema"} className="flex gap-x-2 items-center font-semibold text-sm rounded-md hover:bg-accent py-2 px-4">
+        <Link href={{ pathname: "/skema", query: getCurrWeekAndYear() }} className="flex gap-x-2 items-center font-semibold text-sm rounded-md hover:bg-accent py-2 px-4">
           Skema
           <CalendarIcon />
         </Link>

@@ -25,9 +25,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Toaster richColors />
           <Navbar />
           <div className="py-16 w-full">
-            <SidebarWrapper>
-              <main className="w-full px-4 max-w-4xl">{children}</main>
-            </SidebarWrapper>
+            <main className="w-full px-4">{children}</main>
           </div>
         </ThemeProvider>
         <MainClientHandler />

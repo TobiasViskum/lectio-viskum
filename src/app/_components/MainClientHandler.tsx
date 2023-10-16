@@ -10,15 +10,15 @@ export function MainClientHandler() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  useEffect(() => {
-    handleClientAuthenticated();
+  // useEffect(() => {
+  //   handleClientAuthenticated();
 
-    const isRedirected = searchParams.get("redirected");
-    if (isRedirected && isRedirected === "true") {
-      toast.error("Du skal logge ind før du kan bruge Lectio");
-      router.replace(path);
-    }
-  }, [path, searchParams, router]);
+  //   const isRedirected = searchParams.get("redirected");
+  //   if (isRedirected && isRedirected === "true") {
+  //     toast.error("Du skal logge ind før du kan bruge Lectio");
+  //     router.replace(path);
+  //   }
+  // }, [path, searchParams, router]);
 
   return null;
 }

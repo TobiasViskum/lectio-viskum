@@ -26,5 +26,10 @@ export function generateTimestamps(weeks: Week[]) {
   for (let i = globalStartTime; i <= globalEndTime; i++) {
     timeStamps.push(Math.floor(i));
   }
+
+  if (timeStamps.length === 0) {
+    return [7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+  }
+
   return timeStamps;
 }
