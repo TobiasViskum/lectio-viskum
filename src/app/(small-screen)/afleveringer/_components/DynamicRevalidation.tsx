@@ -1,15 +1,20 @@
 "use client";
 
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { dynamicRevalidation } from "../_actions/dynamicRevalidation";
 
 export function DynamicRevalidation() {
   const path = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
-    dynamicRevalidation();
-  }, [path]);
+    async function doRevalidation() {
+      await dynamicRevalidation();
+      router.push(path, { scroll: false });
+    }
+    doRevalidation();
+  }, [path, router]);
 
   return null;
 }
