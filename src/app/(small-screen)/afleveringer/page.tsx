@@ -10,11 +10,13 @@ export type AssignmentPageProps = { searchParams: { view?: string; search?: stri
 export default async function AssignmentsPage({ searchParams }: AssignmentPageProps) {
   return (
     <>
-      <h1 className="text-4xl font-medium py-6">Afleveringer</h1>
-      <Suspense fallback={<FilterButtonsSkeleton />}>
-        <FilterButtons searchParams={searchParams} />
-      </Suspense>
-      <div className="flex flex-col items-center">
+      <h1 className="text-4xl font-medium pt-6">Afleveringer</h1>
+      <div className="block md:hidden pt-6">
+        <Suspense fallback={<FilterButtonsSkeleton />}>
+          <FilterButtons searchParams={searchParams} />
+        </Suspense>
+      </div>
+      <div className="flex flex-col items-center pt-4 md:pt-0">
         <Suspense fallback={<LoadingDots className="mt-8" />}>
           <AssignmentsRenderer searchParams={searchParams} />
         </Suspense>

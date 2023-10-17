@@ -4,6 +4,7 @@ import { AssignmentPageProps } from "../page";
 import { z } from "zod";
 import { getCredentials } from "@/lib/auth/getCredentials";
 import { lectioAPI } from "@/lib/lectio-api";
+import { FilterButtonsSkeleton } from "./FilterButtonsSkeleton";
 
 export async function FilterButtons({ searchParams }: AssignmentPageProps) {
   const credentials = getCredentials();
@@ -22,22 +23,31 @@ export async function FilterButtons({ searchParams }: AssignmentPageProps) {
     "mangler": "translate-x-72 bg-red-500",
   } as const;
 
+  if (assignments === null) {
+    return <FilterButtonsSkeleton />;
+  }
+
+  const totalAssignments = assignments.length;
+  const submittedAssignments = assignments.filter((obj) => obj.status === "Afleveret").length;
+  const pendingAssignments = assignments.filter((obj) => obj.status === "Venter").length;
+  const missingAssignments = assignments.filter((obj) => obj.status === "Mangler").length;
+
   return (
     <>
-      <div className="relative grid grid-cols-4 text-center w-96">
+      <div className="relative grid grid-cols-4 text-center w-96 text-sm">
         <Link href="?view=alle" className={cn("transition-colors", view === "alle" ? "text-blue-500" : "text-muted-foreground")}>
-          Alle
+          Alle ({totalAssignments})
         </Link>
         <Link href="?view=afleveret" className={cn("transition-colors", view === "afleveret" ? "text-green-500" : "text-muted-foreground")}>
-          Afleveret
+          Afleveret ({submittedAssignments})
         </Link>
         <Link href="?view=venter" className={cn("transition-colors", view === "venter" ? "text-yellow-500" : "text-muted-foreground")}>
-          Venter
+          Venter ({pendingAssignments})
         </Link>
         <Link href="?view=mangler" className={cn("transition-colors", view === "mangler" ? "text-red-500" : "text-muted-foreground")}>
-          Mangler
+          Mangler ({missingAssignments})
         </Link>
-        <div className={cn("absolute -bottom-1 h-0.5 rounded-md w-24 transition-all", translateXMap[view])} />
+        <div className={cn("absolute -bottom-2 h-0.5 rounded-md w-24 transition-all", translateXMap[view])} />
       </div>
     </>
   );

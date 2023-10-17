@@ -24,7 +24,7 @@ export function Assignment({ assignment, addWeek }: Props) {
           <p className="font-medium py-0.5">{assignment.title}</p>
           <p className={cn("opacity-75 text-sm", dateColor)}>{formattedDate}</p>
         </div>
-        <ChevronRightIcon className="text-muted-foreground ml-auto mr-8 opacity-75 transition-transform group-hover:scale-110 group-hover:translate-x-2 group-focus:scale-110 group-focus:translate-x-2" />
+        <ChevronRightIcon className="text-muted-foreground ml-auto mr-8 opacity-75 transition-transform group-hover:scale-110 group-hover:translate-x-2 group-focus:scale-110 group-focus:translate-x-2 hidden md:block" />
         <Separator className="w-[calc(100%-32px)] absolute bottom-0 right-4" />
       </Link>
     </>
