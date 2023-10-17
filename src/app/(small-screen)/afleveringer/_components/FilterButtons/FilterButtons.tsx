@@ -18,9 +18,9 @@ export async function FilterButtons({ searchParams }: AssignmentPageProps) {
 
   const translateXMap = {
     "alle": "translate-x-0 bg-blue-500",
-    "afleveret": "translate-x-24 bg-green-500",
-    "venter": "translate-x-48 bg-yellow-500",
-    "mangler": "translate-x-72 bg-red-500",
+    "afleveret": "translate-x-20 bg-green-500",
+    "venter": "translate-x-40 bg-yellow-500",
+    "mangler": "translate-x-60 bg-red-500",
   } as const;
 
   if (assignments === null) {
@@ -36,7 +36,7 @@ export async function FilterButtons({ searchParams }: AssignmentPageProps) {
 
   return (
     <>
-      <div className="relative grid grid-cols-4 text-center w-96 text-sm">
+      <div className="relative grid grid-cols-4 text-center w-80 text-sm">
         <Link href="?view=alle" className={cn(linkTw, view === "alle" ? "text-blue-500" : "text-muted-foreground")}>
           <p className="text-xs">{totalAssignments}</p>
           <p>Alle</p>
@@ -53,7 +53,7 @@ export async function FilterButtons({ searchParams }: AssignmentPageProps) {
           <p className="text-xs">{missingAssignments}</p>
           <p>Mangler</p>
         </Link>
-        <div className={cn("absolute -bottom-2 h-0.5 rounded-md w-24 transition-all", translateXMap[view])} />
+        <div className={cn("absolute -bottom-2 h-0.5 rounded-md w-20 transition-all", translateXMap[view])} />
       </div>
     </>
   );
