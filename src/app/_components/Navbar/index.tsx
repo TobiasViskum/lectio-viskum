@@ -24,7 +24,7 @@ export async function Navbar() {
           Skema
           <CalendarIcon />
         </Link>
-        <Link href={"/afleveringer"} className="flex gap-x-2 items-center font-semibold text-sm rounded-md hover:bg-accent py-2 px-4">
+        <Link href={"/afleveringer?view=venter"} className="flex gap-x-2 items-center font-semibold text-sm rounded-md hover:bg-accent py-2 px-4">
           Afleveringer
           <PaperPlaneIcon className="-rotate-45" />
         </Link>

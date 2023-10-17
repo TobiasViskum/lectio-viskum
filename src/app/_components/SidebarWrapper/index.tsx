@@ -13,9 +13,9 @@ export function SidebarWrapper({ children }: Props) {
 
   return (
     <>
-      <div className="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10  xl:grid">
-        <div className="hidden h-full w-full shrink-0 lg:sticky md:block">
-          <h2>Hej2</h2>
+      <div className="container px-0 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 w-full lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10 xl:grid">
+        <div className="hidden w-full shrink-0 lg:sticky md:block">
+          <div className="fixed top-24">Fixed</div>
         </div>
         {children}
       </div>
