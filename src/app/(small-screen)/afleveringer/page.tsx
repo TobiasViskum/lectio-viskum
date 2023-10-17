@@ -2,8 +2,8 @@ import { AssignmentsRenderer } from "./_components/AssignmentsRenderer";
 import { Suspense } from "react";
 import { LoadingDots } from "@/components/loading-components/LoadingDots";
 import { DynamicRevalidation } from "./_components/DynamicRevalidation";
-import { FilterButtons } from "./_components/FilterButtons";
-import { FilterButtonsSkeleton } from "./_components/FilterButtonsSkeleton";
+import { FilterButtons } from "./_components/FilterButtons/FilterButtons";
+import { FilterButtonsSkeleton } from "./_components/FilterButtons/FilterButtonsSkeleton";
 
 export type AssignmentPageProps = { searchParams: { view?: string; search?: string } };
 
