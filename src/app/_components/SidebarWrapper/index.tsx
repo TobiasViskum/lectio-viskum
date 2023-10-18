@@ -20,9 +20,7 @@ export function SidebarWrapper({ children }: Props) {
     <>
       <div className="container px-0 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 w-full lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10 xl:grid">
         <div className="hidden w-full shrink-0 lg:sticky md:block">
-          <div className="fixed top-24">
-            <div className="w-full">{componentMap[path]}</div>
-          </div>
+          <div className="fixed top-24 md:w-[220px] lg:w-[240px]">{componentMap[path]}</div>
         </div>
         {children}
       </div>
