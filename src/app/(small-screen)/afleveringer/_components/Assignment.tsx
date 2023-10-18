@@ -13,7 +13,7 @@ export function Assignment({ assignment, addWeek }: Props) {
 
   return (
     <>
-      <Link href="/" className="group flex h-[88px] py-1 gap-x-4 items-center bg-background hover:bg-muted rounded-md pl-1 transition-colors focus:bg-muted focus:outline-0 w-full relative">
+      <Link href="/" className="group flex h-[88px] py-1 gap-x-4 items-center bg-background hover:bg-muted rounded-lg pl-1 transition-colors focus:bg-muted focus:outline-0 w-full relative">
         {addWeek && <Separator className="w-[calc(100%-32px)] absolute top-0 right-4" />}
         <div className={cn("w-2 h-2/3 rounded-md", sideColor)} />
         <div>
