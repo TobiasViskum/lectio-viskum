@@ -8,7 +8,7 @@ import { FilterButtonsSkeleton } from "./_components/FilterButtons/FilterButtons
 export default async function AssignmentsPage() {
   return (
     <>
-      <h1 className="text-4xl font-medium pt-6">Afleveringer</h1>
+      <h1 className="text-4xl font-medium pt-6 max-md:pl-4">Afleveringer</h1>
       <div className="block md:hidden pt-6">
         <Suspense fallback={<FilterButtonsSkeleton />}>
           <FilterButtons />

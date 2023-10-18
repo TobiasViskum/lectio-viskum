@@ -26,7 +26,7 @@ export function Account({ strUser }: Props) {
   }
 
   return (
-    <button className="rounded-full">
+    <button className="rounded-full aspect-square h-10 w-10">
       <Image onClick={handleLogout} src={user.imgSrc} width={40} height={40} alt="img" className="object-cover rounded-full obj aspect-square" />
     </button>
   );

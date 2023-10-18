@@ -20,14 +20,24 @@ export async function Navbar() {
         <Link href={"/"} className="block sm:hidden aspect-[1_/_1] h-9 p-1">
           <HomeIcon2 className="h-7 w-7"></HomeIcon2>
         </Link>
-        <Link href={{ pathname: "/skema", query: getCurrWeekAndYear() }} className="flex gap-x-2 items-center font-semibold text-sm rounded-md hover:bg-accent py-2 px-4">
-          Skema
-          <CalendarIcon />
-        </Link>
-        <Link href={"/afleveringer?view=venter"} className="flex gap-x-2 items-center font-semibold text-sm rounded-md hover:bg-accent py-2 px-4">
-          Afleveringer
-          <PaperPlaneIcon className="-rotate-45" />
-        </Link>
+        <div>
+          <Link href={{ pathname: "/skema", query: getCurrWeekAndYear() }} className="sm:flex gap-x-2 items-center font-semibold text-sm rounded-md hover:bg-accent py-2 px-4 hidden">
+            Skema
+            <CalendarIcon />
+          </Link>
+          <Link href={{ pathname: "/skema", query: getCurrWeekAndYear() }}>
+            <CalendarIcon className="block h-6 w-6 sm:hidden mx-3" />
+          </Link>
+        </div>
+        <div>
+          <Link href={"/afleveringer"} className="sm:flex gap-x-2 items-center font-semibold text-sm rounded-md hover:bg-accent py-2 px-4 hidden">
+            Afleveringer
+            <PaperPlaneIcon className="-rotate-45" />
+          </Link>
+          <Link href={"/afleveringer"}>
+            <PaperPlaneIcon className="block sm:hidden w-6 h-6 -rotate-45 mx-3" />
+          </Link>
+        </div>
         <Menu />
         <div className="ml-auto grid place-items-center rounded-full">
           <Suspense fallback={<Image src={profileLoading.src} alt="img" width={40} height={40} className="object-cover animate-pulse" />}>
