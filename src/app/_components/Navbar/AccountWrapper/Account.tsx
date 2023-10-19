@@ -15,7 +15,15 @@ export function Account({ strUser }: Props) {
   const router = useRouter();
 
   if (user === null) {
-    return <Image width={40} height={40} src={profile.src} alt="img" className="object-cover" />;
+    return (
+      <Image
+        width={40}
+        height={40}
+        src={profile.src}
+        alt="img"
+        className="object-cover"
+      />
+    );
   }
 
   async function handleLogout() {
@@ -26,8 +34,15 @@ export function Account({ strUser }: Props) {
   }
 
   return (
-    <button className="rounded-full aspect-square h-10 w-10">
-      <Image onClick={handleLogout} src={user.imgSrc} width={40} height={40} alt="img" className="object-cover rounded-full obj aspect-square" />
+    <button className="aspect-square h-10 w-10 rounded-full">
+      <Image
+        onClick={handleLogout}
+        src={user.imgSrc}
+        width={40}
+        height={40}
+        alt="img"
+        className="obj aspect-square rounded-full object-cover"
+      />
     </button>
   );
 }

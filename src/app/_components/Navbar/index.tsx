@@ -12,35 +12,57 @@ import { getCurrWeekAndYear } from "@/lib/utils";
 
 export async function Navbar() {
   return (
-    <div className="fixed h-16 w-full bg-black bg-opacity-50 backdrop-blur-sm z-50">
-      <nav className="h-full flex items-center px-4 gap-x-4 sm:px-8">
-        <Link href={"/"} className="hidden sm:block aspect-[3.375_/_1] h-8">
-          <Image src={Logo} alt="LectioV" height={32} width={108} className="aspect-[3.375_/_1]" />
+    <div className="fixed z-50 h-16 w-full bg-black bg-opacity-50 backdrop-blur-sm">
+      <nav className="flex h-full items-center gap-x-4 px-4 sm:px-8">
+        <Link href={"/"} className="hidden aspect-[3.375_/_1] h-8 sm:block">
+          <Image
+            src={Logo}
+            alt="LectioV"
+            height={32}
+            width={108}
+            className="aspect-[3.375_/_1]"
+          />
         </Link>
-        <Link href={"/"} className="block sm:hidden aspect-[1_/_1] h-9 p-1">
+        <Link href={"/"} className="block aspect-[1_/_1] h-9 p-1 sm:hidden">
           <HomeIcon2 className="h-7 w-7"></HomeIcon2>
         </Link>
         <div>
-          <Link href={{ pathname: "/skema", query: getCurrWeekAndYear() }} className="sm:flex gap-x-2 items-center font-semibold text-sm rounded-md hover:bg-accent py-2 px-4 hidden">
+          <Link
+            href={{ pathname: "/skema", query: getCurrWeekAndYear() }}
+            className="hidden items-center gap-x-2 rounded-md px-4 py-2 text-sm font-semibold hover:bg-accent sm:flex"
+          >
             Skema
             <CalendarIcon />
           </Link>
           <Link href={{ pathname: "/skema", query: getCurrWeekAndYear() }}>
-            <CalendarIcon className="block h-6 w-6 sm:hidden mx-3" />
+            <CalendarIcon className="mx-3 block h-6 w-6 sm:hidden" />
           </Link>
         </div>
         <div>
-          <Link href={"/afleveringer"} className="sm:flex gap-x-2 items-center font-semibold text-sm rounded-md hover:bg-accent py-2 px-4 hidden">
+          <Link
+            href={"/afleveringer"}
+            className="hidden items-center gap-x-2 rounded-md px-4 py-2 text-sm font-semibold hover:bg-accent sm:flex"
+          >
             Afleveringer
             <PaperPlaneIcon className="-rotate-45" />
           </Link>
           <Link href={"/afleveringer"}>
-            <PaperPlaneIcon className="block sm:hidden w-6 h-6 -rotate-45 mx-3" />
+            <PaperPlaneIcon className="mx-3 block h-6 w-6 -rotate-45 sm:hidden" />
           </Link>
         </div>
         <Menu />
         <div className="ml-auto grid place-items-center rounded-full">
-          <Suspense fallback={<Image src={profileLoading.src} alt="img" width={40} height={40} className="object-cover animate-pulse" />}>
+          <Suspense
+            fallback={
+              <Image
+                src={profileLoading.src}
+                alt="img"
+                width={40}
+                height={40}
+                className="animate-pulse object-cover"
+              />
+            }
+          >
             <AccountWrapper />
           </Suspense>
         </div>

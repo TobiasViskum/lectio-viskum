@@ -1,0 +1,52 @@
+"use client";
+
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import { ChevronRightIcon } from "lucide-react";
+import Link from "next/link";
+import { getColors } from "../_util/getColors";
+import { getFormattedDate } from "../_util/getFormattedDate";
+
+type Props = { assignment: Assignment; addWeek: boolean };
+
+export function Assignment({ assignment, addWeek }: Props) {
+  const { sideColor, dateColor } = getColors(assignment);
+  const formattedDate = getFormattedDate(assignment);
+
+  const separatorTw =
+    "w-[calc(100%-24px)] absolute right-0 md:right-4 md:w-[calc(100%-32px)]";
+
+  return (
+    <>
+      <Link
+        key={assignment.title}
+        href="/"
+        className="group relative flex h-[88px] w-full items-center gap-x-4 whitespace-nowrap rounded-lg bg-background py-1 pl-1 transition-colors hover:bg-muted focus:bg-muted focus:outline-0"
+      >
+        {addWeek && <Separator className={cn(separatorTw, "top-0")} />}
+        <div className={cn("h-2/3 w-2 rounded-md", sideColor)} />
+        <div className="overflow-hidden">
+          <p className="text-sm text-muted-foreground opacity-50">
+            {[assignment.subject, ", "].join("")}
+            {assignment.class}
+          </p>
+          <p
+            className={cn(
+              assignment.title.length > 30
+                ? "text-sm"
+                : assignment.title.length > 40
+                ? "text-xs"
+                : "text-base",
+              "overflow-hidden text-ellipsis whitespace-nowrap py-0.5 font-medium",
+            )}
+          >
+            {assignment.title}
+          </p>
+          <p className={cn("text-sm opacity-75", dateColor)}>{formattedDate}</p>
+        </div>
+        <ChevronRightIcon className="ml-auto mr-8 hidden text-muted-foreground opacity-75 transition-transform group-hover:translate-x-2 group-hover:scale-110 group-focus:translate-x-2 group-focus:scale-110 md:block" />
+        <Separator className={cn(separatorTw, "bottom-0")} />
+      </Link>
+    </>
+  );
+}

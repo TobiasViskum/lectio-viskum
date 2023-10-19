@@ -26,18 +26,41 @@ type MakeRequestProps<K extends boolean | undefined> = APIProps<{
   getFullResponse?: K;
 }>;
 
-export async function makeRequest<T>({ path, params, getFullResponse = false }: MakeRequestProps<false | undefined>): Promise<T | null>;
-export async function makeRequest<T>({ path, params, getFullResponse = true }: MakeRequestProps<true>): Promise<APIResponse<T> | APIResponse<null>>;
-export async function makeRequest<T, K extends boolean | undefined>({ path, params, getFullResponse = false, tag }: MakeRequestProps<K>): Promise<(K extends false ? APIResponse<T> : T) | (K extends false ? APIResponse<null> : null)> {
-  type ReturnType = (K extends false ? APIResponse<T> : T) | (K extends false ? APIResponse<null> : null);
+export async function makeRequest<T>({
+  path,
+  params,
+  getFullResponse = false,
+}: MakeRequestProps<false | undefined>): Promise<T | null>;
+export async function makeRequest<T>({
+  path,
+  params,
+  getFullResponse = true,
+}: MakeRequestProps<true>): Promise<APIResponse<T> | APIResponse<null>>;
+export async function makeRequest<T, K extends boolean | undefined>({
+  path,
+  params,
+  getFullResponse = false,
+  tag,
+}: MakeRequestProps<K>): Promise<
+  | (K extends false ? APIResponse<T> : T)
+  | (K extends false ? APIResponse<null> : null)
+> {
+  type ReturnType =
+    | (K extends false ? APIResponse<T> : T)
+    | (K extends false ? APIResponse<null> : null);
 
   let result: APIResponse<T> | null = null;
   try {
     if (tag) {
-      const res = await fetch([baseUrl, path, "?"].join("") + new URLSearchParams(params), { cache: "force-cache", next: { tags: [tag] } });
+      const res = await fetch(
+        [baseUrl, path, "?"].join("") + new URLSearchParams(params),
+        { cache: "force-cache", next: { tags: [tag] } },
+      );
       result = (await res.json()) as APIResponse<T>;
     } else {
-      const res = await fetch([baseUrl, path, "?"].join("") + new URLSearchParams(params));
+      const res = await fetch(
+        [baseUrl, path, "?"].join("") + new URLSearchParams(params),
+      );
       result = (await res.json()) as APIResponse<T>;
     }
   } catch {

@@ -20,7 +20,11 @@ type Student = Prettify<{
 }>;
 
 type LessonStatus = Prettify<"changed" | "cancelled" | "normal">;
-type LessonTime = Prettify<{ date: string; startTime: string; endTime: string }>;
+type LessonTime = Prettify<{
+  date: string;
+  startTime: string;
+  endTime: string;
+}>;
 type Lesson = Prettify<{
   href: string;
   status: LessonStatus;

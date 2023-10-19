@@ -3,7 +3,12 @@ import { cn } from "@/lib/utils";
 export function HomeIcon2({ className }: { className?: string }) {
   return (
     <>
-      <svg className={cn("fill-foreground h-8 w-8", className)} version="1.1" id="Capa_1" viewBox="0 0 495.398 495.398">
+      <svg
+        className={cn("h-8 w-8 fill-foreground", className)}
+        version="1.1"
+        id="Capa_1"
+        viewBox="0 0 495.398 495.398"
+      >
         <g>
           <g>
             <g>

@@ -15,18 +15,32 @@ export const metadata: Metadata = {
   description: "Made by Tobias T. Viskum",
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+        />
       </head>
-      <body className={cn(inter.className, "overflow-x-hidden overflow-y-auto flex flex-col items-center")}>
+      <body
+        className={cn(
+          inter.className,
+          "flex flex-col items-center overflow-y-auto overflow-x-hidden",
+        )}
+      >
         <ThemeProvider defaultTheme="dark" forcedTheme="dark">
           <Toaster richColors />
           <Navbar />
-          <div className="py-16 w-full">
-            <main className="w-full px-1 sm:px-2 md:px-4 flex flex-col items-center">{children}</main>
+          <div className="w-full py-16">
+            <main className="flex w-full flex-col items-center px-1 sm:px-2 md:px-4">
+              {children}
+            </main>
           </div>
         </ThemeProvider>
         <MainClientHandler />

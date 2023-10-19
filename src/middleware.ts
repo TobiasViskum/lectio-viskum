@@ -26,8 +26,9 @@ export async function middleware(request: NextRequest) {
     if (request.url.includes("/log-ind")) {
       return NextResponse.next();
     }
-
-    return NextResponse.redirect(new URL("/log-ind?redirected=true", request.url));
+    return NextResponse.redirect(
+      new URL("/log-ind?redirected=true", request.url),
+    );
   }
 }
 
