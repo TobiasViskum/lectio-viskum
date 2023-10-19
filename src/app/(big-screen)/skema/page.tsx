@@ -95,7 +95,7 @@ export default async function SchedulePage({ searchParams }: Props) {
             {schedule.map((week, index) => {
               return (
                 <>
-                  <Weekday key={Math.random()} week={week} timestamps={timestamps} day={indexToDayMap[index]} />
+                  <Weekday key={index} week={week} timestamps={timestamps} day={indexToDayMap[index]} />
                 </>
               );
             })}

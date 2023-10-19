@@ -7,7 +7,7 @@ export function getDate(assignment: Assignment) {
   const year = Number(splitYearTime[0]);
 
   const splitHoursMinutes = splitYearTime[1].split(":");
-  const hours = Number(splitHoursMinutes[0]) - 1;
+  const hours = Number(splitHoursMinutes[0]);
   const minutes = Number(splitHoursMinutes[1]);
 
   return new Date(year, month, day, hours, minutes);

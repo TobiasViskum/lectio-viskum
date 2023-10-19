@@ -44,12 +44,12 @@ export function AssignmentsWrapper({ strAssignments }: Props) {
           <>
             {addWeek && (
               <>
-                <p key={index + 50} className="pt-4 font-bold text-xl w-full pb-2">
+                <p key={`${index}-${assignment.week}-${assignment.title}`} className="pt-4 font-bold text-xl w-full pb-2">
                   Uge {assignment.week}
                 </p>
               </>
             )}
-            <Assignment addWeek={addWeek} key={index} assignment={assignment} />
+            <Assignment addWeek={addWeek} key={`${assignment.title}-${assignment.week}-${index}`} assignment={assignment} />
           </>
         );
       })}

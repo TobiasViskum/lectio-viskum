@@ -4,6 +4,7 @@ import { LoadingDots } from "@/components/loading-components/LoadingDots";
 import { DynamicRevalidation } from "./_components/DynamicRevalidation";
 import { FilterButtons } from "./_components/FilterButtons/FilterButtons";
 import { FilterButtonsSkeleton } from "./_components/FilterButtons/FilterButtonsSkeleton";
+import { DateUpdater } from "./_components/DateUpdater";
 
 export default async function AssignmentsPage() {
   return (
@@ -20,6 +21,7 @@ export default async function AssignmentsPage() {
         </Suspense>
       </div>
       <DynamicRevalidation />
+      <DateUpdater />
     </>
   );
 }

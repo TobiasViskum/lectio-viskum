@@ -70,7 +70,7 @@ export async function Lesson({ lesson, timestamps, lessonsAddedAtTimestamp }: Pr
   return (
     <Link key={Math.random()} href={"/skema"} className={cn(`group hover:scale-[1.025] bg-opacity-50 absolute w-full rounded-md transition-[transform,_background-color] hover:bg-opacity-90 flex gap-x-2 hover:z-50 overflow-hidden`, backgroundColor)} style={{ top: `calc(var(--offset-top-lesson) + var(--height-hour) * ${multi})`, height: `calc((${endTime - startTime}) * var(--height-hour))`, width: `calc(var(--lesson-width) / ${lesson.overlappingLessons + 1})`, left: leftOffset }}>
       <div className={cn("h-full w-1.5 rounded-l-md transition-colors", sidebarColor, hoverSidebarColor)} />
-      <div className="w-full">
+      <div className="w-full overflow-hidden">
         <div className="float-right flex items-center h-6 justify-end pr-0.5" style={{ shapeOutside: `polygon(0 0, ${cornerWidth}px 0, ${cornerWidth}px 24px, 0 24px)`, width: cornerWidth }}>
           {lesson.hasNote && <NoteIcon className={cn("transition-colors", fillColor, hoverFillColor)} />}
           {lesson.hasHomework && <HomeworkIcon className="h-5 w-5" fillTw={cn("transition-colors", fillColor, hoverFillColor)} />}
