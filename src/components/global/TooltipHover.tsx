@@ -17,7 +17,9 @@ export default function TooltipHover({
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>{children}</TooltipTrigger>
-          <TooltipContent>{html}</TooltipContent>
+          <TooltipContent className="border border-accent bg-background text-muted-foreground">
+            {html}
+          </TooltipContent>
         </Tooltip>
       </TooltipProvider>
     </>

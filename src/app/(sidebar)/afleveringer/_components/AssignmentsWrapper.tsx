@@ -11,14 +11,17 @@ export function AssignmentsWrapper({ strAssignments }: Props) {
   const [filter, setFilter] = useState<
     "all" | "submitted" | "pending" | "missing"
   >("pending");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     vEvent.listen("assignmentsFilter", (e) => {
       setFilter(e.detail.filter);
+      setSearch(e.detail.search);
     });
   }, []);
 
   let currWeek = "-1";
+  let wasEmpty = false;
 
   if (filter === "submitted") {
     assignments = assignments.filter((obj) => obj.status === "Afleveret");
@@ -26,6 +29,25 @@ export function AssignmentsWrapper({ strAssignments }: Props) {
     assignments = assignments.filter((obj) => obj.status === "Venter");
   } else if (filter === "missing") {
     assignments = assignments.filter((obj) => obj.status === "Mangler");
+  }
+
+  if (assignments.length === 0) {
+    wasEmpty = true;
+  }
+
+  if (search !== "") {
+    assignments = assignments.filter((obj) => {
+      const query = search.toLowerCase();
+
+      const match1 = obj.title.toLowerCase().includes(query);
+      const match2 = obj.subject.toLowerCase().includes(query);
+      const match3 = obj.class.toLowerCase().includes(query);
+      const match4 = [obj.subject, obj.class]
+        .join(", ")
+        .toLowerCase()
+        .includes(query);
+      return match1 || match2 || match3 || match4;
+    });
   }
 
   return (
@@ -36,7 +58,9 @@ export function AssignmentsWrapper({ strAssignments }: Props) {
             Ingen Opgaver
           </p>
           <p className="text-sm text-muted-foreground opacity-50">
-            Der er ingen opgaver at vise. Godt klaret!
+            {search === "" || wasEmpty
+              ? "Der er ingen opgaver at vise. Godt klaret!"
+              : "Der var intet resultat"}
           </p>
         </div>
       )}

@@ -45,7 +45,7 @@ export function Buttons({ strAssignments }: Props) {
   const countTw = "text-xs h-6 w-6 p-1 rounded-full bg-zinc-500 bg-opacity-5";
 
   function handleClick(newFilter: "all" | "submitted" | "pending" | "missing") {
-    vEvent.dispatch("assignmentsFilter", { filter: newFilter });
+    vEvent.dispatch("assignmentsFilter", { filter: newFilter, search: "" });
   }
 
   useEffect(() => {
