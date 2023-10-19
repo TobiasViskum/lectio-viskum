@@ -7,19 +7,17 @@ import {
 
 export default function TooltipHover({
   children,
-  text,
+  html,
 }: {
   children?: React.ReactNode;
-  text?: string;
+  html?: JSX.Element;
 }) {
   return (
     <>
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>{children}</TooltipTrigger>
-          <TooltipContent>
-            <p>{text}</p>
-          </TooltipContent>
+          <TooltipContent>{html}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
     </>

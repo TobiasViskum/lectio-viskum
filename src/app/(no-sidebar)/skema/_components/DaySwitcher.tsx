@@ -12,7 +12,7 @@ export function DaySwitcher() {
 
   return (
     <div className="flex w-full justify-between">
-      <TooltipHover text="⌘⇧←">
+      <TooltipHover html={<p>{"⌘⇧←"}</p>}>
         <Button
           variant={"outline"}
           onClick={() => handleClick("previous")}
@@ -21,7 +21,7 @@ export function DaySwitcher() {
           <ArrowLeft className="text-white" />
         </Button>
       </TooltipHover>
-      <TooltipHover text="⌘⇧→">
+      <TooltipHover html={<p>{"⌘⇧→"}</p>}>
         <Button
           variant={"outline"}
           onClick={() => handleClick("next")}

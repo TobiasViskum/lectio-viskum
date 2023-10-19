@@ -1,10 +1,12 @@
 import { Logo, profileLoading } from "@/assets";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { CalendarIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
+import {
+  CalendarIcon,
+  EnvelopeClosedIcon,
+  PaperPlaneIcon,
+} from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu } from "./Menu";
 import { HomeIcon2 } from "@/components/icons/HomeIcon";
 import { AccountWrapper } from "./AccountWrapper";
 import { Suspense } from "react";
@@ -50,7 +52,19 @@ export async function Navbar() {
             <PaperPlaneIcon className="mx-3 block h-6 w-6 -rotate-45 sm:hidden" />
           </Link>
         </div>
-        <Menu />
+        <div>
+          <Link
+            href={"/beskeder"}
+            className="hidden items-center gap-x-2 rounded-md px-4 py-2 text-sm font-semibold hover:bg-accent sm:flex"
+          >
+            Beskeder
+            <EnvelopeClosedIcon />
+          </Link>
+          <Link href={"/beskeder"}>
+            <EnvelopeClosedIcon className="mx-3 block h-6 w-6 sm:hidden" />
+          </Link>
+        </div>
+
         <div className="ml-auto grid place-items-center rounded-full">
           <Suspense
             fallback={

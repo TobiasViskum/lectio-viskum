@@ -6,8 +6,32 @@ import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 import { getColors } from "../_util/getColors";
 import { getFormattedDate } from "../_util/getFormattedDate";
+import TooltipHover from "@/components/global/TooltipHover";
 
 type Props = { assignment: Assignment; addWeek: boolean };
+
+function TooltipHoverContent({ assignment }: { assignment: Assignment }) {
+  const assignmentTime = !isNaN(Number(assignment.assignmentTime.split(",")[0]))
+    ? Number(assignment.assignmentTime.split(",")[0])
+    : 0;
+
+  return (
+    <div className="flex flex-col">
+      <div className="flex">
+        <p className="w-16">Fravær:</p>
+        <p>{assignment.absence}</p>
+      </div>
+      <div className="flex">
+        <p className="w-16">Afventer:</p>
+        <p>{assignment.awaiter}</p>
+      </div>
+      <div className="flex">
+        <p className="w-16">Elevtimer:</p>
+        <p>{assignmentTime}</p>
+      </div>
+    </div>
+  );
+}
 
 export function Assignment({ assignment, addWeek }: Props) {
   const { sideColor, dateColor } = getColors(assignment);
@@ -17,10 +41,10 @@ export function Assignment({ assignment, addWeek }: Props) {
     "w-[calc(100%-24px)] absolute right-0 md:right-4 md:w-[calc(100%-32px)]";
 
   return (
-    <>
+    <TooltipHover html={<TooltipHoverContent assignment={assignment} />}>
       <Link
         key={assignment.title}
-        href="/"
+        href={`/afleveringer/${assignment.id}`}
         className="group relative flex h-[88px] w-full items-center gap-x-4 whitespace-nowrap rounded-lg bg-background py-1 pl-1 transition-colors hover:bg-muted focus:bg-muted focus:outline-0"
       >
         {addWeek && <Separator className={cn(separatorTw, "top-0")} />}
@@ -47,6 +71,6 @@ export function Assignment({ assignment, addWeek }: Props) {
         <ChevronRightIcon className="ml-auto mr-8 hidden text-muted-foreground opacity-75 transition-transform group-hover:translate-x-2 group-hover:scale-110 group-focus:translate-x-2 group-focus:scale-110 md:block" />
         <Separator className={cn(separatorTw, "bottom-0")} />
       </Link>
-    </>
+    </TooltipHover>
   );
 }
