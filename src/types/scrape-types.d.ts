@@ -19,6 +19,14 @@ type Student = Prettify<{
   imgSrc: string;
 }>;
 
+type Teacher = Prettify<{
+  name: string;
+  initials: string;
+  teacherId: string;
+  imgUrl: string;
+  imgSrc: string;
+}>;
+
 type LessonStatus = Prettify<"changed" | "cancelled" | "normal">;
 type LessonTime = Prettify<{
   date: string;
@@ -49,12 +57,39 @@ type Assignment = Prettify<{
   subject: string;
   title: string;
   dueTo: string;
-  assignmentTime: string;
-  assignmentDescription: string;
+  studentTime: string;
+  description: string;
   status: string;
   absence: string;
   awaiter: string;
   grade: string;
   gradeNote: string;
   id: string;
+}>;
+
+type SubmittedDocument = Prettify<{ name: string; href: string }>;
+type FullAssignment = Prettify<{
+  title: string;
+  documents: SubmittedDocument[];
+  description: string[];
+  subject: string;
+  class: string;
+  gradeSystem: string;
+  teacher: Teacher;
+  studentTime: number;
+  dueTo: { date: string; time: string };
+  inTeachingDescription: boolean;
+  awaiter: string;
+  status: string;
+  absence: string;
+  finished: boolean;
+  grade: string;
+  gradeNote: string;
+  studentNote: string;
+  submits: {
+    time: { date: string; time: string };
+    submitter: string;
+    comment: string;
+    document: SubmittedDocument;
+  }[];
 }>;

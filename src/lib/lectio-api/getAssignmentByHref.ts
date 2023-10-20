@@ -1,17 +1,17 @@
 import { makeRequest } from ".";
 
-type MainType = Prettify<Assignment[]>;
-type FunctionProps = APIProps<StandardProps>;
+type MainType = Prettify<FullAssignment>;
+type FunctionProps = APIProps<StandardProps & { href: string }>;
 
-export async function getAssignments(
+export async function getAssignmentByHref(
   props: FunctionProps,
   getFullResponse?: false | undefined,
 ): Promise<MainType | null>;
-export async function getAssignments(
+export async function getAssignmentByHref(
   props: FunctionProps,
   getFullResponse: true,
 ): Promise<APIResponse<MainType> | APIResponse<null>>;
-export async function getAssignments<K extends boolean | undefined>(
+export async function getAssignmentByHref<K extends boolean | undefined>(
   props: FunctionProps,
   getFullResponse?: boolean | undefined,
 ): Promise<
@@ -23,7 +23,7 @@ export async function getAssignments<K extends boolean | undefined>(
     | (K extends false ? APIResponse<null> : null);
 
   const result = await makeRequest<MainType>({
-    path: "/get-assignments",
+    path: "/get-assignment/by-href",
     params: props,
     tag: props.tag,
     // @ts-ignore

@@ -11,8 +11,8 @@ import TooltipHover from "@/components/global/TooltipHover";
 type Props = { assignment: Assignment; addWeek: boolean };
 
 function TooltipHoverContent({ assignment }: { assignment: Assignment }) {
-  const assignmentTime = !isNaN(Number(assignment.assignmentTime.split(",")[0]))
-    ? Number(assignment.assignmentTime.split(",")[0])
+  const studentTime = !isNaN(Number(assignment.studentTime.split(",")[0]))
+    ? Number(assignment.studentTime.split(",")[0])
     : 0;
 
   return (
@@ -27,7 +27,7 @@ function TooltipHoverContent({ assignment }: { assignment: Assignment }) {
       </div>
       <div className="flex">
         <p className="w-16">Elevtimer:</p>
-        <p>{assignmentTime}</p>
+        <p>{studentTime}</p>
       </div>
     </div>
   );
@@ -40,11 +40,13 @@ export function Assignment({ assignment, addWeek }: Props) {
   const separatorTw =
     "w-[calc(100%-24px)] absolute right-0 md:right-4 md:w-[calc(100%-32px)]";
 
+  const studentId = assignment.href.split("elevid=")[1].split("&")[0];
+
   return (
     <TooltipHover html={<TooltipHoverContent assignment={assignment} />}>
       <Link
         key={assignment.title}
-        href={`/afleveringer/${assignment.id}`}
+        href={`/afleveringer/${studentId}-${assignment.id}`}
         className="group relative flex h-[88px] w-full items-center gap-x-4 whitespace-nowrap rounded-lg bg-background py-1 pl-1 transition-colors hover:bg-muted focus:bg-muted focus:outline-0"
       >
         {addWeek && <Separator className={cn(separatorTw, "top-0")} />}

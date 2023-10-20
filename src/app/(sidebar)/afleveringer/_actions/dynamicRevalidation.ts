@@ -8,6 +8,6 @@ export async function dynamicRevalidation() {
   const credentials = getCredentials();
   const tag = `assignments-${credentials.username}`;
   revalidateTag(tag);
-  await lectioAPI.getAssignments({ ...credentials, tag: tag });
+  await lectioAPI.getAssignment.all({ ...credentials, tag: tag });
   return;
 }
