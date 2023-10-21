@@ -1,6 +1,7 @@
 "use client";
 
 import { getLectioCookies } from "@/lib/auth/getLectioCookies";
+import axios from "axios";
 
 type Props = { strAssignment: string };
 
@@ -12,31 +13,24 @@ export function AssignmentFiles({ strAssignment }: Props) {
   async function handleFetch(href: string, name: string) {
     const lectioCookies = getLectioCookies();
     let neededHref = href.split("lectio.dk")[1];
+    const text =
+      "ASP.NET_SessionId=2N5IG3QLSKAHZPVAY5OQ74LUHSIJYBOZ35UC3OZHDJDADO25JDQCAIBA;lectiogsc=1fc12062-bd4b-ab44-10f4-df04e0673e1a;";
+    console.log(href);
 
-    const res = await fetch(neededHref, {
-      method: "GET",
-      headers: {
-        // "Access-Control-Allow-Origin": "*",
-        // "Access-Control-Allow-Headers": "Content-Type,Authorization",
-        // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
-        // "Access-Control-Allow-Credentials": "true",
-        Cookie: lectioCookies,
-      },
-    })
-      .then(async (response) => {
-        console.log(await response.text());
-
-        return response.blob();
+    const res = await axios
+      .get(neededHref, {
+        withCredentials: true,
       })
+      .then((response) => response.data)
       .then((blob) => {
         console.log(blob);
 
         // Create an object URL for the blob
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = name; // The file name
-        link.click(); // This will download the file
+        // const url = URL.createObjectURL(blob);
+        // const link = document.createElement("a");
+        // link.href = url;
+        // link.download = name; // The file name
+        // link.click(); // This will download the file
         // link.remove();
       })
       .catch((error) => console.error(error));

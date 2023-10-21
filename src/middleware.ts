@@ -62,10 +62,13 @@ export async function middleware(request: NextRequest) {
         return response;
       }
     }
-    return NextResponse.redirect(
-      new URL("/log-ind?redirected=true", request.url),
-      { headers: requestHeaders },
-    );
+    if (!request.url.includes("/log-ind")) {
+      return NextResponse.redirect(
+        new URL("/log-ind?redirected=true", request.url),
+        { headers: requestHeaders },
+      );
+    }
+    return NextResponse.next({ headers: requestHeaders });
   } catch {
     if (request.url.includes("/log-ind")) {
       return NextResponse.next({ headers: requestHeaders });

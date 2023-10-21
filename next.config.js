@@ -15,7 +15,7 @@ const nextConfig = {
     return [
       {
         source: "/lectio/:path*",
-        destination: "https://lectio.dk/lectio/:path*",
+        destination: "https://www.lectio.dk/lectio/:path*",
       },
     ];
   },

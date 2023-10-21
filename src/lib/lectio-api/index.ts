@@ -70,16 +70,17 @@ export async function makeRequest<T, K extends boolean | undefined>({
   } catch {
     result = { status: "error", message: "Error when requesting endpoint" };
   }
+
   if (result.status === "error") {
     if (result.message.includes("auth")) {
-      // redirect("?revalidateCookies=true");
+      redirect("?revalidateCookies=true");
     }
     if (getFullResponse) {
       return result as ReturnType;
     }
     return null as ReturnType;
   }
-  await setCookies(result.lectioCookies);
+
   if (getFullResponse) {
     return result as ReturnType;
   }
