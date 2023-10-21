@@ -1,9 +1,9 @@
-import { getCredentials } from "@/lib/auth/getCredentials";
+import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { lectioAPI } from "@/lib/lectio-api";
-import Image from "next/image";
 import Link from "next/link";
 import { ClassAndTeacher } from "./_components/ClassAndTeacher";
 import { AssignmentDescription } from "./_components/AssignmentDescription";
+import { AssignmentFiles } from "./_components/AssignmentFiles";
 
 type Props = { params: { ids: string } };
 
@@ -11,10 +11,10 @@ export default async function AssignmentPage({ params }: Props) {
   const studentId = params.ids.split("-")[0];
   const assignmentId = params.ids.split("-")[1];
   const href = `ElevAflevering.aspx?elevid=${studentId}&exerciseid=${assignmentId}`;
-  const credentials = getCredentials();
-  const tag = `assignment-${assignmentId}-${credentials.username}`;
+  const lectioProps = getLectioProps();
+  const tag = `assignment-${assignmentId}-${lectioProps.username}`;
   const assignment = await lectioAPI.getAssignment.byHref({
-    ...credentials,
+    ...lectioProps,
     href: href,
     tag: tag,
   });
@@ -29,24 +29,7 @@ export default async function AssignmentPage({ params }: Props) {
       <div className="flex flex-col gap-y-6">
         <ClassAndTeacher assignment={assignment} />
         <AssignmentDescription assignment={assignment} />
-        <div>
-          <p>Vedhæftede filer:</p>
-          <div>
-            {assignment.documents.map((item, index) => {
-              const key = `${item.href}-${item.name}`;
-              return (
-                <div key={key}>
-                  <Link
-                    className="text-sm text-muted-foreground "
-                    href={item.href}
-                  >
-                    {item.name}
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <AssignmentFiles strAssignment={JSON.stringify(assignment)} />
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ type FormResponse = {
 type APIResponse<T> = Prettify<
   { message: string } & (
     | { status: "error" }
-    | { status: "success"; data: T | null }
+    | { status: "success"; data: T | null; lectioCookies: string }
   )
 >;
 

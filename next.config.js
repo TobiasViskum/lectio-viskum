@@ -11,6 +11,14 @@ const nextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/lectio/:path*",
+        destination: "https://lectio.dk/lectio/:path*",
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

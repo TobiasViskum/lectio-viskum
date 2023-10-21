@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import { Navbar } from "./_components/Navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
-import { SidebarWrapper } from "./_components/SidebarWrapper";
 import { Toaster } from "sonner";
 import { MainClientHandler } from "./_components/MainClientHandler";
 import { KeyHandler } from "./_components/KeyHandler";

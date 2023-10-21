@@ -1,4 +1,9 @@
 type StandardProps = Prettify<{
+  lectioCookies: string;
+  schoolCode: string;
+}>;
+
+type AuthProps = Prettify<{
   username: string;
   password: string;
   schoolCode: string;
@@ -11,6 +16,7 @@ type School = Prettify<{
 
 type LectioAuth = Prettify<{
   isAuthenticated: boolean;
+  lectioCookies: string;
 }>;
 
 type Student = Prettify<{

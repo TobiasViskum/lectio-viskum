@@ -19,6 +19,8 @@ export function AssignmentDescription({ assignment }: Props) {
   }
 
   if (assignment.description.length === 0) return null;
+  if (assignment.description.length === 1 && assignment.description[0] === "")
+    return null;
 
   return (
     <div className="flex flex-col gap-y-1">

@@ -7,9 +7,10 @@ import { getStudentByCredentials } from "./getStudentByCredentials";
 import { getScheduleByCredentials } from "./getScheduleByCredentials";
 import { getAllAssignments } from "./getAllAssignments";
 import { getAssignmentByHref } from "./getAssignmentByHref";
+import { setCookies } from "./set-cookies";
 
-const developmentUrl = "http://localhost:3001";
-const productionUrl = "https://lectio-api.vercel.app";
+const developmentUrl = "http://localhost:3001/api";
+const productionUrl = "https://lectio-api.vercel.app/api";
 let baseUrl = developmentUrl;
 if (process.env.NODE_ENV === "production") {
   baseUrl = productionUrl;
@@ -51,12 +52,14 @@ export async function makeRequest<T, K extends boolean | undefined>({
     | (K extends false ? APIResponse<null> : null);
 
   let result: APIResponse<T> | null = null;
+
   try {
     if (tag) {
       const res = await fetch(
         [baseUrl, path, "?"].join("") + new URLSearchParams(params),
         { cache: "force-cache", next: { tags: [tag] } },
       );
+
       result = (await res.json()) as APIResponse<T>;
     } else {
       const res = await fetch(
@@ -69,13 +72,14 @@ export async function makeRequest<T, K extends boolean | undefined>({
   }
   if (result.status === "error") {
     if (result.message.includes("auth")) {
-      redirect("/log-ind?redirected=true");
+      // redirect("?revalidateCookies=true");
     }
     if (getFullResponse) {
       return result as ReturnType;
     }
     return null as ReturnType;
   }
+  await setCookies(result.lectioCookies);
   if (getFullResponse) {
     return result as ReturnType;
   }

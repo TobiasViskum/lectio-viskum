@@ -1,4 +1,4 @@
-import { getCredentials } from "@/lib/auth/getCredentials";
+import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { lectioAPI } from "@/lib/lectio-api";
 import { generateTimestamps } from "./_util/generateTimestamps";
 import { Timestamps } from "./_components/Timestamps";
@@ -31,11 +31,13 @@ export default async function SchedulePage({ searchParams }: Props) {
     //   redirect(`/skema?week=${newObj.week}&year=${newObj.year}`);
     // }
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 
+  const lectioProps = getLectioProps();
+
   function getTag(week: string) {
-    const tag = `skema-${credentials.username}-${[
+    const tag = `skema-${lectioProps.username}-${[
       week,
       searchParamsObj.year,
     ].join("")}`;
@@ -43,10 +45,8 @@ export default async function SchedulePage({ searchParams }: Props) {
     return tag;
   }
 
-  const credentials = getCredentials();
-
   const schedule = await lectioAPI.getSchedule.byCredentials({
-    ...credentials,
+    ...lectioProps,
     ...searchParamsObj,
     tag: getTag(searchParamsObj.week),
   });

@@ -27,17 +27,17 @@ export function Title({ schoolPromise, name }: Props) {
   const titleTw =
     "sm:text-4xl text-3xl leading-snug font-semibold flex flex-col [text-wrap:balance] text-center";
 
-  useEffect(() => {
-    async function verifySchool() {
-      const school = await schoolPromise;
-      if (school === null) {
-        router.push("/log-ind");
-      } else if (school.name !== name) {
-        setSchoolName(school.name);
-      }
-    }
-    verifySchool();
-  }, [schoolPromise, router, name]);
+  // useEffect(() => {
+  //   async function verifySchool() {
+  //     const school = await schoolPromise;
+  //     if (school === null) {
+  //       router.push("/log-ind");
+  //     } else if (school.name !== name) {
+  //       setSchoolName(school.name);
+  //     }
+  //   }
+  //   verifySchool();
+  // }, [schoolPromise, router, name]);
 
   return (
     <>
