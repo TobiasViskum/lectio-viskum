@@ -1,16 +1,28 @@
-export function getLectioCookies() {
-  const cookies = document.cookie.split("; ");
+export function getCookies() {
+  const splitCookies = document.cookie.split("; ");
 
-  let lectioCookies = "";
+  let cookies = {
+    username: splitCookies
+      .find((c) => c.includes("username="))
+      ?.replace("username=", ""),
+    password: splitCookies
+      .find((c) => c.includes("password="))
+      ?.replace("password=", ""),
+    schoolCode: splitCookies
+      .find((c) => c.includes("schoolCode="))
+      ?.replace("schoolCode=", ""),
+    lectioCookies: splitCookies
+      .find((c) => c.includes("lectioCookies="))
+      ?.replace("lectioCookies=", ""),
+  };
 
-  for (let i = 0; i < cookies.length; i++) {
-    const cookie = cookies[i];
-    if (cookie.includes("lectioCookies=")) {
-      lectioCookies = cookie.replace("lectioCookies=", "");
-      break;
+  for (const [k, value] of Object.entries(cookies)) {
+    if (value) {
+      const key = k as keyof typeof cookies;
+      const newValue = decodeURIComponent(value);
+      cookies[key] = newValue;
     }
   }
-  lectioCookies = decodeURIComponent(lectioCookies);
 
-  return lectioCookies;
+  return cookies;
 }

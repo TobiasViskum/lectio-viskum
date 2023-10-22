@@ -11,7 +11,7 @@ export function ClassAndTeacher({ assignment }: Props) {
           {[assignment.subject, assignment.class].join(", ")}
         </p>
       </div>
-      <button className="flex w-max items-center gap-x-2 rounded-md py-2 pl-1 pr-3 transition-colors hover:bg-accent focus:bg-accent">
+      <button className="flex w-max items-center gap-x-2 rounded-lg py-2 pl-1 pr-3 transition-colors hover:bg-accent focus:bg-accent">
         <Image
           src={assignment.teacher.imgSrc}
           width={48}

@@ -32,7 +32,7 @@ type Teacher = Prettify<{
   imgUrl: string;
   imgSrc: string;
 }>;
-
+type LectioDocument = Prettify<{ name: string; href: string }>;
 type LessonStatus = Prettify<"changed" | "cancelled" | "normal">;
 type LessonTime = Prettify<{
   date: string;
@@ -73,10 +73,15 @@ type Assignment = Prettify<{
   id: string;
 }>;
 
-type SubmittedDocument = Prettify<{ name: string; href: string }>;
+type Submit = Prettify<{
+  time: string;
+  submitter: string;
+  comment: string;
+  document: LectioDocument;
+}>;
 type FullAssignment = Prettify<{
   title: string;
-  documents: SubmittedDocument[];
+  documents: LectioDocument[];
   description: string[];
   subject: string;
   class: string;
@@ -92,10 +97,5 @@ type FullAssignment = Prettify<{
   grade: string;
   gradeNote: string;
   studentNote: string;
-  submits: {
-    time: string;
-    submitter: string;
-    comment: string;
-    document: SubmittedDocument;
-  }[];
+  submits: Submit[];
 }>;

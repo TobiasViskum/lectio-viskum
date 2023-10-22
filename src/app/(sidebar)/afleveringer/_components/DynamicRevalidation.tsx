@@ -11,7 +11,7 @@ export function DynamicRevalidation() {
   useEffect(() => {
     async function doRevalidation() {
       await dynamicRevalidation();
-      router.push(path, { scroll: false });
+      router.refresh();
     }
     doRevalidation();
   }, [path, router]);
