@@ -7,7 +7,6 @@ export async function downloadAsset(href: string, name: string) {
   const lectioCookies = getLectioCookies();
   await client
     .get(href, {
-      headers: { Cookie: lectioCookies },
       responseType: "blob",
     })
     .then((res) => {
@@ -15,9 +14,8 @@ export async function downloadAsset(href: string, name: string) {
       const link = document.createElement("a");
       link.href = url;
       link.target = "_blank";
-      link.download = "test.mw"; // The file name
+      link.download = name; // The file name
       link.click(); // This will download the file
-      link.remove();
     })
     .catch((err) => {
       return null;

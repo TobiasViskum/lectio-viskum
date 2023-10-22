@@ -11,8 +11,6 @@ export function AssignmentFiles({ strAssignment }: Props) {
   if (assignment.documents.length === 0) return null;
 
   async function handleFetch(href: string, name: string) {
-    console.log(name);
-
     await downloadAsset(href, name);
   }
 
