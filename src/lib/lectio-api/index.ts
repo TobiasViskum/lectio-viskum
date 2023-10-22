@@ -13,9 +13,10 @@ const testUrl = "https://dev07.reactprojects.mywire.org/api";
 const test2Url = "http://localhost:3000/api";
 const developmentUrl = "http://localhost:3001/api";
 const productionUrl = "https://lectio-api.vercel.app/api";
+const production2Url = "https://lectio-viskum.vercel.app/api";
 let baseUrl = test2Url;
 if (process.env.NODE_ENV === "production") {
-  baseUrl = productionUrl;
+  baseUrl = production2Url;
 }
 
 export type StandardProps = {
