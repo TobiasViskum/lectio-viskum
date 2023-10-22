@@ -1,17 +1,23 @@
 "use client";
 
 import { downloadAsset } from "@/lib/downloadAsset";
+import { cn } from "@/lib/utils";
 import { Dot } from "lucide-react";
+import { useState } from "react";
 
 type Props = { strAssignment: string };
 
 export function AssignmentFiles({ strAssignment }: Props) {
+  const [isDownloading, setIsDownloading] = useState(false);
+
   const assignment: FullAssignment = JSON.parse(strAssignment);
 
   if (assignment.documents.length === 0) return null;
 
   async function handleFetch(href: string, name: string) {
+    setIsDownloading(true);
     await downloadAsset(href, name);
+    setIsDownloading(false);
   }
 
   return (
@@ -25,7 +31,10 @@ export function AssignmentFiles({ strAssignment }: Props) {
               <Dot />
               <button
                 onClick={() => handleFetch(item.href, item.name)}
-                className="text-sm text-blue-400 underline"
+                className={cn(
+                  "text-sm text-blue-400 underline",
+                  isDownloading ? "animate-pulse" : "",
+                )}
               >
                 {item.name}
               </button>
