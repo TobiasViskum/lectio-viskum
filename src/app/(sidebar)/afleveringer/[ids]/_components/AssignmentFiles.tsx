@@ -27,8 +27,7 @@ export function AssignmentFiles({ strAssignment }: Props) {
         {assignment.documents.map((item, index) => {
           const key = `${item.href}-${item.name}`;
           return (
-            <li key={key} className="flex">
-              <Dot />
+            <li key={key} className="flex items-start">
               <button
                 onClick={() => handleFetch(item.href, item.name)}
                 className={cn(
