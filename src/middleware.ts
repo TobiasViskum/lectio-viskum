@@ -6,6 +6,12 @@ export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-url", request.url);
 
+  if (request.nextUrl.pathname === "/") {
+    return NextResponse.redirect(new URL("/forside", request.url), {
+      headers: requestHeaders,
+    });
+  }
+
   const cookies = request.cookies;
   let obj = {
     username: cookies.get("username")?.value,
@@ -81,5 +87,11 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/skema/:path*", "/afleveringer/:path*", "/log-ind"],
+  matcher: [
+    "/",
+    "/skema/:path*",
+    "/afleveringer/:path*",
+    "/log-ind",
+    "/forside",
+  ],
 };

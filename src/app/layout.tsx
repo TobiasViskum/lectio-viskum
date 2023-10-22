@@ -1,7 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Navbar } from "./_components/Navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
@@ -26,6 +25,7 @@ export default async function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
         />
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body
         className={cn(
@@ -35,7 +35,7 @@ export default async function RootLayout({
       >
         <ThemeProvider defaultTheme="dark" forcedTheme="dark">
           <Toaster richColors />
-          <Navbar />
+
           <div className="w-full py-16">
             <main className="flex w-full flex-col items-center px-1 sm:px-2 md:px-4">
               {children}

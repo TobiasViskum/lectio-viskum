@@ -80,6 +80,7 @@ type Submit = Prettify<{
   document: LectioDocument;
 }>;
 type FullAssignment = Prettify<{
+  studentName: string;
   title: string;
   documents: LectioDocument[];
   description: string[];

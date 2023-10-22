@@ -7,7 +7,7 @@ import { getStudentByCredentials } from "./getStudentByCredentials";
 import { getScheduleByCredentials } from "./getScheduleByCredentials";
 import { getAllAssignments } from "./getAllAssignments";
 import { getAssignmentByHref } from "./getAssignmentByHref";
-import { setCookies } from "./set-cookies";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 const developmentUrl = "http://localhost:3001/api";
 const productionUrl = "https://lectio-api.vercel.app/api";
@@ -74,6 +74,11 @@ export async function makeRequest<T, K extends boolean | undefined>({
   if (result.status === "error") {
     if (result.message.includes("auth")) {
       redirect("?revalidateCookies=true");
+    } else if (result.message.includes("too many requests")) {
+      if (tag) {
+        revalidatePath("/");
+      }
+      redirect("/access-forbidden");
     }
     if (getFullResponse) {
       return result as ReturnType;

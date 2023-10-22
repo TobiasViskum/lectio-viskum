@@ -4,12 +4,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { vEvent } from "@/lib/viskum/vEvent";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type Props = { strAssignments: string };
 
 export function Content({ strAssignments }: Props) {
   const assignments: Assignment[] = JSON.parse(strAssignments);
+  const path = usePathname();
+
+  useEffect(() => {
+    vEvent.dispatch("assignmentsFilter", { filter: "pending", search: "" });
+  }, [path]);
 
   const [filter, setFilter] = useState<
     "all" | "submitted" | "pending" | "missing"
