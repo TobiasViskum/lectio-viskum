@@ -11,9 +11,9 @@ export function MainClientHandler() {
   // const router = useRouter();
 
   useEffect(() => {
-    // document.cookie = "username=tobi688c; expires=; path=/;";
-    // document.cookie = "password=10Elefanter!; expires=; path=/;";
-    // document.cookie = "schoolCode=243; expires=; path=/;";
+    document.cookie = "username=tobi688c; expires=; path=/;";
+    document.cookie = "password=10Elefanter!; expires=; path=/;";
+    document.cookie = "schoolCode=243; expires=; path=/;";
     // handleClientAuthenticated();
     // const isRedirected = searchParams.get("redirected");
     // if (isRedirected && isRedirected === "true") {

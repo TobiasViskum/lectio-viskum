@@ -22,16 +22,16 @@ export function AssignmentFiles({ strAssignment }: Props) {
 
   return (
     <div>
-      <p>Vedhæftede filer:</p>
+      <p className="font-medium">Vedhæftede filer:</p>
       <ul className="flex flex-col gap-y-2">
         {assignment.documents.map((item, index) => {
           const key = `${item.href}-${item.name}`;
           return (
-            <li key={key} className="flex items-start">
+            <li key={key} className="flex ">
               <button
                 onClick={() => handleFetch(item.href, item.name)}
                 className={cn(
-                  "text-sm text-blue-400 underline",
+                  "text-start text-sm text-blue-400 underline",
                   isDownloading ? "animate-pulse" : "",
                 )}
               >

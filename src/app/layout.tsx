@@ -42,7 +42,7 @@ export default async function RootLayout({
             </main>
           </div>
         </ThemeProvider>
-        <MainClientHandler />
+        {process.env.NODE_ENV === "development" && <MainClientHandler />}
         <KeyHandler />
       </body>
     </html>

@@ -4,17 +4,20 @@ export function AssignmentDescription({ assignment }: Props) {
   function urlifyNote(text: string) {
     const linkTw = "text-blue-400 font-medium";
 
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const urlRegex = /(https?:\/\/[^\s<]+)/g;
     const siteRegex = /https?:\/\/(.*)\//;
 
     return text.replace(urlRegex, function (url: string) {
       let title = url;
-      const siteMatch = text.match(siteRegex);
-      if (siteMatch) {
-        title = siteMatch[1];
+      const domainRegex =
+        /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n?]+)/im;
+      const match = url.match(domainRegex);
+
+      if (match) {
+        title = match[1];
       }
 
-      return `<a class="${linkTw}" href=${url}>${title}</a>`;
+      return `<a class="${linkTw}" href=${url} target="_blank" >${title}</a>`;
     });
   }
 

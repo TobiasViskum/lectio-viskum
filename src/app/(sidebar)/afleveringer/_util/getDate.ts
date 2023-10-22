@@ -1,5 +1,5 @@
-export function getDate(assignment: Assignment) {
-  const splitDueTo = assignment.dueTo.split("-");
+export function getDate(time: string) {
+  const splitDueTo = time.split("-");
   const splitDayMonth = splitDueTo[0].split("/");
   const day = Number(splitDayMonth[0]);
   const month = Number(splitDayMonth[1]) - 1;

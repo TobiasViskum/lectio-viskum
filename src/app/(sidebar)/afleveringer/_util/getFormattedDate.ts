@@ -1,7 +1,7 @@
 import { getDate } from "./getDate";
 
 export function getFormattedDate(assignment: Assignment) {
-  const date = getDate(assignment);
+  const date = getDate(assignment.dueTo);
 
   const msBetween = date.getTime() - new Date().getTime();
   const daysBetween = msBetween / (1000 * 60 * 60 * 24);
