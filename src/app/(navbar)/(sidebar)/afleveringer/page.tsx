@@ -19,7 +19,7 @@ export default async function AssignmentsPage() {
           <AssignmentsRenderer />
         </Suspense>
       </div>
-      <DynamicRevalidation />
+      {/* <DynamicRevalidation /> */}
     </>
   );
 }

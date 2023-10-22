@@ -69,7 +69,7 @@ export default async function AssignmentPage({ params, searchParams }: Props) {
           </Suspense>
         </div>
       </div>
-      <DynamicRevalidation ids={params.ids} />
+      {/* <DynamicRevalidation ids={params.ids} /> */}
     </>
   );
 }

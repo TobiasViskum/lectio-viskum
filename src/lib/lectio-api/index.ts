@@ -7,11 +7,13 @@ import { getStudentByCredentials } from "./getStudentByCredentials";
 import { getScheduleByCredentials } from "./getScheduleByCredentials";
 import { getAllAssignments } from "./getAllAssignments";
 import { getAssignmentByHref } from "./getAssignmentByHref";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 
+const testUrl = "https://dev07.reactprojects.mywire.org/api";
+const test2Url = "http://localhost:3000/api";
 const developmentUrl = "http://localhost:3001/api";
 const productionUrl = "https://lectio-api.vercel.app/api";
-let baseUrl = developmentUrl;
+let baseUrl = test2Url;
 if (process.env.NODE_ENV === "production") {
   baseUrl = productionUrl;
 }
