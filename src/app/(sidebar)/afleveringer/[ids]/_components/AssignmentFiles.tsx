@@ -1,7 +1,7 @@
 "use client";
 
-import { getLectioCookies } from "@/lib/auth/getLectioCookies";
-import axios from "axios";
+import { downloadAsset } from "@/lib/downloadAsset";
+import { Dot } from "lucide-react";
 
 type Props = { strAssignment: string };
 
@@ -11,51 +11,30 @@ export function AssignmentFiles({ strAssignment }: Props) {
   if (assignment.documents.length === 0) return null;
 
   async function handleFetch(href: string, name: string) {
-    const lectioCookies = getLectioCookies();
-    let neededHref = href.split("lectio.dk")[1];
-    const text =
-      "ASP.NET_SessionId=2N5IG3QLSKAHZPVAY5OQ74LUHSIJYBOZ35UC3OZHDJDADO25JDQCAIBA;lectiogsc=1fc12062-bd4b-ab44-10f4-df04e0673e1a;";
-    console.log(href);
+    console.log(name);
 
-    const res = await axios
-      .get(neededHref, {
-        withCredentials: true,
-      })
-      .then((response) => response.data)
-      .then((blob) => {
-        console.log(blob);
-
-        // Create an object URL for the blob
-        // const url = URL.createObjectURL(blob);
-        // const link = document.createElement("a");
-        // link.href = url;
-        // link.download = name; // The file name
-        // link.click(); // This will download the file
-        // link.remove();
-      })
-      .catch((error) => console.error(error));
-
-    return res;
+    await downloadAsset(href, name);
   }
 
   return (
     <div>
       <p>Vedhæftede filer:</p>
-      <div>
+      <ul className="flex flex-col gap-y-2">
         {assignment.documents.map((item, index) => {
           const key = `${item.href}-${item.name}`;
           return (
-            <div key={key}>
+            <li key={key} className="flex">
+              <Dot />
               <button
                 onClick={() => handleFetch(item.href, item.name)}
-                className="text-sm text-muted-foreground "
+                className="text-sm text-blue-400 underline"
               >
                 {item.name}
               </button>
-            </div>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </div>
   );
 }
