@@ -1,6 +1,5 @@
 import { getAllSchools as _getAllSchools } from "@/library/scrapeFunctions";
 import { processResult } from "./processResult";
-import { validateResult } from "./validateResult";
 
 type MainType = Prettify<School[]>;
 

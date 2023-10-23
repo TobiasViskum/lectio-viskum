@@ -1,7 +1,8 @@
 import { load } from "cheerio";
-import { getAxiosInstance } from "../getAxiosInstance";
+import { getFetchCookie } from "../getFetchCookie";
 import { getPageFromMap } from "./page-map";
 import { getSchoolBySchoolCode } from "../scrapeFunctions/getSchoolBySchoolCode";
+import { getLectioProps } from "@/lib/auth/getLectioProps";
 
 type Props = {
   page?: Pages;
@@ -27,32 +28,36 @@ export async function getAuthenticatedPage({
     targetPage = specificPage;
   }
 
-  const { client } = getAxiosInstance();
+  const { fetchCookie } = getFetchCookie();
 
-  const targetPageContent = await client
-    .get(`${baseUrl}/${schoolCode}/${targetPage}`, {
+  const targetPageContent = await fetchCookie(
+    `${baseUrl}/${schoolCode}/${targetPage}`,
+    {
+      method: "GET",
       headers: { Cookie: lectioCookies },
-    })
+    },
+  )
     .then(async (res) => {
-      if (res.data.includes("Log ind")) {
-        return "Not authenticated";
-      } else if (res.data.includes("Der opstod en ukendt fejl")) {
-        const school = await getSchoolBySchoolCode({ schoolCode: schoolCode });
-        if (school === null) return "Invalid school";
+      try {
+        const text = await res.text();
+        if (text.includes("Log ind")) {
+          return "Not authenticated";
+        } else if (text.includes("Der opstod en ukendt fejl")) {
+          const school = await getSchoolBySchoolCode({
+            schoolCode: schoolCode,
+          });
+          if (school === null) return "Invalid school";
+          return null;
+        } else if (text.includes("Server Error")) {
+          return "Forbidden access";
+        } else {
+          return { $: load(text), fetchCookie: fetchCookie };
+        }
+      } catch {
         return null;
-      } else {
-        return { $: load(res.data), client: client };
       }
     })
     .catch((err) => {
-      if (
-        err.response &&
-        err.response.data &&
-        err.response.data.includes("Server Error")
-      ) {
-        return "Forbidden access";
-      }
-
       return null;
     });
 

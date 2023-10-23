@@ -1,8 +1,7 @@
 import { load } from "cheerio";
 import { getAuthenticatedPage } from ".";
 import { getAssignmentsForm } from "./getForm/assignment-form";
-
-type Props = StandardProps;
+import { getLectioProps } from "@/lib/auth/getLectioProps";
 
 export async function getAssignmentsPage({
   lectioCookies,
@@ -19,7 +18,7 @@ export async function getAssignmentsPage({
   if (res === "Forbidden access") return res;
   if (res === "Invalid school") return res;
   const $ = res.$;
-  const client = res.client;
+  const fetchCookie = res.fetchCookie;
 
   const __VIEWSTATEX = $("input#__VIEWSTATEX").val();
   const __EVENTVALIDATION = $("input#__EVENTVALIDATION").val();
@@ -31,23 +30,30 @@ export async function getAssignmentsPage({
       __EVENTVALIDATION: __EVENTVALIDATION,
       masterFooterValue: masterFooterValue,
     });
+    const cookies = getLectioProps();
 
-    const pageContent = await client
-      .post("https://www.lectio.dk/lectio/243/OpgaverElev.aspx", form, {
-        headers: { Cookie: lectioCookies },
-      })
-      .then((res) => {
-        if (res.data.includes("Log ind")) {
+    const pageContent = await fetchCookie(
+      "https://www.lectio.dk/lectio/243/OpgaverElev.aspx",
+      {
+        method: "POST",
+        body: form,
+        headers: { Cookie: cookies.lectioCookies },
+      },
+    ).then(async (res) => {
+      try {
+        const text = await res.text();
+        if (text.includes("Log ind")) {
           return "Not authenticated";
-        } else if (res.data.includes("Der opstod en ukendt fejl")) {
+        } else if (text.includes("Der opstod en ukendt fejl")) {
           return null;
         } else {
-          return { $: load(res.data), client: client };
+          return { $: load(text), fetchCookie: fetchCookie };
         }
-      })
-      .catch((err) => {
+      } catch {
         return null;
-      });
+      }
+    });
+
     return pageContent;
   } else {
     return null;

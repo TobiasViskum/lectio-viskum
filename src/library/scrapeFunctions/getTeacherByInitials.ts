@@ -22,11 +22,17 @@ export async function getTeacherByInitials({
   if (res === null) return res;
 
   const $ = res.$;
-  const client = res.client;
+  const fetchCookie = res.fetchCookie;
 
   const teachers: Teacher[] = $("span.classpicture")
     .map((index, elem) => {
-      let obj = { name: "", initials: "", teacherId: "", imgUrl: "", imgSrc: "" } as Teacher;
+      let obj = {
+        name: "",
+        initials: "",
+        teacherId: "",
+        imgUrl: "",
+        imgSrc: "",
+      } as Teacher;
       const $elem = $(elem);
       const $name = $elem.find("> span > span");
       const name = $name.text();
@@ -58,15 +64,20 @@ export async function getTeacherByInitials({
     return "No data";
   }
 
-  const imageBase64 = await client
-    .get(foundTeacher.imgUrl, { responseType: "arraybuffer", headers: { "Cookie": lectioCookies } })
-    .then((res) => {
-      const contentType = res.headers["content-type"];
-
-      const base64Image = Buffer.from(res.data, "binary").toString("base64");
-      const fullSrc = ["data:", contentType, ";base64,", base64Image].join("");
-
-      return fullSrc;
+  const imageBase64 = await fetchCookie(foundTeacher.imgUrl, {
+    method: "GET",
+    headers: { Cookie: lectioCookies },
+  })
+    .then(async (res) => {
+      try {
+        const arrayBuffer = await res.arrayBuffer();
+        const contentType = res.headers.get("content-type");
+        const base64 = Buffer.from(arrayBuffer).toString("base64");
+        const fullSrc = `data:${contentType};base64,${base64}`;
+        return fullSrc;
+      } catch {
+        return null;
+      }
     })
     .catch((err) => {
       return null;

@@ -1,6 +1,5 @@
 import { getIsAuthenticated as _getIsAuthenticated } from "@/library/scrapeFunctions/getIsAuthenticated";
 import { processResult } from "./processResult";
-import { validateResult } from "./validateResult";
 
 type MainType = LectioAuth;
 type FunctionProps = APIProps<AuthProps>;

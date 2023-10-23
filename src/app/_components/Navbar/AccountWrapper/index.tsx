@@ -24,12 +24,10 @@ export async function AccountWrapper() {
   const lectioProps = getLectioProps();
   const date1 = new Date().getTime();
 
-  const user = await getStudentByCredentials({ ...lectioProps });
-
-  // const user = await lectioAPI.getStudent.byCredentials({
-  //   ...lectioProps,
-  //   tag: `user-${lectioProps.username}`,
-  // });
+  const user = await lectioAPI.getStudent.byCredentials({
+    ...lectioProps,
+    tag: `user-${lectioProps.username}`,
+  });
 
   console.log(new Date().getTime() - date1);
 

@@ -1,29 +1,35 @@
 import { getCookies } from "./auth/getLectioCookies";
-import { getAxiosInstance } from "./getAxiosInstance";
+import { getFetchCookie } from "./getFetchCookie";
 import { getLoginForm } from "./login-form";
 import { load } from "cheerio";
 
 export async function downloadAsset(href: string, name: string) {
-  const { client } = getAxiosInstance();
+  const { fetchCookie } = getFetchCookie();
   const cookies = getCookies();
 
-  const form = await client
-    .get(`/lectio/${cookies.schoolCode || ""}/login.aspx`)
-    .then((res) => {
-      const $ = load(res.data);
-      const __VIEWSTATEX = $("input#__VIEWSTATEX").val();
-      const __EVENTVALIDATION = $("input#__EVENTVALIDATION").val();
-      const masterFooterValue = $('input[name="masterfootervalue"]').val();
+  const form = await fetchCookie(`/lectio/${cookies.schoolCode}/login.aspx`, {
+    method: "GET",
+  })
+    .then(async (res) => {
+      try {
+        const text = await res.text();
+        const $ = load(text);
+        const __VIEWSTATEX = $("input#__VIEWSTATEX").val();
+        const __EVENTVALIDATION = $("input#__EVENTVALIDATION").val();
+        const masterFooterValue = $('input[name="masterfootervalue"]').val();
 
-      if (__VIEWSTATEX && __EVENTVALIDATION && masterFooterValue) {
-        return getLoginForm({
-          __VIEWSTATEX: __VIEWSTATEX,
-          __EVENTVALIDATION: __EVENTVALIDATION,
-          masterFooterValue: masterFooterValue,
-          username: cookies.username || "",
-          password: cookies.password || "",
-        });
-      } else {
+        if (__VIEWSTATEX && __EVENTVALIDATION && masterFooterValue) {
+          return getLoginForm({
+            __VIEWSTATEX: __VIEWSTATEX,
+            __EVENTVALIDATION: __EVENTVALIDATION,
+            masterFooterValue: masterFooterValue,
+            username: cookies.username || "",
+            password: cookies.password || "",
+          });
+        } else {
+          return null;
+        }
+      } catch {
         return null;
       }
     })
@@ -32,41 +38,41 @@ export async function downloadAsset(href: string, name: string) {
     });
 
   if (form) {
-    const targetPageContent = await client
-      .post(
-        `/lectio/${cookies.schoolCode || ""}/login.aspx?prevurl=forside.aspx`,
-        form,
-      )
-      .then((res) => {
-        if (res.data.includes("Log ind")) {
+    const targetPageContent = await fetchCookie(
+      `/lectio/${cookies.schoolCode}/login.aspx?prevurl=forside.aspx`,
+      { method: "POST" },
+    ).then(async (res) => {
+      try {
+        const text = await res.text();
+        if (text.includes("Log ind")) {
           return null;
-        } else if (res.data.includes("Der opstod en ukendt fejl")) {
+        } else if (text.includes("Der opstod en ukendt fejl")) {
           return null;
         } else {
           return true;
         }
-      })
-      .catch((err) => {
+      } catch {
         return null;
-      });
+      }
+    });
 
     if (targetPageContent) {
-      const res = await client
-        .get(href, {
-          responseType: "blob",
-        })
-        .then((res) => {
-          const url = URL.createObjectURL(res.data);
-          const link = document.createElement("a");
-          link.href = url;
-          link.target = "_blank";
-          link.download = name; // The file name
-          link.click(); // This will download the file
-          return true;
-        })
-        .catch((err) => {
-          return null;
+      const res = await fetchCookie(href, { method: "GET" })
+        .then((res) => res.blob())
+        .then(async (res) => {
+          try {
+            const url = URL.createObjectURL(res);
+            const link = document.createElement("a");
+            link.href = url;
+            link.target = "_blank";
+            link.download = name;
+            link.click();
+            return true;
+          } catch {
+            return null;
+          }
         });
+
       return res;
     }
     return null;

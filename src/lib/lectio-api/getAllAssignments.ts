@@ -11,6 +11,7 @@ export async function getAllAssignments(props: FunctionProps) {
     schoolCode: props.schoolCode,
   });
   const processedResult = processResult<MainType>(result);
+
   validateResult(processedResult);
 
   const data =

@@ -2,7 +2,10 @@ import { load } from "cheerio";
 import { getAuthenticatedPage } from ".";
 import { getAllMessagesForm } from "./getForm/all-messages-form";
 
-export async function getAllMessagesPage({ lectioCookies, schoolCode }: StandardProps) {
+export async function getAllMessagesPage({
+  lectioCookies,
+  schoolCode,
+}: StandardProps) {
   const res = await getAuthenticatedPage({
     lectioCookies: lectioCookies,
     schoolCode: schoolCode,
@@ -12,11 +15,10 @@ export async function getAllMessagesPage({ lectioCookies, schoolCode }: Standard
   if (res === null) return res;
   if (res === "Not authenticated") return res;
   if (res === "Forbidden access") return res;
-
   if (res === "Invalid school") return res;
 
   const $ = res.$;
-  const client = res.client;
+  const fetchCookie = res.fetchCookie;
 
   const __VIEWSTATEY_KEY = $("input#__VIEWSTATEY_KEY").val();
   const masterFooterValue = $('input[name="masterfootervalue"]').val();
@@ -27,20 +29,27 @@ export async function getAllMessagesPage({ lectioCookies, schoolCode }: Standard
       masterFooterValue: masterFooterValue,
     });
 
-    const pageContent = await client
-      .post("https://www.lectio.dk/lectio/243/beskeder2.aspx?selectedfolderid=-30", form)
-      .then((res) => {
-        if (res.data.includes("Log ind")) {
+    const pageContent = await fetchCookie(
+      "https://www.lectio.dk/lectio/243/beskeder2.aspx?selectedfolderid=-30",
+      {
+        method: "POST",
+        body: form,
+      },
+    ).then(async (res) => {
+      try {
+        const text = await res.text();
+        if (text.includes("Log ind")) {
           return "Not authenticated";
-        } else if (res.data.includes("Der opstod en ukendt fejl")) {
+        } else if (text.includes("Der opstod en ukendt fejl")) {
           return null;
         } else {
-          return { $: load(res.data), client: client };
+          return { $: load(text), fetchCookie: fetchCookie };
         }
-      })
-      .catch((err) => {
+      } catch {
         return null;
-      });
+      }
+    });
+
     return pageContent;
   } else {
     return null;

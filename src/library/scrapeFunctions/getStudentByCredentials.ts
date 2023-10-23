@@ -16,24 +16,29 @@ export async function getStudentByCredentials({
   if (res === "Invalid school") return res;
 
   const $ = res.$;
-  const client = res.client;
+  const fetchCookie = res.fetchCookie;
 
   const imgHref = [
     "https://lectio.dk",
     $("img#s_m_HeaderContent_picctrlthumbimage").attr("src"),
     "&fullsize=1",
   ].join("");
-  const imageBase64 = await client
-    .get(imgHref, {
-      responseType: "arraybuffer",
-      headers: { Cookie: lectioCookies },
-    })
-    .then((res) => {
-      const contentType = res.headers["content-type"];
-      const base64 = Buffer.from(res.data, "binary").toString("base64");
-      const fullSrc = ["data:", contentType, ";base64,", base64].join("");
 
-      return fullSrc;
+  const imageBase64 = await fetchCookie(imgHref, {
+    method: "GET",
+    headers: { Cookie: lectioCookies },
+  })
+    .then(async (res) => {
+      try {
+        const arrayBuffer = await res.arrayBuffer();
+        const contentType = res.headers.get("content-type");
+        const base64 = Buffer.from(arrayBuffer).toString("base64");
+        const fullSrc = `data:${contentType};base64,${base64}`;
+
+        return fullSrc;
+      } catch {
+        return null;
+      }
     })
     .catch((err) => {
       return null;
