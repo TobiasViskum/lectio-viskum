@@ -5,6 +5,7 @@ import { AssignmentsWrapper } from "./AssignmentsWrapper";
 export async function AssignmentsRenderer() {
   const lectioProps = getLectioProps();
   const tag = `assignments-${lectioProps.username}`;
+  const d = new Date().getTime();
   const assignments = await lectioAPI.getAssignment.all({
     ...lectioProps,
     tag: tag,

@@ -5,7 +5,7 @@ import {
   schoolSuccessRequest,
 } from "@/library/api-return";
 import { getSearchParamsObject } from "@/library/getSearchParamsObject";
-import { getSchool } from "@/library/scrapeFunctions";
+import { getSchoolBySchoolCode } from "@/library/scrapeFunctions/getSchoolBySchoolCode";
 import { NextRequest } from "next/server";
 import z from "zod";
 
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const data = routeSchema.parse(params);
-    const result = await getSchool(data);
+    const result = await getSchoolBySchoolCode(data);
     if (result === "No data") {
       return schoolSuccessNoData();
     } else if (result === null) {

@@ -7,7 +7,7 @@ import {
   successRequest,
 } from "@/library/api-return";
 import { getSearchParamsObject } from "@/library/getSearchParamsObject";
-import { getAssignment } from "@/library/scrapeFunctions/getAssignment/getAssignment";
+import { getAssignment } from "@/library/scrapeFunctions/getAssignment";
 import { standardSchema } from "@/library/standard-schema";
 import { NextRequest } from "next/server";
 import { z } from "zod";

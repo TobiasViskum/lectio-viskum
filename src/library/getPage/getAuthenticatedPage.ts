@@ -1,7 +1,7 @@
 import { load } from "cheerio";
 import { getAxiosInstance } from "../getAxiosInstance";
 import { getPageFromMap } from "./page-map";
-import { getSchool } from "../scrapeFunctions";
+import { getSchoolBySchoolCode } from "../scrapeFunctions/getSchoolBySchoolCode";
 
 type Props = {
   page?: Pages;
@@ -31,13 +31,13 @@ export async function getAuthenticatedPage({
 
   const targetPageContent = await client
     .get(`${baseUrl}/${schoolCode}/${targetPage}`, {
-      headers: { "Cookie": lectioCookies },
+      headers: { Cookie: lectioCookies },
     })
     .then(async (res) => {
       if (res.data.includes("Log ind")) {
         return "Not authenticated";
       } else if (res.data.includes("Der opstod en ukendt fejl")) {
-        const school = await getSchool({ schoolCode: schoolCode });
+        const school = await getSchoolBySchoolCode({ schoolCode: schoolCode });
         if (school === null) return "Invalid school";
         return null;
       } else {
@@ -45,7 +45,11 @@ export async function getAuthenticatedPage({
       }
     })
     .catch((err) => {
-      if (err.response && err.response.data && err.response.data.includes("Server Error")) {
+      if (
+        err.response &&
+        err.response.data &&
+        err.response.data.includes("Server Error")
+      ) {
         return "Forbidden access";
       }
 

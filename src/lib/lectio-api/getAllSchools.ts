@@ -1,27 +1,15 @@
-import { makeRequest } from ".";
+import { getAllSchools as _getAllSchools } from "@/library/scrapeFunctions";
+import { processResult } from "./processResult";
+import { validateResult } from "./validateResult";
 
 type MainType = Prettify<School[]>;
 
-export async function getAllSchools(
-  getFullResponse?: false | undefined,
-): Promise<MainType | null>;
-export async function getAllSchools(
-  getFullResponse: true,
-): Promise<APIResponse<MainType> | APIResponse<null>>;
-export async function getAllSchools<K extends boolean | undefined>(
-  getFullResponse?: boolean | undefined,
-): Promise<
-  | (K extends false ? APIResponse<MainType> : MainType)
-  | (K extends false ? APIResponse<null> : null)
-> {
-  type ReturnType =
-    | (K extends false ? APIResponse<MainType> : MainType)
-    | (K extends false ? APIResponse<null> : null);
+export async function getAllSchools() {
+  const result = await _getAllSchools();
+  const processedResult = processResult<MainType>(result);
 
-  const result = await makeRequest<MainType>({
-    path: "/get-school/all",
-    // @ts-ignore
-    getFullResponse: getFullResponse,
-  });
-  return result as ReturnType;
+  const data =
+    processedResult.status === "success" ? processedResult.data : null;
+
+  return data;
 }

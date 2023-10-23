@@ -1,97 +1,76 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 import { lectioAPI } from "./lib/lectio-api";
 
-export async function middleware(request: NextRequest) {
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-url", request.url);
+export async function middleware(req: NextRequest) {
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set("x-url", req.url);
 
-  if (request.nextUrl.pathname === "/") {
-    return NextResponse.redirect(new URL("/forside", request.url), {
+  const cookies = req.cookies;
+
+  const revalidateCookies = req.url.includes("revalidateCookies=true");
+  if (revalidateCookies) {
+    let newUrl = req.url;
+    newUrl = newUrl.replace("revalidateCookies=true", "");
+
+    const username = cookies.get("username")?.value;
+    const password = cookies.get("password")?.value;
+    const schoolCode = cookies.get("schoolCode")?.value;
+
+    if (!username || !password || !schoolCode) {
+      return NextResponse.redirect(
+        new URL("/log-ind?redirected=true", newUrl),
+        {
+          headers: requestHeaders,
+        },
+      );
+    }
+
+    const res = await lectioAPI.getIsAuthenticated({
+      username: username,
+      password: password,
+      schoolCode: schoolCode,
+    });
+
+    if (res && res.isAuthenticated) {
+      const expireDate = new Date();
+      expireDate.setFullYear(expireDate.getFullYear() + 1);
+      const response = NextResponse.next({
+        headers: requestHeaders,
+      });
+      response.cookies.set({
+        name: "lectioCookies",
+        value: res.lectioCookies,
+        path: "/",
+        expires: expireDate,
+      });
+      return response;
+    } else {
+      return NextResponse.redirect(
+        new URL("/log-ind?redirected=true", newUrl),
+        {
+          headers: requestHeaders,
+        },
+      );
+    }
+  }
+
+  const lectioCookies = cookies.get("lectioCookies")?.value;
+  if (lectioCookies) {
+    if (req.nextUrl.pathname === "/") {
+      return NextResponse.redirect(new URL("/forside", req.url), {
+        headers: requestHeaders,
+      });
+    }
+    return NextResponse.next({
       headers: requestHeaders,
     });
   }
 
-  const cookies = request.cookies;
-  let obj = {
-    username: cookies.get("username")?.value,
-    password: cookies.get("password")?.value,
-    schoolCode: cookies.get("schoolCode")?.value,
-  };
-  const revalidateCookies = request.url.includes("revalidateCookies=true");
-
-  try {
-    const data = z
-      .object({
-        username: z.string().min(1),
-        password: z.string().min(1),
-        schoolCode: z.string().min(1),
-      })
-      .parse(obj);
-
-    if (!revalidateCookies && cookies.get("lectioCookies")?.value) {
-      return NextResponse.next({
-        headers: requestHeaders,
-      });
-    }
-
-    const res = await lectioAPI.getIsAuthenticated(data);
-    if (res && res.isAuthenticated) {
-      const expireDate = new Date();
-      expireDate.setFullYear(expireDate.getFullYear() + 1);
-      if (request.url.includes("/log-ind")) {
-        const newUrl = request.url.replace("revalidateCookies=true", "");
-
-        const response = NextResponse.redirect(new URL("/", newUrl), {
-          headers: requestHeaders,
-        });
-        response.cookies.set({
-          name: "lectioCookies",
-          value: res.lectioCookies,
-          path: "/",
-          expires: expireDate,
-        });
-        return response;
-      } else {
-        const nextUrl = request.nextUrl.clone();
-        nextUrl.searchParams.delete("revalidateCookies");
-
-        const response = NextResponse.redirect(nextUrl, {
-          headers: requestHeaders,
-        });
-        response.cookies.set({
-          name: "lectioCookies",
-          value: res.lectioCookies,
-          path: "/",
-          expires: expireDate,
-        });
-        return response;
-      }
-    }
-    if (!request.url.includes("/log-ind")) {
-      return NextResponse.redirect(
-        new URL("/log-ind?redirected=true", request.url),
-        { headers: requestHeaders },
-      );
-    }
-    return NextResponse.next({ headers: requestHeaders });
-  } catch {
-    if (request.url.includes("/log-ind")) {
-      return NextResponse.next({ headers: requestHeaders });
-    }
-    return NextResponse.redirect(
-      new URL("/log-ind?redirected=true", request.url),
-      { headers: requestHeaders },
-    );
-  }
+  return NextResponse.next({
+    headers: requestHeaders,
+  });
 }
 
 export const config = {
-  matcher: [
-    "/",
-    "/skema/:path*",
-    "/afleveringer/:path*",
-    "/log-ind",
-    "/forside",
-  ],
+  matcher: ["/", "/skema/:path*", "/afleveringer/:path*", "/forside"],
 };

@@ -22,7 +22,8 @@ type LectioAuth = Prettify<{
 type Student = Prettify<{
   name: string;
   studentClass: string;
-  imgSrc: string;
+  imgUrl: string;
+  imgSrc: string | null;
 }>;
 
 type Teacher = Prettify<{

@@ -18,13 +18,10 @@ export async function handleLogin(props: Props) {
       })
       .parse(props);
 
-    const isAuthenticated = await lectioAPI.getIsAuthenticated(data, true);
+    const isAuthenticated = await lectioAPI.getIsAuthenticated(data);
 
     return isAuthenticated;
   } catch {
-    return {
-      status: "error",
-      message: "Invalid parameters",
-    } as APIResponse<LectioAuth>;
+    return null;
   }
 }

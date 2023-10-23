@@ -3,7 +3,7 @@ type StandardProps = {
   schoolCode: string;
 };
 
-type StandardProps2 = {
+type AuthProps = {
   username: string;
   password: string;
   schoolCode: string;

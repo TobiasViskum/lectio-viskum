@@ -1,32 +1,18 @@
-import { makeRequest } from ".";
+import { getSchoolBySchoolCode } from "@/library/scrapeFunctions/getSchoolBySchoolCode";
+import { processResult } from "./processResult";
+import { validateResult } from "./validateResult";
 
 type MainType = School;
 type FunctionProps = APIProps<{ schoolCode: string }>;
 
-export async function getSchool(
-  props: FunctionProps,
-  getFullResponse?: false | undefined,
-): Promise<MainType | null>;
-export async function getSchool(
-  props: FunctionProps,
-  getFullResponse: true,
-): Promise<APIResponse<MainType> | APIResponse<null>>;
-export async function getSchool<K extends boolean | undefined>(
-  props: FunctionProps,
-  getFullResponse?: boolean | undefined,
-): Promise<
-  | (K extends false ? APIResponse<MainType> : MainType)
-  | (K extends false ? APIResponse<null> : null)
-> {
-  type ReturnType =
-    | (K extends false ? APIResponse<MainType> : MainType)
-    | (K extends false ? APIResponse<null> : null);
-
-  const result = await makeRequest<MainType>({
-    path: "/get-school/by-school-code",
-    params: props,
-    // @ts-ignore
-    getFullResponse: getFullResponse,
+export async function getSchool(props: FunctionProps) {
+  const result = await getSchoolBySchoolCode({
+    schoolCode: props.schoolCode,
   });
-  return result as ReturnType;
+  const processedResult = processResult<MainType>(result);
+
+  const data =
+    processedResult.status === "success" ? processedResult.data : null;
+
+  return data;
 }

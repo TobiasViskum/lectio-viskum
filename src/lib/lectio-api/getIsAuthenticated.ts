@@ -1,32 +1,15 @@
-import { StandardProps, makeRequest } from ".";
+import { getIsAuthenticated as _getIsAuthenticated } from "@/library/scrapeFunctions/getIsAuthenticated";
+import { processResult } from "./processResult";
+import { validateResult } from "./validateResult";
 
 type MainType = LectioAuth;
-type FunctionProps = APIProps<StandardProps>;
+type FunctionProps = APIProps<AuthProps>;
 
-export async function getIsAuthenticated(
-  props: FunctionProps,
-  getFullResponse?: false | undefined,
-): Promise<MainType | null>;
-export async function getIsAuthenticated(
-  props: FunctionProps,
-  getFullResponse: true,
-): Promise<APIResponse<MainType> | APIResponse<null>>;
-export async function getIsAuthenticated<K extends boolean | undefined>(
-  props: FunctionProps,
-  getFullResponse?: boolean | undefined,
-): Promise<
-  | (K extends false ? APIResponse<MainType> : MainType)
-  | (K extends false ? APIResponse<null> : null)
-> {
-  type ReturnType =
-    | (K extends false ? APIResponse<MainType> : MainType)
-    | (K extends false ? APIResponse<null> : null);
+export async function getIsAuthenticated(props: FunctionProps) {
+  const result = await _getIsAuthenticated(props);
+  const processedResult = processResult<MainType>(result);
 
-  const result = await makeRequest<MainType>({
-    path: "/get-is-authenticated",
-    params: props,
-    // @ts-ignore
-    getFullResponse: getFullResponse,
-  });
-  return result as ReturnType;
+  const data =
+    processedResult.status === "success" ? processedResult.data : null;
+  return data;
 }

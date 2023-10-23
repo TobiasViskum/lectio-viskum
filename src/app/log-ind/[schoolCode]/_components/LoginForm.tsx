@@ -45,11 +45,9 @@ export function LoginForm() {
           password: password,
           schoolCode: params.schoolCode,
         });
-        if (res.status === "error") {
-          toast.error(res.message);
-        } else if (res.data === null) {
-          toast.error(res.message);
-        } else if (res.data.isAuthenticated) {
+        if (res === null) {
+          toast.error("Der skete en fejl");
+        } else if (res.isAuthenticated) {
           setAuthCookies({
             username: username,
             password: password,

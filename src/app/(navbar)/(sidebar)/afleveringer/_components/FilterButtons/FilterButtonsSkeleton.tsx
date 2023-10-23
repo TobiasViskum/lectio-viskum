@@ -22,7 +22,7 @@ export function FilterButtonsSkeleton() {
           <p className={countTw}>0</p>
           <p>Mangler</p>
         </button>
-        <div className="absolute -bottom-2 h-0.5 w-1/4 rounded-md bg-muted-foreground transition-all duration-300" />
+        <div className="absolute -bottom-2 h-0.5 w-1/4 translate-x-[200%] rounded-md bg-muted-foreground transition-all duration-300" />
       </div>
     </>
   );

@@ -62,12 +62,11 @@ export async function getStudentByCredentials({
     studentClass = classMatch[1];
   }
 
-  //@ts-ignore
   return {
     name: name,
-    class: studentClass,
+    studentClass: studentClass,
     studentId: studentId || "",
     imgUrl: imgHref,
-    imgSrc: imageBase64 || "",
+    imgSrc: imageBase64,
   } as Student;
 }

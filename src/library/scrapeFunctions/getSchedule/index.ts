@@ -8,7 +8,12 @@ import { getTeachers } from "./getTeachers";
 import { getTime } from "./getTime";
 import { getTitle } from "./getTitle";
 
-type Props = { week: string; year: string; teacherId?: string; studentId?: string };
+type Props = {
+  week: string;
+  year: string;
+  teacherId?: string;
+  studentId?: string;
+};
 
 export async function getSchedule({
   lectioCookies,
@@ -38,7 +43,9 @@ export async function getSchedule({
 
   const $ = res.$;
 
-  const weekSchedule: Week[] = $(".s2skemabrikcontainer.lec-context-menu-instance")
+  const weekSchedule: Week[] = $(
+    ".s2skemabrikcontainer.lec-context-menu-instance",
+  )
     .map((_index, _elem) => {
       const $_elem = $(_elem);
 
@@ -89,7 +96,9 @@ export async function getSchedule({
             lesson.hasNote = info.includes("Note:");
             lesson.hasHomework = info.includes("Lektier:");
             lesson.hasOtherContent = info.includes("Øvrigt indhold:");
-            lesson.hasPresentation = info.includes("Aktiviteten har en præsentation.");
+            lesson.hasPresentation = info.includes(
+              "Aktiviteten har en præsentation.",
+            );
           }
 
           if (
@@ -121,7 +130,10 @@ export async function getSchedule({
         });
       });
 
-      lessons.sort((a, b) => getStartTime(a) - getStartTime(b) || getEndTime(a) - getEndTime(b));
+      lessons.sort(
+        (a, b) =>
+          getStartTime(a) - getStartTime(b) || getEndTime(a) - getEndTime(b),
+      );
 
       if (_index <= 4) {
         return { lessons: lessons, notes: [""] };

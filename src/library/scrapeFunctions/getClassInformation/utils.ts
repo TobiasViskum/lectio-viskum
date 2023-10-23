@@ -12,11 +12,19 @@ export function getNote($: cheerio.Root) {
   const note = $("#s_m_Content_Content_tocAndToolbar_ActNoteTB_tb").text();
   return note;
 }
-export function getHomework($parent: cheerio.Cheerio, $: cheerio.Root, homework: Homework[]) {
+export function getHomework(
+  $parent: cheerio.Cheerio,
+  $: cheerio.Root,
+  homework: Homework[],
+) {
   const $sibling = $parent.next();
 
   if ($sibling.length === 0) return; //We have went through all elements
-  if ($sibling.find("h1:first-child").length === 0 && $sibling.find("h1:nth-child(2)").length === 1) return; //We have switched between result type
+  if (
+    $sibling.find("h1:first-child").length === 0 &&
+    $sibling.find("h1:nth-child(2)").length === 1
+  )
+    return; //We have switched between result type
 
   const id = $sibling.attr("id");
 
@@ -60,7 +68,12 @@ export function getHomeworkAndOtherAndPresentation($: cheerio.Root) {
     } else {
       const $sibling = $parent.next();
       if ($sibling.length !== 0) {
-        const $presentationsHolder = $sibling.children().eq(1).children().eq(1).children();
+        const $presentationsHolder = $sibling
+          .children()
+          .eq(1)
+          .children()
+          .eq(1)
+          .children();
 
         setPresentation($presentationsHolder, presentation, $);
       }
@@ -118,7 +131,11 @@ function setTitle($article: cheerio.Cheerio, currHomework: Homework) {
     }
   }
 }
-function setDescription($article: cheerio.Cheerio, currHomework: Homework, $: cheerio.Root) {
+function setDescription(
+  $article: cheerio.Cheerio,
+  currHomework: Homework,
+  $: cheerio.Root,
+) {
   const $elements = $article.find("*");
 
   let isAddingToUl = false;
@@ -155,7 +172,11 @@ function setDescription($article: cheerio.Cheerio, currHomework: Homework, $: ch
 
   trimLineBreaks(currHomework);
 }
-function setPresentation($presentationsHolder: cheerio.Cheerio, presentation: Homework[][], $: cheerio.Root) {
+function setPresentation(
+  $presentationsHolder: cheerio.Cheerio,
+  presentation: Homework[][],
+  $: cheerio.Root,
+) {
   $presentationsHolder.each((index, elem) => {
     let currIndex = 0;
     presentation.push([{ titleHref: "", title: "", description: [] }]);
@@ -175,7 +196,11 @@ function setPresentation($presentationsHolder: cheerio.Cheerio, presentation: Ho
           if (elem.name === "h1" || elem.name === "h2") {
             if (presentation[index][currIndex].title !== "") {
               currIndex += 1;
-              presentation[index].push({ titleHref: "", title: "", description: [] });
+              presentation[index].push({
+                titleHref: "",
+                title: "",
+                description: [],
+              });
             }
             if (text.length > 1) {
               presentation[index][currIndex].title = text;

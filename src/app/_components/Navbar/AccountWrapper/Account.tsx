@@ -37,7 +37,7 @@ export function Account({ strUser }: Props) {
     <button className="aspect-square h-10 w-10 rounded-full">
       <Image
         onClick={handleLogout}
-        src={user.imgSrc}
+        src={user.imgSrc || profile}
         width={40}
         height={40}
         alt="img"

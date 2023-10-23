@@ -1,9 +1,13 @@
 import { load } from "cheerio";
 import { getAxiosInstance } from "../getAxiosInstance";
 import { getLoginForm } from "./getForm/login-form";
-import { getSchool } from "../scrapeFunctions";
+import { getSchoolBySchoolCode } from "../scrapeFunctions/getSchoolBySchoolCode";
 
-export async function getRawAuthenticatedPage({ username, password, schoolCode }: StandardProps2) {
+export async function getRawAuthenticatedPage({
+  username,
+  password,
+  schoolCode,
+}: StandardProps2) {
   const baseUrl = "https://www.lectio.dk/lectio";
   const { client, cookieJar } = getAxiosInstance();
 
@@ -25,7 +29,9 @@ export async function getRawAuthenticatedPage({ username, password, schoolCode }
         });
       } else {
         if (res.data.includes("Der opstod en ukendt fejl")) {
-          const school = await getSchool({ schoolCode: schoolCode });
+          const school = await getSchoolBySchoolCode({
+            schoolCode: schoolCode,
+          });
           if (school === null) return "Invalid school";
         }
 
@@ -33,7 +39,7 @@ export async function getRawAuthenticatedPage({ username, password, schoolCode }
       }
     })
     .catch(async (err) => {
-      const school = await getSchool({ schoolCode: schoolCode });
+      const school = await getSchoolBySchoolCode({ schoolCode: schoolCode });
       if (school === null) return "Invalid school";
 
       return null;
@@ -46,7 +52,9 @@ export async function getRawAuthenticatedPage({ username, password, schoolCode }
         if (res.data.includes("Log ind")) {
           return "Not authenticated";
         } else if (res.data.includes("Der opstod en ukendt fejl")) {
-          const school = await getSchool({ schoolCode: schoolCode });
+          const school = await getSchoolBySchoolCode({
+            schoolCode: schoolCode,
+          });
 
           if (school === null) return "Invalid school";
           return null;

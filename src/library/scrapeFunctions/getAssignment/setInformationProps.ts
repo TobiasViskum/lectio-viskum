@@ -1,5 +1,5 @@
 import { getSubjectName } from "@/library/util/getSubjectFromClass";
-import { titleMap } from "./getAssignment";
+import { titleMap } from ".";
 
 export function setInformationProps(
   $: cheerio.Root,
