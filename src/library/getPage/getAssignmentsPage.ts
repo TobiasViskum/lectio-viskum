@@ -2,9 +2,12 @@ import { load } from "cheerio";
 import { getAuthenticatedPage } from ".";
 import { getAssignmentsForm } from "./getForm/assignment-form";
 
-type Props = StandardProps2;
+type Props = StandardProps;
 
-export async function getAssignmentsPage({ lectioCookies, schoolCode }: StandardProps) {
+export async function getAssignmentsPage({
+  lectioCookies,
+  schoolCode,
+}: StandardProps) {
   const res = await getAuthenticatedPage({
     lectioCookies: lectioCookies,
     schoolCode: schoolCode,
@@ -31,7 +34,7 @@ export async function getAssignmentsPage({ lectioCookies, schoolCode }: Standard
 
     const pageContent = await client
       .post("https://www.lectio.dk/lectio/243/OpgaverElev.aspx", form, {
-        headers: { "Cookie": lectioCookies },
+        headers: { Cookie: lectioCookies },
       })
       .then((res) => {
         if (res.data.includes("Log ind")) {

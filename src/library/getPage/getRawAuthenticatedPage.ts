@@ -7,7 +7,7 @@ export async function getRawAuthenticatedPage({
   username,
   password,
   schoolCode,
-}: StandardProps2) {
+}: StandardProps) {
   const baseUrl = "https://www.lectio.dk/lectio";
   const { client, cookieJar } = getAxiosInstance();
 
