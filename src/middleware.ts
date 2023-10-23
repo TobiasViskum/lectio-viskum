@@ -20,12 +20,6 @@ export async function middleware(request: NextRequest) {
   };
   const revalidateCookies = request.url.includes("revalidateCookies=true");
 
-  if (!revalidateCookies && cookies.get("lectioCookies")?.value) {
-    return NextResponse.next({
-      headers: requestHeaders,
-    });
-  }
-
   try {
     const data = z
       .object({
@@ -34,6 +28,12 @@ export async function middleware(request: NextRequest) {
         schoolCode: z.string().min(1),
       })
       .parse(obj);
+
+    if (!revalidateCookies && cookies.get("lectioCookies")?.value) {
+      return NextResponse.next({
+        headers: requestHeaders,
+      });
+    }
 
     const res = await lectioAPI.getIsAuthenticated(data);
     if (res && res.isAuthenticated) {
