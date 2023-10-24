@@ -28,7 +28,7 @@ type GetPageReturn =
   | "Forbidden access"
   | {
       $: cheerio.Root;
-      client: FetchCookieImpl<RequestInfo | URL, RequestInit, Response>;
+      fetchCookie: FetchCookieImpl<RequestInfo | URL, RequestInit, Response>;
     }
   | null;
 
