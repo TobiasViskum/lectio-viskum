@@ -52,6 +52,7 @@ export function LoginForm() {
             username: username,
             password: password,
             schoolCode: params.schoolCode,
+            lectioCookies: res.lectioCookies,
           });
           router.refresh();
           router.push("/");

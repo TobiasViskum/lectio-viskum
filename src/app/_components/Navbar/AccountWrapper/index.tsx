@@ -4,7 +4,6 @@ import { Account } from "./Account";
 import { getServerUrl } from "@/lib/next/getServerUrl";
 import Image from "next/image";
 import { profile } from "@/assets";
-import { getStudentByCredentials } from "@/library/scrapeFunctions/getStudentByCredentials";
 
 export async function AccountWrapper() {
   const url = getServerUrl();
@@ -24,12 +23,12 @@ export async function AccountWrapper() {
   const lectioProps = getLectioProps();
   const date1 = new Date().getTime();
 
-  const user = await lectioAPI.getStudent.byCredentials({
-    ...lectioProps,
-    tag: `user-${lectioProps.username}`,
-  });
+  // const user = await lectioAPI.getStudent.byCredentials({
+  //   ...lectioProps,
+  //   tag: `user-${lectioProps.username}`,
+  // });
 
-  console.log(new Date().getTime() - date1);
+  const user = null;
 
   return (
     <>

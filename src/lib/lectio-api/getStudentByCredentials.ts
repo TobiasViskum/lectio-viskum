@@ -5,7 +5,7 @@ import { validateResult } from "./validateResult";
 type MainType = Student;
 type FunctionProps = APIProps<StandardProps>;
 
-export async function getStudentByCredentials(props: FunctionProps) {
+export const getStudentByCredentials = async (props: FunctionProps) => {
   const result = await _getStudentByCredentials({
     schoolCode: props.schoolCode,
     lectioCookies: props.lectioCookies,
@@ -17,4 +17,4 @@ export async function getStudentByCredentials(props: FunctionProps) {
     processedResult.status === "success" ? processedResult.data : null;
 
   return data;
-}
+};

@@ -68,9 +68,15 @@ export async function getIsAuthenticated({
         const ASP_NET_SessionId = cookies[1];
 
         if (lectiogsc && ASP_NET_SessionId) {
+          const date = new Date()
+            .toString()
+            .replace(/\(.*\)/, "(Central European Summer Time)");
+          const encodedDate = encodeURI(date);
+
           let lectioCookies = "";
           lectioCookies += `ASP.NET_SessionId=${ASP_NET_SessionId.value};`;
           lectioCookies += `lectiogsc=${lectiogsc.value};`;
+          lectioCookies += `LastAuthenticatedPageLoad=${encodedDate};`;
           return {
             isAuthenticated: true,
             lectioCookies: lectioCookies,

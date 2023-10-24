@@ -3,7 +3,7 @@ import { processResult } from "./processResult";
 
 type MainType = Prettify<School[]>;
 
-export async function getAllSchools() {
+export const getAllSchools = async () => {
   const result = await _getAllSchools();
   const processedResult = processResult<MainType>(result);
 
@@ -11,4 +11,4 @@ export async function getAllSchools() {
     processedResult.status === "success" ? processedResult.data : null;
 
   return data;
-}
+};

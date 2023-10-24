@@ -1,11 +1,12 @@
 import { processResult } from "./processResult";
 import { getAssignments } from "@/library/scrapeFunctions";
 import { validateResult } from "./validateResult";
+import { cache } from "react";
 
 type MainType = Prettify<Assignment[]>;
 type FunctionProps = APIProps<StandardProps>;
 
-export async function getAllAssignments(props: FunctionProps) {
+export const getAllAssignments = async (props: FunctionProps) => {
   const result = await getAssignments({
     lectioCookies: props.lectioCookies,
     schoolCode: props.schoolCode,
@@ -18,4 +19,4 @@ export async function getAllAssignments(props: FunctionProps) {
     processedResult.status === "success" ? processedResult.data : null;
 
   return data;
-}
+};
