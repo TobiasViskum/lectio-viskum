@@ -29,7 +29,12 @@ export function Account({ strUser }: Props) {
   async function handleLogout() {
     await clearUserCache({ username: "tobi688c" });
     router.refresh();
-    setAuthCookies({ username: "", password: "", schoolCode: "" });
+    setAuthCookies({
+      username: "",
+      password: "",
+      schoolCode: "",
+      lectioCookies: "",
+    });
     router.push("/log-ind");
   }
 
