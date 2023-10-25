@@ -55,8 +55,10 @@ export function LoginForm() {
             lectioCookies: res.lectioCookies,
           });
           router.refresh();
-          router.push("/");
           toast.success("Loggede dig ind!");
+          setTimeout(() => {
+            router.push("/forside");
+          }, 500);
         } else {
           toast.error("Elev findes ikke");
         }

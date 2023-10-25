@@ -22,7 +22,7 @@ export function setAuthCookies({
   document.cookie =
     `schoolCode=${schoolCode}; expires=` + date.toUTCString() + "; path=/";
   document.cookie =
-    `lectioCookies=${lectioCookies}; expires=` +
+    `lectioCookies=${encodeURIComponent(lectioCookies)}; expires=` +
     date.toUTCString() +
     "; path=/";
 }

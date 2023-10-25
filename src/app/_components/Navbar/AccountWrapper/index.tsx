@@ -21,14 +21,11 @@ export async function AccountWrapper() {
   }
 
   const lectioProps = getLectioProps();
-  const date1 = new Date().getTime();
 
-  // const user = await lectioAPI.getStudent.byCredentials({
-  //   ...lectioProps,
-  //   tag: `user-${lectioProps.username}`,
-  // });
-
-  const user = null;
+  const user = await lectioAPI.getStudent.byCredentials({
+    ...lectioProps,
+    tag: `user-${lectioProps.username}`,
+  });
 
   return (
     <>

@@ -76,12 +76,11 @@ export async function makeRequest<T, K extends boolean | undefined>({
 
   if (result.status === "error") {
     if (result.message.includes("auth")) {
-      redirect("?revalidateCookies=true");
     } else if (result.message.includes("too many requests")) {
       if (tag) {
         revalidatePath("/");
       }
-      redirect("/access-forbidden");
+      redirect("/adgang-forbudt");
     }
     if (getFullResponse) {
       return result as ReturnType;

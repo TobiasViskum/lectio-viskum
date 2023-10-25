@@ -64,8 +64,14 @@ export async function getIsAuthenticated({
       } else {
         const cookies = store.getCookiesSync("https://www.lectio.dk");
 
-        const lectiogsc = cookies[0];
-        const ASP_NET_SessionId = cookies[1];
+        let lectiogsc = null;
+        let ASP_NET_SessionId = null;
+        try {
+          lectiogsc = cookies.find((obj: any) => obj.key === "lectiogsc");
+          ASP_NET_SessionId = cookies.find(
+            (obj: any) => obj.key === "ASP.NET_SessionId",
+          );
+        } catch {}
 
         if (lectiogsc && ASP_NET_SessionId) {
           const date = new Date()
@@ -77,6 +83,7 @@ export async function getIsAuthenticated({
           lectioCookies += `ASP.NET_SessionId=${ASP_NET_SessionId.value};`;
           lectioCookies += `lectiogsc=${lectiogsc.value};`;
           lectioCookies += `LastAuthenticatedPageLoad=${encodedDate};`;
+
           return {
             isAuthenticated: true,
             lectioCookies: lectioCookies,

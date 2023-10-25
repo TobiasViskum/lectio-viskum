@@ -4,10 +4,10 @@ import { ReturnType } from "../types/types";
 export function validateResult(result: ReturnType<any>) {
   if (result.status === "error") {
     if (result.message.includes("too many requests")) {
-      return redirect("/access-forbidden");
+      return redirect("/adgang-forbudt");
+    } else if (result.message.includes("auth")) {
+      return redirect("/opdater-adgang");
     }
-
-    return redirect("?revalidateCookies=true");
   } else {
     return;
   }

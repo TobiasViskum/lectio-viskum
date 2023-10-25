@@ -6,25 +6,18 @@ export async function middleware(req: NextRequest) {
   requestHeaders.set("x-url", req.url);
 
   const cookies = req.cookies;
+  const username = cookies.get("username")?.value;
+  const password = cookies.get("password")?.value;
+  const schoolCode = cookies.get("schoolCode")?.value;
+  const lectioCookies = cookies.get("lectioCookies")?.value;
 
-  const revalidateCookies = req.url.includes("revalidateCookies=true");
-  if (revalidateCookies) {
-    let newUrl = req.url;
-    newUrl = newUrl.replace("revalidateCookies=true", "");
+  if (!username || !password || !schoolCode || !lectioCookies) {
+    return NextResponse.redirect(new URL("/log-ind?redirected=true", req.url), {
+      headers: requestHeaders,
+    });
+  }
 
-    const username = cookies.get("username")?.value;
-    const password = cookies.get("password")?.value;
-    const schoolCode = cookies.get("schoolCode")?.value;
-
-    if (!username || !password || !schoolCode) {
-      return NextResponse.redirect(
-        new URL("/log-ind?redirected=true", newUrl),
-        {
-          headers: requestHeaders,
-        },
-      );
-    }
-
+  if (req.nextUrl.pathname === "/opdater-adgang") {
     const res = await lectioAPI.getIsAuthenticated({
       username: username,
       password: password,
@@ -34,7 +27,7 @@ export async function middleware(req: NextRequest) {
     if (res && res.isAuthenticated) {
       const expireDate = new Date();
       expireDate.setFullYear(expireDate.getFullYear() + 1);
-      const response = NextResponse.next({
+      const response = NextResponse.redirect(new URL("/forside", req.url), {
         headers: requestHeaders,
       });
       response.cookies.set({
@@ -46,7 +39,7 @@ export async function middleware(req: NextRequest) {
       return response;
     } else {
       return NextResponse.redirect(
-        new URL("/log-ind?redirected=true", newUrl),
+        new URL("/log-ind?redirected=true", req.url),
         {
           headers: requestHeaders,
         },
@@ -54,7 +47,6 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  const lectioCookies = cookies.get("lectioCookies")?.value;
   if (lectioCookies) {
     if (req.nextUrl.pathname === "/") {
       return NextResponse.redirect(new URL("/forside", req.url), {

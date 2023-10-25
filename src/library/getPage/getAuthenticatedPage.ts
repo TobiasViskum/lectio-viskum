@@ -46,6 +46,7 @@ export async function getAuthenticatedPage({
           const school = await getSchoolBySchoolCode({
             schoolCode: schoolCode,
           });
+
           if (school === null) return "Invalid school";
           return null;
         } else if (text.includes("Server Error")) {
