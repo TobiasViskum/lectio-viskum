@@ -20,6 +20,13 @@ const tailwindConfig: Config = {
         xxs: "320px",
         xs: "480px",
       },
+      minWidth: {
+        "1/2": "50%",
+        "1/3": "33.333333%",
+        "1/4": "25%",
+        "1/5": "20%",
+        "1/6": "16.666667%",
+      },
       fontSize: {
         "2xs": "0.7rem",
         "3xs": "0.675rem",
@@ -94,7 +101,10 @@ const tailwindConfig: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/container-queries"),
+  ],
 };
 
 module.exports = tailwindConfig;

@@ -9,7 +9,6 @@ import { getCurrWeekAndYear } from "@/lib/utils";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { DaySwitcher } from "./_components/DaySwitcher";
-import { Separator } from "@/components/ui/separator";
 import { Wrapper } from "./_components/Wrapper";
 
 type Props = { searchParams: { [key: string]: string } };
@@ -67,13 +66,8 @@ export default async function SchedulePage({ searchParams }: Props) {
     6: "Søndag",
   };
 
-  const roundingInterval = "var(--lesson-width) + var(--lesson-gap)";
-  const valueToRound = "100svw - var(--text-width) - 32px";
-  const multi = `round(down, ${valueToRound}, ${roundingInterval})`;
-  const cssWidth = `calc(var(--text-width) + ${multi})`;
-
   return (
-    <div id="schedule-main">
+    <div id="schedule-main" className="w-full">
       <h1>Skema</h1>
       <Link
         href={{
@@ -96,50 +90,49 @@ export default async function SchedulePage({ searchParams }: Props) {
         {"Forward >"}
       </Link>
       <DaySwitcher />
-      <div className="relative flex rounded-md" style={{ width: cssWidth }}>
-        <div className="flex h-full w-16 flex-col pl-2">
-          <div
-            className="grid w-16 text-muted-foreground opacity-70"
-            style={{ paddingTop: "var(--offset-top-text)" }}
-          >
-            <Timestamps timestamps={timestamps} />
-          </div>
-        </div>
 
-        <div className="relative flex w-full overflow-x-hidden overflow-y-hidden bg-opacity-10 pl-2">
-          <div
-            className="pointer-events-none absolute h-full w-full bg-transparent"
-            style={{ paddingTop: "var(--offset-top-lesson)" }}
-          >
-            <TimestampsLines timestamps={timestamps} />
+      <div className="relative flex w-full justify-center rounded-md">
+        {schedule.length === 0 ? (
+          <div className="text-center">
+            <p>Der er ingen aktiviteter i denne uge!</p>
+            <p>Nyd ugen!</p>
           </div>
-          <div className="absolute left-0 h-full">
-            {[1, 2, 3, 4].map((item, index) => {
-              return (
-                <Separator
-                  key={item}
-                  orientation="vertical"
-                  style={{
-                    left: `calc(1px + 13px * ${item} + var(--lesson-width) * ${item})`,
-                  }}
-                  className="absolute"
-                />
-              );
-            })}
-          </div>
-          <Wrapper>
-            {schedule.map((week, index) => {
-              return (
-                <Weekday
-                  key={index}
-                  week={week}
-                  timestamps={timestamps}
-                  day={indexToDayMap[index]}
-                />
-              );
-            })}
-          </Wrapper>
-        </div>
+        ) : (
+          <>
+            <div className="flex h-full w-14 flex-col">
+              <div
+                className="grid w-16 pl-1 text-muted-foreground opacity-70"
+                style={{ paddingTop: "var(--offset-top-text)" }}
+              >
+                <Timestamps timestamps={timestamps} />
+              </div>
+            </div>
+
+            <div className="relative w-full max-w-[1600px] overflow-x-hidden overflow-y-hidden">
+              <div
+                className="pointer-events-none absolute z-10 h-full w-full bg-transparent"
+                style={{
+                  paddingTop: "var(--offset-top-lesson)",
+                  width: "calc(100% - 12px)",
+                }}
+              >
+                <TimestampsLines timestamps={timestamps} />
+              </div>
+              <Wrapper>
+                {schedule.map((week, index) => {
+                  return (
+                    <Weekday
+                      week={week}
+                      timestamps={timestamps}
+                      day={indexToDayMap[index]}
+                      key={index}
+                    />
+                  );
+                })}
+              </Wrapper>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

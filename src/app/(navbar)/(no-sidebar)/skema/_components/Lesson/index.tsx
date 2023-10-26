@@ -2,7 +2,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { NoteIcon } from "@/components/icons/NoteIcon";
 import { HomeworkIcon } from "@/components/icons/HomeworkIcon";
-import { getNumericLessonTimes } from "../_util/getNumericLessonTimes";
+import { getNumericLessonTimes } from "../../_util/getNumericLessonTimes";
+import { BookmarkFilledIcon } from "@radix-ui/react-icons";
 
 type Props = {
   lesson: Lesson;
@@ -58,9 +59,9 @@ export async function Lesson({
     totalAdded: 1,
   });
   if (foundLesson) {
-    leftOffset = `calc((var(--lesson-width) / ${
-      lesson.overlappingLessons + 1
-    }) * ${foundLesson.totalAdded})`;
+    leftOffset = `calc(((100% - 16px) / ${lesson.overlappingLessons + 1}) * ${
+      foundLesson.totalAdded
+    })`;
     foundLesson.totalAdded += 1;
   }
 
@@ -70,9 +71,9 @@ export async function Lesson({
 
   const cornerWidth = Number(hasNote) * 20 + Number(hasHomework) * 20;
 
-  let titleSize = "text-base";
+  let titleSize = "text-sm @[124px]:text-sm";
   if (lesson.overlappingLessons >= 1) {
-    titleSize = "text-sm";
+    titleSize = "text-xs @[124px]:text-sm";
   }
 
   const numericTimes = getNumericLessonTimes(lesson);
@@ -88,13 +89,13 @@ export async function Lesson({
       key={Math.random()}
       href={"/skema"}
       className={cn(
-        `group absolute flex w-full gap-x-2 overflow-hidden rounded-md bg-opacity-50 transition-[transform,_background-color] hover:z-50 hover:scale-[1.025] hover:bg-opacity-90`,
+        `@container group absolute ml-1 flex w-full gap-x-1 overflow-hidden rounded-md bg-opacity-50 transition-[transform,_background-color] hover:z-50 hover:scale-[1.025] hover:bg-opacity-90 sm:gap-x-1.5`,
         backgroundColor,
       )}
       style={{
         top: `calc(var(--offset-top-lesson) + var(--height-hour) * ${multi})`,
         height: `calc((${endTime - startTime}) * var(--height-hour))`,
-        width: `calc(var(--lesson-width) / ${lesson.overlappingLessons + 1})`,
+        width: `calc((100% - 16px) / ${lesson.overlappingLessons + 1})`,
         left: leftOffset,
       }}
     >
@@ -106,53 +107,66 @@ export async function Lesson({
         )}
       />
       <div className="w-full overflow-hidden">
-        <div
-          className="float-right flex h-6 items-center justify-end pr-0.5"
-          style={{
-            shapeOutside: `polygon(0 0, ${cornerWidth}px 0, ${cornerWidth}px 24px, 0 24px)`,
-            width: cornerWidth,
-          }}
-        >
-          {lesson.hasNote && (
-            <NoteIcon
-              className={cn("transition-colors", fillColor, hoverFillColor)}
-            />
-          )}
-          {lesson.hasHomework && (
-            <HomeworkIcon
-              className="h-5 w-5"
-              fillTw={cn("transition-colors", fillColor, hoverFillColor)}
-            />
-          )}
-        </div>
-
         <div className="w-auto overflow-auto break-words pt-1">
-          <p
+          <div
             className={cn(
-              "py-0.5 font-semibold leading-3 transition-colors",
+              "@[124px]:semibold flex flex-wrap items-start gap-x-1.5 font-bold leading-3 transition-colors",
               textColor,
               hoverTextColor,
               titleSize,
             )}
           >
             {lesson.subjects.join(", ")}
-          </p>
-          <p
+            {!isSubjectsEmpty && (
+              <div className="flex items-center">
+                {lesson.hasNote && (
+                  <NoteIcon
+                    className={cn(
+                      "h-4 w-4 transition-colors",
+                      fillColor,
+                      hoverFillColor,
+                    )}
+                  />
+                )}
+                {lesson.hasHomework && (
+                  <BookmarkFilledIcon className="h-4 w-4" />
+                )}
+              </div>
+            )}
+          </div>
+          <div
             className={cn(
               isSubjectsEmpty
-                ? `font-semibold leading-3 transition-colors ${titleSize}`
-                : "w-full text-xs transition-colors",
+                ? `@[124px]:semibold font-bold leading-3 transition-colors ${titleSize} flex flex-wrap items-start gap-x-1.5`
+                : "@[124px]:text-xs w-full text-2xs transition-colors",
+              lesson.title.length > 20 ? "@[124px]:text-2xs text-3xs" : "",
               textColor,
               hoverTextColor,
             )}
           >
             {lesson.title}
-          </p>
+            {isSubjectsEmpty && (
+              <div className="flex items-center">
+                {lesson.hasNote && (
+                  <NoteIcon
+                    className={cn(
+                      "h-4 w-4 transition-colors",
+                      fillColor,
+                      hoverFillColor,
+                    )}
+                  />
+                )}
+                {lesson.hasHomework && (
+                  <BookmarkFilledIcon className="h-4 w-4" />
+                )}
+              </div>
+            )}
+          </div>
           {!displayOnlyTitle && (
             <>
               <p
                 className={cn(
-                  "text-xs transition-colors",
+                  "@[124px]:text-xs text-2xs transition-colors",
                   textColor,
                   hoverTextColor,
                 )}
@@ -161,12 +175,12 @@ export async function Lesson({
               </p>
               <p
                 className={cn(
-                  "transition-colors",
+                  " transition-colors",
                   textColor,
                   hoverTextColor,
                   lesson.classes.join(", ").length > 40
                     ? "text-2xs"
-                    : "text-xs",
+                    : "@[124px]:text-xs text-2xs",
                 )}
               >
                 {lesson.classes.join(", ")}

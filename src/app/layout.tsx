@@ -13,6 +13,14 @@ export const metadata: Metadata = {
   description: "Made by Tobias T. Viskum",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  minimumScale: 1,
+  userScalable: "no",
+};
+
 export default async function RootLayout({
   children,
 }: {
@@ -21,10 +29,6 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
-        />
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body

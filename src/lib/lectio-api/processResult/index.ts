@@ -14,7 +14,7 @@ export function processResult<T>(lectioResult: LectioResult) {
     return {
       status: "success",
       message: "There was no data",
-      data: null,
+      data: [],
     } as Prettify<ReturnType<T>>;
   } else if (lectioResult === "Forbidden access") {
     return {

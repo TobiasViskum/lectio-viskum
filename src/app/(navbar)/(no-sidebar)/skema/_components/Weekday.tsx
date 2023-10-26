@@ -11,21 +11,12 @@ export async function Weekday({ week, timestamps, day }: Props) {
   }[] = [];
 
   return (
-    <div>
-      <div
-        className="relative"
-        style={{
-          width: "var(--lesson-width)",
-          minWidth: "var(--lesson-width)",
-        }}
-      >
+    <div className="sm:min-w-1/2 lg:min-w-1/3 xl:min-w-1/4 2xl:min-w-1/5 flex min-w-full">
+      <div className="relative w-full">
         <div className="absolute grid w-full place-items-center  px-2">
           <Badge className="px-6 py-1">{day}</Badge>
         </div>
-        <div
-          className="absolute h-full"
-          style={{ width: "var(--lesson-width)" }}
-        >
+        <div className="absolute z-50 flex h-full w-full justify-between">
           {week.lessons.map((lesson, index) => {
             return (
               <Lesson

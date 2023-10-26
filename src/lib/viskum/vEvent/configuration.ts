@@ -1,6 +1,6 @@
 export type EventMap = {
   searchSchool: { searchString: string };
-  newScheduleWeek: { action: "next" | "previous" };
+  newScheduleWeek: { action: "forwards" | "backwards" };
   assignmentsFilter: {
     filter: "all" | "submitted" | "pending" | "missing";
     search: string;

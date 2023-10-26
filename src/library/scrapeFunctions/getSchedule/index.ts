@@ -145,5 +145,16 @@ export async function getSchedule({
     return "No data";
   }
 
+  let isWeekEmpty = true;
+  for (let i = 0; i < weekSchedule.length; i++) {
+    const day = weekSchedule[i];
+    if (day.lessons.length !== 0) {
+      isWeekEmpty = false;
+      break;
+    }
+  }
+
+  if (isWeekEmpty) return "No data";
+
   return weekSchedule;
 }

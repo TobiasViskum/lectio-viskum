@@ -51,11 +51,10 @@
   --lesson-gap: calc(12px * var(--multi));
   --offset-top-text: calc(18px * var(--multi));
   --offset-top-lesson: calc(30px * var(--multi));
-  --height-hour: calc(70px * var(--multi));
-  --lesson-width: calc(256px * var(--multi));
+  --height-hour: calc(68px * var(--multi));
 }
 
-@media screen and (min-width: 1500px) {
+@media screen and (min-width: 1536px) {
   #schedule-main {
     --multi: 1;
   }
