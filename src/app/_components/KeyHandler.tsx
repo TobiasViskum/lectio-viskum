@@ -7,9 +7,9 @@ export function KeyHandler() {
   useEffect(() => {
     window.addEventListener("keydown", (e) => {
       if (e.key === "ArrowRight" && e.metaKey && e.shiftKey) {
-        vEvent.dispatch("newScheduleWeek", { action: "next" });
+        vEvent.dispatch("newScheduleWeek", { action: "forwards" });
       } else if (e.key === "ArrowLeft" && e.metaKey && e.shiftKey) {
-        vEvent.dispatch("newScheduleWeek", { action: "previous" });
+        vEvent.dispatch("newScheduleWeek", { action: "backwards" });
       }
     });
   }, []);
