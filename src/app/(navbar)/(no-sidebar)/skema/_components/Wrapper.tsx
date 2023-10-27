@@ -27,7 +27,7 @@ export function Wrapper({ children }: Props) {
 
   return (
     <div
-      className="flex h-full transition-transform"
+      className="flex h-full transition-transform duration-500 sm:duration-300"
       style={{ transform: `translateX(${getNewTransform()}%)` }}
     >
       {children}
