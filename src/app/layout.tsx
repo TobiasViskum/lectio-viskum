@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import { MainClientHandler } from "./_components/MainClientHandler";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -46,7 +47,9 @@ export default async function RootLayout({
             </main>
           </div>
         </ThemeProvider>
-        <MainClientHandler />
+        <Suspense>
+          <MainClientHandler />
+        </Suspense>
       </body>
     </html>
   );
