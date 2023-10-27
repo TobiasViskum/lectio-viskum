@@ -1,8 +1,6 @@
 import { getAuthenticatedPage } from "../../getPage";
 import { getClass } from "./getClass";
 import { getClassroom } from "./getClassroom";
-import { getEndTime } from "./getEndTime";
-import { getStartTime } from "./getStartTime";
 import { getSubject } from "./getSubject";
 import { getTeachers } from "./getTeachers";
 import { getTime } from "./getTime";
@@ -29,6 +27,8 @@ export async function getSchedule({
   } else if (studentId) {
     targetPage = `SkemaNy.aspx?week=${week + year}&elevid=${teacherId}`;
   }
+  let numberWeek = !isNaN(Number(week)) ? Number(week) : -1;
+  let numberYear = !isNaN(Number(year)) ? Number(year) : -1;
 
   const res = await getAuthenticatedPage({
     lectioCookies: lectioCookies,
@@ -71,7 +71,7 @@ export async function getSchedule({
           const lesson: Lesson = {
             href: "",
             status: "normal",
-            time: { date: "", startTime: "", endTime: "" },
+            time: { startDate: new Date(1970), endDate: new Date(1970) },
             teachers: [],
             classrooms: [""],
             classes: [],
@@ -87,7 +87,11 @@ export async function getSchedule({
           if (info) {
             lesson.href = href;
             lesson.status = status;
-            lesson.time = getTime(info);
+            lesson.time = getTime(info, {
+              week: numberWeek,
+              year: numberYear,
+              day: index,
+            });
             lesson.teachers = getTeachers(info);
             lesson.classrooms = getClassroom(info);
             lesson.classes = getClass(info);
@@ -115,10 +119,10 @@ export async function getSchedule({
 
       lessons.forEach((lesson1, index1) => {
         lessons.forEach((lesson2, index2) => {
-          const startTime1 = getStartTime(lesson1);
-          const endTime1 = getEndTime(lesson1);
+          const startTime1 = lesson1.time.startDate.getTime();
+          const endTime1 = lesson1.time.endDate.getTime();
 
-          const startTime2 = getStartTime(lesson2);
+          const startTime2 = lesson2.time.startDate.getTime();
 
           if (index1 !== index2) {
             if (startTime2 === startTime1) {
@@ -132,7 +136,8 @@ export async function getSchedule({
 
       lessons.sort(
         (a, b) =>
-          getStartTime(a) - getStartTime(b) || getEndTime(a) - getEndTime(b),
+          a.time.startDate.getTime() - b.time.startDate.getTime() ||
+          a.time.endDate.getTime() - b.time.endDate.getTime(),
       );
 
       if (_index <= 4) {

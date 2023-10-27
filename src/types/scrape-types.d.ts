@@ -36,9 +36,8 @@ type Teacher = Prettify<{
 type LectioDocument = Prettify<{ name: string; href: string }>;
 type LessonStatus = Prettify<"changed" | "cancelled" | "normal">;
 type LessonTime = Prettify<{
-  date: string;
-  startTime: string;
-  endTime: string;
+  startDate: Date;
+  endDate: Date;
 }>;
 type Lesson = Prettify<{
   href: string;

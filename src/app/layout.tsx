@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import { MainClientHandler } from "./_components/MainClientHandler";
-import { KeyHandler } from "./_components/KeyHandler";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -46,8 +46,7 @@ export default async function RootLayout({
             </main>
           </div>
         </ThemeProvider>
-        {process.env.NODE_ENV === "development" && <MainClientHandler />}
-        <KeyHandler />
+        <MainClientHandler />
       </body>
     </html>
   );

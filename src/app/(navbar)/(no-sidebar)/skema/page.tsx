@@ -10,6 +10,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { DaySwitcher } from "./_components/DaySwitcher";
 import { Wrapper } from "./_components/Wrapper";
+import { ScheduleProvider } from "./schedule-context";
 
 type Props = { searchParams: { [key: string]: string } };
 
@@ -67,73 +68,75 @@ export default async function SchedulePage({ searchParams }: Props) {
   };
 
   return (
-    <div id="schedule-main" className="w-full">
-      <h1>Skema</h1>
-      <Link
-        href={{
-          query: {
-            week: Number(searchParamsObj.week) - 1,
-            year: searchParamsObj.year,
-          },
-        }}
-      >
-        {"< Back"}
-      </Link>
-      <Link
-        href={{
-          query: {
-            week: Number(searchParamsObj.week) + 1,
-            year: searchParamsObj.year,
-          },
-        }}
-      >
-        {"Forward >"}
-      </Link>
-      <DaySwitcher />
+    <ScheduleProvider>
+      <div id="schedule-main" className="w-full">
+        <h1>Skema</h1>
+        <Link
+          href={{
+            query: {
+              week: Number(searchParamsObj.week) - 1,
+              year: searchParamsObj.year,
+            },
+          }}
+        >
+          {"< Back"}
+        </Link>
+        <Link
+          href={{
+            query: {
+              week: Number(searchParamsObj.week) + 1,
+              year: searchParamsObj.year,
+            },
+          }}
+        >
+          {"Forward >"}
+        </Link>
+        <DaySwitcher />
 
-      <div className="relative flex w-full justify-center rounded-md">
-        {schedule.length === 0 ? (
-          <div className="text-center">
-            <p>Der er ingen aktiviteter i denne uge!</p>
-            <p>Nyd ugen!</p>
-          </div>
-        ) : (
-          <>
-            <div className="flex h-full w-14 flex-col">
-              <div
-                className="grid w-16 pl-1 text-muted-foreground opacity-70"
-                style={{ paddingTop: "var(--offset-top-text)" }}
-              >
-                <Timestamps timestamps={timestamps} />
-              </div>
+        <div className="relative flex w-full justify-center rounded-md">
+          {schedule.length === 0 ? (
+            <div className="text-center">
+              <p>Der er ingen aktiviteter i denne uge!</p>
+              <p>Nyd ugen!</p>
             </div>
+          ) : (
+            <>
+              <div className="flex h-full w-14 flex-col">
+                <div
+                  className="grid w-16 pl-1 text-muted-foreground opacity-70"
+                  style={{ paddingTop: "var(--offset-top-text)" }}
+                >
+                  <Timestamps timestamps={timestamps} />
+                </div>
+              </div>
 
-            <div className="relative w-full max-w-[1600px] overflow-x-hidden overflow-y-hidden">
-              <div
-                className="pointer-events-none absolute z-10 h-full w-full bg-transparent"
-                style={{
-                  paddingTop: "var(--offset-top-lesson)",
-                  width: "calc(100% - 12px)",
-                }}
-              >
-                <TimestampsLines timestamps={timestamps} />
+              <div className="relative w-full max-w-[1600px] overflow-x-hidden overflow-y-hidden">
+                <div
+                  className="pointer-events-none absolute h-full w-full bg-transparent"
+                  style={{
+                    paddingTop: "var(--offset-top-lesson)",
+                    width: "calc(100% - 12px)",
+                  }}
+                >
+                  <TimestampsLines timestamps={timestamps} />
+                </div>
+                <Wrapper>
+                  {schedule.map((week, index) => {
+                    return (
+                      <Weekday
+                        week={week}
+                        timestamps={timestamps}
+                        day={indexToDayMap[index]}
+                        key={index}
+                      />
+                    );
+                  })}
+                </Wrapper>
               </div>
-              <Wrapper>
-                {schedule.map((week, index) => {
-                  return (
-                    <Weekday
-                      week={week}
-                      timestamps={timestamps}
-                      day={indexToDayMap[index]}
-                      key={index}
-                    />
-                  );
-                })}
-              </Wrapper>
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </ScheduleProvider>
   );
 }

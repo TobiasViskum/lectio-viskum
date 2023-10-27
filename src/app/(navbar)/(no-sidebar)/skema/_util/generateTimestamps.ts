@@ -5,15 +5,15 @@ export function generateTimestamps(weeks: Week[]) {
   weeks.forEach((week) => {
     week.lessons.forEach((lesson) => {
       const time = lesson.time;
-      const splitStartTime = time.startTime.split(":");
+
       const startTime =
-        Number(splitStartTime[0]) + Number(splitStartTime[1]) / 60;
+        time.startDate.getHours() + time.startDate.getMinutes() / 60;
+
       if (startTime < globalStartTime) {
         globalStartTime = startTime;
       }
 
-      const splitEndTime = time.endTime.split(":");
-      const endTime = Number(splitEndTime[0]) + Number(splitEndTime[1]) / 60;
+      const endTime = time.endDate.getHours() + time.endDate.getMinutes() / 60;
       if (endTime > globalEndTime) {
         globalEndTime = endTime;
       }

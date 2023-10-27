@@ -2,12 +2,15 @@
 
 import TooltipHover from "@/components/global/TooltipHover";
 import { Button } from "@/components/ui/button";
-import { vEvent } from "@/lib/viskum/vEvent";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useContext } from "react";
+import { ScheduleContext } from "../schedule-context";
 
 export function DaySwitcher() {
+  const context = useContext(ScheduleContext);
+
   function handleClick(action: "forwards" | "backwards") {
-    vEvent.dispatch("newScheduleWeek", { action: action });
+    context.changeDay(action);
   }
 
   return (

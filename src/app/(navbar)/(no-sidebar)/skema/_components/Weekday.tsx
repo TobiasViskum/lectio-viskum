@@ -20,7 +20,7 @@ export async function Weekday({ week, timestamps, day }: Props) {
           {week.lessons.map((lesson, index) => {
             return (
               <Lesson
-                key={new URLSearchParams(lesson.time).toString()}
+                key={`${lesson.title}-${lesson.status}-${lesson.href}`}
                 lesson={lesson}
                 timestamps={timestamps}
                 lessonsAddedAtTimestamp={lessonsAddedAtTimestamp}

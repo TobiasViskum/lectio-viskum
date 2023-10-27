@@ -17,10 +17,10 @@ export async function Lesson({
   lessonsAddedAtTimestamp,
 }: Props) {
   const time = lesson.time;
-  const splitStartTime = time.startTime.split(":");
-  const startTime = Number(splitStartTime[0]) + Number(splitStartTime[1]) / 60;
-  const splitEndTime = time.endTime.split(":");
-  const endTime = Number(splitEndTime[0]) + Number(splitEndTime[1]) / 60;
+  const startTime =
+    time.startDate.getHours() + time.startDate.getMinutes() / 60;
+
+  const endTime = time.endDate.getHours() + time.endDate.getMinutes() / 60;
 
   const multi = startTime - timestamps[0];
 
@@ -69,19 +69,21 @@ export async function Lesson({
   const hasNote = lesson.hasNote;
   const hasHomework = lesson.hasHomework;
 
-  const cornerWidth = Number(hasNote) * 20 + Number(hasHomework) * 20;
-
-  let titleSize = "text-sm @[124px]:text-sm";
-  if (lesson.overlappingLessons >= 1) {
-    titleSize = "text-xs @[124px]:text-sm";
-  }
-
   const numericTimes = getNumericLessonTimes(lesson);
 
   let displayOnlyTitle = false;
   if (numericTimes.endTime - numericTimes.startTime < 0.75) {
-    titleSize = "text-sm";
     displayOnlyTitle = true;
+  }
+
+  function getTitleSize() {
+    let titleSize = "text-sm @[124px]:text-sm";
+    if (displayOnlyTitle) {
+      titleSize = "text-sm";
+    } else if (lesson.overlappingLessons >= 1) {
+      titleSize = "text-xs @[124px]:text-sm";
+    }
+    return titleSize;
   }
 
   return (
@@ -89,7 +91,7 @@ export async function Lesson({
       key={Math.random()}
       href={"/skema"}
       className={cn(
-        `@container group absolute ml-1 flex w-full gap-x-1 overflow-hidden rounded-md bg-opacity-50 transition-[transform,_background-color] hover:z-50 hover:scale-[1.025] hover:bg-opacity-90 sm:gap-x-1.5`,
+        `@container group absolute ml-1 flex w-full gap-x-1 overflow-hidden rounded-md bg-opacity-50 transition-[transform,_background-color] hover:scale-[1.025] hover:bg-opacity-90 sm:gap-x-1.5`,
         backgroundColor,
       )}
       style={{
@@ -113,13 +115,13 @@ export async function Lesson({
               "@[124px]:semibold flex flex-wrap items-start gap-x-1.5 font-bold leading-3 transition-colors",
               textColor,
               hoverTextColor,
-              titleSize,
+              getTitleSize(),
             )}
           >
             {lesson.subjects.join(", ")}
             {!isSubjectsEmpty && (
               <div className="flex items-center">
-                {lesson.hasNote && (
+                {hasNote && (
                   <NoteIcon
                     className={cn(
                       "h-4 w-4 transition-colors",
@@ -128,18 +130,18 @@ export async function Lesson({
                     )}
                   />
                 )}
-                {lesson.hasHomework && (
-                  <BookmarkFilledIcon className="h-4 w-4" />
-                )}
+                {hasHomework && <BookmarkFilledIcon className="h-4 w-4" />}
               </div>
             )}
           </div>
           <div
             className={cn(
               isSubjectsEmpty
-                ? `@[124px]:semibold font-bold leading-3 transition-colors ${titleSize} flex flex-wrap items-start gap-x-1.5`
+                ? `@[124px]:semibold flex flex-wrap items-start gap-x-1.5 font-bold leading-3 transition-colors ${getTitleSize()}`
                 : "@[124px]:text-xs w-full text-2xs transition-colors",
-              lesson.title.length > 20 ? "@[124px]:text-2xs text-3xs" : "",
+              lesson.title.length > 20 && !displayOnlyTitle
+                ? "@[124px]:text-2xs text-3xs"
+                : "text-sm",
               textColor,
               hoverTextColor,
             )}
@@ -147,7 +149,7 @@ export async function Lesson({
             {lesson.title}
             {isSubjectsEmpty && (
               <div className="flex items-center">
-                {lesson.hasNote && (
+                {hasNote && (
                   <NoteIcon
                     className={cn(
                       "h-4 w-4 transition-colors",
@@ -156,9 +158,7 @@ export async function Lesson({
                     )}
                   />
                 )}
-                {lesson.hasHomework && (
-                  <BookmarkFilledIcon className="h-4 w-4" />
-                )}
+                {hasHomework && <BookmarkFilledIcon className="h-4 w-4" />}
               </div>
             )}
           </div>
