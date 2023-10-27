@@ -100,3 +100,9 @@ type FullAssignment = Prettify<{
   studentNote: string;
   submits: Submit[];
 }>;
+
+type Homework = Prettify<{
+  titleHref: string;
+  title: string;
+  description: (string | string[] | { img: string })[];
+}>;
