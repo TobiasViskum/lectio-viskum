@@ -12,9 +12,6 @@ import { DaySwitcher } from "./_components/DaySwitcher";
 import { Wrapper } from "./_components/Wrapper";
 import { ScheduleProvider } from "./schedule-context";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
 type Props = { searchParams: { [key: string]: string } };
 
 export default async function SchedulePage({ searchParams }: Props) {
