@@ -8,7 +8,7 @@
   "/page": "app/page.js",
   "/(navbar)/(no-sidebar)/forside/page": "app/(navbar)/(no-sidebar)/forside/page.js",
   "/(navbar)/(no-sidebar)/skema/page": "app/(navbar)/(no-sidebar)/skema/page.js",
-  "/(navbar)/(sidebar)/beskeder/page": "app/(navbar)/(sidebar)/beskeder/page.js",
   "/(navbar)/(sidebar)/afleveringer/[ids]/page": "app/(navbar)/(sidebar)/afleveringer/[ids]/page.js",
-  "/(navbar)/(sidebar)/afleveringer/page": "app/(navbar)/(sidebar)/afleveringer/page.js"
+  "/(navbar)/(sidebar)/afleveringer/page": "app/(navbar)/(sidebar)/afleveringer/page.js",
+  "/(navbar)/(sidebar)/beskeder/page": "app/(navbar)/(sidebar)/beskeder/page.js"
 }
