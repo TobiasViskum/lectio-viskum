@@ -64,12 +64,12 @@ export default async function SchedulePage({ searchParams }: Props) {
     6: "Søndag",
   };
 
-  lectioAPI.getSchedule.byCredentials({
+  await lectioAPI.getSchedule.byCredentials({
     ...lectioProps,
     week: (Number(searchParamsObj.week) - 1).toString(),
     year: searchParamsObj.year,
   });
-  lectioAPI.getSchedule.byCredentials({
+  await lectioAPI.getSchedule.byCredentials({
     ...lectioProps,
     week: (Number(searchParamsObj.week) + 1).toString(),
     year: searchParamsObj.year,
