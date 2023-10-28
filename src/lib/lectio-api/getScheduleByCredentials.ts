@@ -15,9 +15,9 @@ export const getScheduleByCredentials = async (props: FunctionProps) => {
   const tag = `${userId}-schedule-${props.week + props.year}`;
   const foundCache = global.cache.get(tag);
 
-  // if (foundCache && new Date().getTime() < foundCache.expires) {
-  //   return foundCache.data as MainType;
-  // }
+  if (foundCache && new Date().getTime() < foundCache.expires) {
+    return foundCache.data as MainType;
+  }
 
   const result = await getSchedule({
     week: props.week,
