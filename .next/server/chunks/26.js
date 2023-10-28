@@ -1,1 +1,0 @@
-"use strict";exports.id=26,exports.ids=[26],exports.modules={26026:(e,t,l)=>{l.d(t,{f:()=>s});var o=l(81199),r=l(77848),a=l(52345);let d=(0,r.forwardRef)((e,t)=>(0,r.createElement)(a.WV.label,(0,o.Z)({},e,{ref:t,onMouseDown:t=>{var l;null===(l=e.onMouseDown)||void 0===l||l.call(e,t),!t.defaultPrevented&&t.detail>1&&t.preventDefault()}}))),s=d}};
