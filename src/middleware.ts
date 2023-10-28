@@ -10,8 +10,9 @@ export async function middleware(req: NextRequest) {
   const password = cookies.get("password")?.value;
   const schoolCode = cookies.get("schoolCode")?.value;
   const lectioCookies = cookies.get("lectioCookies")?.value;
+  const userId = cookies.get("userId")?.value;
 
-  if (!username || !password || !schoolCode || !lectioCookies) {
+  if (!username || !password || !schoolCode || !lectioCookies || !userId) {
     return NextResponse.redirect(new URL("/log-ind?redirected=true", req.url), {
       headers: requestHeaders,
     });
@@ -33,6 +34,12 @@ export async function middleware(req: NextRequest) {
       response.cookies.set({
         name: "lectioCookies",
         value: res.lectioCookies,
+        path: "/",
+        expires: expireDate,
+      });
+      response.cookies.set({
+        name: "userId",
+        value: res.studentId,
         path: "/",
         expires: expireDate,
       });

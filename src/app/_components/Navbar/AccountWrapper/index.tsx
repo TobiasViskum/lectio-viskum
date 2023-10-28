@@ -24,7 +24,6 @@ export async function AccountWrapper() {
 
   const user = await lectioAPI.getStudent.byCredentials({
     ...lectioProps,
-    tag: `user-${lectioProps.username}`,
   });
 
   return (

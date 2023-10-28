@@ -1,0 +1,2 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[118],{977:(e,r,t)=>{"use strict";function register(){let e=new Map;t.g.cache=e}t.r(r),t.d(r,{register:()=>register})}},e=>{var r=e(e.s=977);(_ENTRIES="undefined"==typeof _ENTRIES?{}:_ENTRIES).middleware_instrumentation=r}]);
+//# sourceMappingURL=edge-instrumentation.js.map

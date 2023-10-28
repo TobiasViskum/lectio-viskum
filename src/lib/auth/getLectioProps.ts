@@ -8,14 +8,20 @@ export function getLectioProps() {
   const password = cookieStore.get("password");
   const schoolCode = cookieStore.get("schoolCode");
   const lectioCookies = cookieStore.get("lectioCookies");
+  const userId = cookieStore.get("userId");
 
-  if (username && password && schoolCode && lectioCookies) {
+  if (username && password && schoolCode && lectioCookies && userId) {
     return {
       username: username.value,
       password: password.value,
       schoolCode: schoolCode.value,
       lectioCookies: decodeURIComponent(lectioCookies.value),
-    } as StandardProps & { username: string; password: string };
+      userId: userId.value,
+    } as StandardProps & {
+      username: string;
+      password: string;
+      userId: string;
+    };
   }
   redirect("/log-ind?redirected=true");
 }

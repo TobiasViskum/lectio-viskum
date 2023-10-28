@@ -5,6 +5,7 @@ type Props = {
   password: string;
   schoolCode: string;
   lectioCookies: string;
+  userId: string;
 };
 
 export function setAuthCookies({
@@ -12,6 +13,7 @@ export function setAuthCookies({
   password,
   schoolCode,
   lectioCookies,
+  userId,
 }: Props) {
   const date = new Date();
   date.setFullYear(date.getFullYear() + 1);
@@ -25,4 +27,6 @@ export function setAuthCookies({
     `lectioCookies=${encodeURIComponent(lectioCookies)}; expires=` +
     date.toUTCString() +
     "; path=/";
+  document.cookie =
+    `userId=${userId}; expires=` + date.toUTCString() + "; path=/";
 }

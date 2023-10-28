@@ -1,4 +1,4 @@
-import { getAllSchools as _getAllSchools } from "@/library/scrapeFunctions";
+import { getAllSchools as _getAllSchools } from "@/api-functions/scrapeFunctions";
 import { processResult } from "./processResult";
 
 type MainType = Prettify<School[]>;

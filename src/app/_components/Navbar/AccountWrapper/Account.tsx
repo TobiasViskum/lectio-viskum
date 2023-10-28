@@ -2,6 +2,7 @@
 
 import { clearUserCache } from "@/app/_actions/actions";
 import { profile } from "@/assets";
+import { getCookies } from "@/lib/auth/getLectioCookies";
 import { setAuthCookies } from "@/lib/auth/setAuthCookies";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -27,13 +28,15 @@ export function Account({ strUser }: Props) {
   }
 
   async function handleLogout() {
-    await clearUserCache({ username: "tobi688c" });
+    const cookies = getCookies();
+    await clearUserCache({ userId: cookies.userId });
     router.refresh();
     setAuthCookies({
       username: "",
       password: "",
       schoolCode: "",
       lectioCookies: "",
+      userId: "",
     });
     router.push("/log-ind");
   }

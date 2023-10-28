@@ -1,8 +1,8 @@
-import { getIsAuthenticated as _getIsAuthenticated } from "@/library/scrapeFunctions/getIsAuthenticated";
+import { getIsAuthenticated as _getIsAuthenticated } from "@/api-functions/scrapeFunctions/getIsAuthenticated";
 import { processResult } from "./processResult";
 
 type MainType = LectioAuth;
-type FunctionProps = APIProps<AuthProps>;
+type FunctionProps = AuthProps;
 
 export const getIsAuthenticated = async (props: FunctionProps) => {
   const result = await _getIsAuthenticated(props);

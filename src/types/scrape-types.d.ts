@@ -17,6 +17,7 @@ type School = Prettify<{
 type LectioAuth = Prettify<{
   isAuthenticated: boolean;
   lectioCookies: string;
+  studentId: string;
 }>;
 
 type Student = Prettify<{

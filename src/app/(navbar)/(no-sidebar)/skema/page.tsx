@@ -12,6 +12,9 @@ import { DaySwitcher } from "./_components/DaySwitcher";
 import { Wrapper } from "./_components/Wrapper";
 import { ScheduleProvider } from "./schedule-context";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 type Props = { searchParams: { [key: string]: string } };
 
 export default async function SchedulePage({ searchParams }: Props) {
@@ -38,19 +41,11 @@ export default async function SchedulePage({ searchParams }: Props) {
 
   const lectioProps = getLectioProps();
 
-  function getTag(week: string) {
-    const tag = `skema-${lectioProps.username}-${[
-      week,
-      searchParamsObj.year,
-    ].join("")}`;
-
-    return tag;
-  }
+  const d = new Date().getTime();
 
   const schedule = await lectioAPI.getSchedule.byCredentials({
     ...lectioProps,
     ...searchParamsObj,
-    tag: getTag(searchParamsObj.week),
   });
 
   if (schedule === null) {
@@ -68,6 +63,17 @@ export default async function SchedulePage({ searchParams }: Props) {
     5: "Lørdag",
     6: "Søndag",
   };
+
+  lectioAPI.getSchedule.byCredentials({
+    ...lectioProps,
+    week: (Number(searchParamsObj.week) - 1).toString(),
+    year: searchParamsObj.year,
+  });
+  lectioAPI.getSchedule.byCredentials({
+    ...lectioProps,
+    week: (Number(searchParamsObj.week) + 1).toString(),
+    year: searchParamsObj.year,
+  });
 
   return (
     <ScheduleProvider>

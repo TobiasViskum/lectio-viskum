@@ -45,6 +45,7 @@ export function LoginForm() {
           password: password,
           schoolCode: params.schoolCode,
         });
+
         if (res === null) {
           toast.error("Der skete en fejl");
         } else if (res.isAuthenticated) {
@@ -53,6 +54,7 @@ export function LoginForm() {
             password: password,
             schoolCode: params.schoolCode,
             lectioCookies: res.lectioCookies,
+            userId: res.studentId,
           });
           router.refresh();
           toast.success("Loggede dig ind!");

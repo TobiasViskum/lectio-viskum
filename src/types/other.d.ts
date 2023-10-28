@@ -14,7 +14,7 @@ type APIResponse<T> = Prettify<
   )
 >;
 
-type APIProps<T> = Prettify<{ tag?: string } & T>;
+type APIProps<T> = Prettify<{ userId: string } & T>;
 
 type Day =
   | "Mandag"
@@ -24,3 +24,39 @@ type Day =
   | "Fredag"
   | "Lørdag"
   | "Søndag";
+
+type Pages =
+  | "front"
+  | "schedule"
+  | "absence-overview"
+  | "absence-reasons"
+  | "assignments"
+  | "homework"
+  | "grades-overview"
+  | "grades-messages"
+  | "borrowed-books"
+  | "questionnaire"
+  | "messages-newest"
+  | "messages-unread"
+  | "messages-personal"
+  | "messages-all"
+  | "messages-deleted"
+  | "studyPlan-calender"
+  | "studyPlan-educationDescription"
+  | "studyPlan-studyDirection"
+  | "studyPlan-elective"
+  | "teachers"
+  | "student-by-credentials";
+
+type GetPageReturn =
+  | "Not authenticated"
+  | "Invalid school"
+  | "No data"
+  | "Forbidden access"
+  | {
+      $: cheerio.Root;
+      fetchCookie: FetchCookieImpl<RequestInfo | URL, RequestInit, Response>;
+    }
+  | null;
+
+type MessagesTypes = "all" | "unread" | "personal" | "newest" | "deleted";

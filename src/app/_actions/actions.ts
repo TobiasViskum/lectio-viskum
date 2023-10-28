@@ -1,10 +1,8 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+type Props = { userId: string };
 
-type Props = { username: string };
-
-export async function clearUserCache({ username }: Props) {
-  revalidateTag(`user-${username}`);
+export async function clearUserCache({ userId }: Props) {
+  global.cache.delete(`user-${userId}`);
   return;
 }

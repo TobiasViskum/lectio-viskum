@@ -47,7 +47,7 @@ export function Assignment({ assignment, addWeek }: Props) {
       <Link
         key={assignment.title}
         href={{
-          pathname: `/afleveringer/${studentId}-${assignment.id}`,
+          pathname: `/afleveringer/${assignment.id}`,
           query: {
             title: assignment.title,
             class: assignment.class,
