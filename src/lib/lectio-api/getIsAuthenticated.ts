@@ -1,3 +1,4 @@
+import "server-only";
 import { getIsAuthenticated as _getIsAuthenticated } from "@/api-functions/scrapeFunctions/getIsAuthenticated";
 import { processResult } from "./processResult";
 

@@ -41,8 +41,6 @@ export default async function SchedulePage({ searchParams }: Props) {
 
   const lectioProps = getLectioProps();
 
-  const d = new Date().getTime();
-
   const schedule = await lectioAPI.getSchedule.byCredentials({
     ...lectioProps,
     ...searchParamsObj,

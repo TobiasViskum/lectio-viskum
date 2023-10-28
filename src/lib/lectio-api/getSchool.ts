@@ -1,3 +1,4 @@
+import "server-only";
 import { getSchoolBySchoolCode } from "@/api-functions/scrapeFunctions/getSchoolBySchoolCode";
 import { processResult } from "./processResult";
 

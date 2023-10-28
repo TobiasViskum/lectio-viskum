@@ -1,3 +1,4 @@
+import "server-only";
 import { getAssignment } from "@/api-functions/scrapeFunctions/getAssignment";
 import { processResult } from "./processResult";
 import { validateResult } from "./validateResult";

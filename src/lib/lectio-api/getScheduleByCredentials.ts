@@ -1,3 +1,4 @@
+import "server-only";
 import { getSchedule } from "@/api-functions/scrapeFunctions";
 import { processResult } from "./processResult";
 import { validateResult } from "./validateResult";

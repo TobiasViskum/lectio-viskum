@@ -1,3 +1,4 @@
+import "server-only";
 import { redirect } from "next/navigation";
 import { ReturnType } from "../types/types";
 

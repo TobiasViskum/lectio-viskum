@@ -1,3 +1,4 @@
+import "server-only";
 import { processResult } from "./processResult";
 import { getStudentByCredentials as _getStudentByCredentials } from "@/api-functions/scrapeFunctions/getStudentByCredentials";
 import { validateResult } from "./validateResult";

@@ -1,3 +1,4 @@
+import "server-only";
 import { ReturnType } from "../types/types";
 
 type LectioResult =
