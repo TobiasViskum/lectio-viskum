@@ -66,7 +66,17 @@ export default async function SchedulePage({ searchParams }: Props) {
   });
   lectioAPI.getSchedule.byCredentials({
     ...lectioProps,
+    week: (Number(searchParamsObj.week) - 2).toString(),
+    year: searchParamsObj.year,
+  });
+  lectioAPI.getSchedule.byCredentials({
+    ...lectioProps,
     week: (Number(searchParamsObj.week) + 1).toString(),
+    year: searchParamsObj.year,
+  });
+  lectioAPI.getSchedule.byCredentials({
+    ...lectioProps,
+    week: (Number(searchParamsObj.week) + 2).toString(),
     year: searchParamsObj.year,
   });
 
