@@ -53,23 +53,23 @@ export async function getSchedule({
         .find("a[data-additionalinfo]")
         .map((index, elem) => {
           const $elem = $(elem);
+          let id = "";
           let href = ["https://lectio.dk", $elem.attr("href")].join("");
-          const hrefRegex =
-            /https:\/\/lectio.dk\/lectio\/[0-9]+\/(aktivitet\/aktivitetforside2.aspx\?absid=[0-9]+)/i;
-          const hrefMath = href.match(hrefRegex);
+          const idRegex = /absid=([0-9]+)/i;
+          const idMath = href.match(idRegex);
           const info = $elem.attr("data-additionalinfo");
           let status: LessonStatus = "normal";
-          if (hrefMath && info) {
+          if (idMath && info) {
             status = info.includes("Ændret!")
               ? "changed"
               : info.includes("Aflyst!")
               ? "cancelled"
               : "normal";
-            href = hrefMath[1];
+            id = idMath[1];
           }
 
           const lesson: Lesson = {
-            href: "",
+            id: "",
             status: "normal",
             time: { startDate: new Date(1970), endDate: new Date(1970) },
             teachers: [],
@@ -85,7 +85,7 @@ export async function getSchedule({
           };
 
           if (info) {
-            lesson.href = href;
+            lesson.id = id;
             lesson.status = status;
             lesson.time = getTime(info, {
               week: numberWeek,
@@ -119,13 +119,18 @@ export async function getSchedule({
 
       lessons.forEach((lesson1, index1) => {
         lessons.forEach((lesson2, index2) => {
-          const startTime1 = lesson1.time.startDate.getTime();
-          const endTime1 = lesson1.time.endDate.getTime();
+          const startDate1 = lesson1.time.startDate;
+          const endDate1 = lesson1.time.endDate;
+          const startTime1 =
+            startDate1.getHours() + startDate1.getMinutes() / 60;
+          const endTime1 = endDate1.getHours() + endDate1.getMinutes() / 60;
 
-          const startTime2 = lesson2.time.startDate.getTime();
+          const startDate2 = lesson2.time.startDate;
+          const startTime2 =
+            startDate2.getHours() + startDate2.getMinutes() / 60;
 
           if (index1 !== index2) {
-            if (startTime2 === startTime1) {
+            if (startTime1 === startTime2) {
               lessons[index2].overlappingLessons += 1;
             } else if (startTime2 > startTime1 && startTime2 < endTime1) {
               lessons[index2].overlappingLessons += 1;
@@ -136,8 +141,8 @@ export async function getSchedule({
 
       lessons.sort(
         (a, b) =>
-          a.time.startDate.getTime() - b.time.startDate.getTime() ||
-          a.time.endDate.getTime() - b.time.endDate.getTime(),
+          b.time.startDate.getTime() - a.time.startDate.getTime() ||
+          b.time.endDate.getTime() - a.time.endDate.getTime(),
       );
 
       if (_index <= 4) {

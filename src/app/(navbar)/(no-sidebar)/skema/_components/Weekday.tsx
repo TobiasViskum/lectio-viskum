@@ -11,7 +11,7 @@ export async function Weekday({ week, timestamps, day }: Props) {
   }[] = [];
 
   return (
-    <div className="sm:min-w-1/2 lg:min-w-1/3 xl:min-w-1/4 2xl:min-w-1/5 flex min-w-full">
+    <div className="flex min-w-full sm:min-w-1/2 lg:min-w-1/3 xl:min-w-1/4 2xl:min-w-1/5">
       <div className="relative w-full">
         <div className="absolute grid w-full place-items-center  px-2">
           <Badge className="px-6 py-1">{day}</Badge>
@@ -20,7 +20,7 @@ export async function Weekday({ week, timestamps, day }: Props) {
           {week.lessons.map((lesson, index) => {
             return (
               <Lesson
-                key={`${lesson.title}-${lesson.status}-${lesson.href}`}
+                key={lesson.id}
                 lesson={lesson}
                 timestamps={timestamps}
                 lessonsAddedAtTimestamp={lessonsAddedAtTimestamp}

@@ -25,13 +25,15 @@ export default async function SchedulePage({ searchParams }: Props) {
     const data = schema.parse(searchParams);
     searchParamsObj = data;
 
-    // if (isNaN(Number(data.week)) || isNaN(Number(data.year))) {
-    //   const newObj = getCurrWeekAndYear();
+    if (isNaN(Number(data.week)) || isNaN(Number(data.year))) {
+      const newObj = getCurrWeekAndYear();
 
-    //   redirect(`/skema?week=${newObj.week}&year=${newObj.year}`);
-    // }
+      redirect(`/skema?week=${newObj.week}&year=${newObj.year}`);
+    }
   } catch (err) {
-    // console.log(err);
+    redirect(
+      `/skema?week=${searchParamsObj.week}&year=${searchParamsObj.year}`,
+    );
   }
 
   const lectioProps = getLectioProps();

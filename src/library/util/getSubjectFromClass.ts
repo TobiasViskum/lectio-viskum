@@ -7,17 +7,22 @@ export function getSubjectName(classStr: string) {
   let lcClass = classStr.toLowerCase().trimStart();
 
   if (lcClass.includes("skolepulje")) return lcClass;
+  if (lcClass.includes("alle")) return "";
 
   if (lcClass.split(", ").length > 1) return "";
 
   if (lcClass.includes("fy øv")) return "Fysikøvelse";
   if (lcClass.includes("ke øv")) return "Kemiøvelse";
   if (/ mc|-mc|mc-|mc /.test(lcClass)) {
-    const mcName = capitalizeFirstLetter(lcClass.replace(/mc [0-9]+/i, "").trimStart());
+    const mcName = capitalizeFirstLetter(
+      lcClass.replace(/mc [0-9]+/i, "").trimStart(),
+    );
     return mcName;
   }
   if (/ mk|-mk|mk-|mk /.test(lcClass)) {
-    const mkName = capitalizeFirstLetter(lcClass.replace(/mk [0-9]+/i, "").trimStart());
+    const mkName = capitalizeFirstLetter(
+      lcClass.replace(/mk [0-9]+/i, "").trimStart(),
+    );
     return mkName;
   }
   if (/ fy|-fy|fy-/.test(lcClass)) return "Fysik";

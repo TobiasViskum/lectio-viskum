@@ -1,3 +1,5 @@
+import { capitalizeFirstLetter } from "@/lib/utils";
+
 export function getTitle(info: string) {
   const pattern1 = /([0-9:]+ [-|til] [0-9:]+)/i;
   const pattern2 = /([0-9\/-]+ [0-9:]+ [-|til] [0-9\/-]+ [0-9:]+)/i;
@@ -17,5 +19,5 @@ export function getTitle(info: string) {
     return potentialTitle.split(" ")[0];
   }
 
-  return potentialTitle;
+  return capitalizeFirstLetter(potentialTitle);
 }

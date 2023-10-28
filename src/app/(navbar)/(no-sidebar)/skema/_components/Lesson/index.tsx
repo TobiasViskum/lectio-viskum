@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { NoteIcon } from "@/components/icons/NoteIcon";
-import { HomeworkIcon } from "@/components/icons/HomeworkIcon";
 import { getNumericLessonTimes } from "../../_util/getNumericLessonTimes";
 import { BookmarkFilledIcon } from "@radix-ui/react-icons";
 
@@ -89,9 +88,9 @@ export async function Lesson({
   return (
     <Link
       key={Math.random()}
-      href={"/skema"}
+      href={`/skema/${lesson.id}`}
       className={cn(
-        `@container group absolute ml-1 flex w-full gap-x-1 overflow-hidden rounded-md bg-opacity-50 transition-[transform,_background-color] hover:scale-[1.025] hover:bg-opacity-90 sm:gap-x-1.5`,
+        `group absolute ml-1 flex w-full gap-x-1 overflow-hidden rounded-md bg-opacity-50 transition-[transform,_background-color] @container hover:scale-[1.025] hover:bg-opacity-90 sm:gap-x-1.5`,
         backgroundColor,
       )}
       style={{
@@ -138,9 +137,9 @@ export async function Lesson({
             className={cn(
               isSubjectsEmpty
                 ? `@[124px]:semibold flex flex-wrap items-start gap-x-1.5 font-bold leading-3 transition-colors ${getTitleSize()}`
-                : "@[124px]:text-xs w-full text-2xs transition-colors",
+                : "w-full text-2xs transition-colors @[124px]:text-xs",
               lesson.title.length > 20 && !displayOnlyTitle
-                ? "@[124px]:text-2xs text-3xs"
+                ? "text-3xs @[124px]:text-2xs"
                 : "text-sm",
               textColor,
               hoverTextColor,
@@ -166,7 +165,7 @@ export async function Lesson({
             <>
               <p
                 className={cn(
-                  "@[124px]:text-xs text-2xs transition-colors",
+                  "text-2xs transition-colors @[124px]:text-xs",
                   textColor,
                   hoverTextColor,
                 )}
@@ -180,7 +179,7 @@ export async function Lesson({
                   hoverTextColor,
                   lesson.classes.join(", ").length > 40
                     ? "text-2xs"
-                    : "@[124px]:text-xs text-2xs",
+                    : "text-2xs @[124px]:text-xs",
                 )}
               >
                 {lesson.classes.join(", ")}

@@ -40,7 +40,7 @@ type LessonTime = Prettify<{
   endDate: Date;
 }>;
 type Lesson = Prettify<{
-  href: string;
+  id: string;
   status: LessonStatus;
   time: LessonTime;
   teachers: Teacher[];
