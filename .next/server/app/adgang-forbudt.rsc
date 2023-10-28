@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/c9a5bc6a7c948fb0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/2f5e6eb7dc136860.css","style",{"crossOrigin":""}]
-0:["-Q38xMXpQSN3ARU8RwNGa",[[["",{"children":["adgang-forbudt",{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/2f5e6eb7dc136860.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["RA-6no9QYQStwUR5KDJRF",[[["",{"children":["adgang-forbudt",{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/2f5e6eb7dc136860.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 3:[null,"$L5",null]
 4:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"Lectio"}],["$","meta","3",{"name":"description","content":"Made by Tobias T. Viskum"}],["$","link","4",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"16x16"}],["$","meta","5",{"name":"next-size-adjust"}]]
 6:I[3875,["497","static/chunks/497-edd653d27c3e0fd3.js","185","static/chunks/app/layout-414222e67e38187b.js"],"ThemeProvider"]
