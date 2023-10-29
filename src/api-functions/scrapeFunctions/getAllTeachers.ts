@@ -1,6 +1,18 @@
+import "server-only";
+import { getTimeInMs } from "@/util/getTimeInMs";
 import { getAuthenticatedPage } from "../getPage/getAuthenticatedPage";
 
-export async function getAllTeachers({ lectioCookies, schoolCode }: StandardProps) {
+export async function getAllTeachers({
+  lectioCookies,
+  schoolCode,
+}: StandardProps) {
+  const tag = `teachers`;
+  const foundCache = global.cache.get(tag);
+
+  if (foundCache && new Date().getTime() < foundCache.expires) {
+    return foundCache.data as Teacher[];
+  }
+
   const res = await getAuthenticatedPage({
     page: "teachers",
     lectioCookies: lectioCookies,
@@ -16,7 +28,13 @@ export async function getAllTeachers({ lectioCookies, schoolCode }: StandardProp
 
   const teachers: Teacher[] = $("span.classpicture")
     .map((index, elem) => {
-      let obj = { name: "", initials: "", teacherId: "", imgUrl: "", imgSrc: "" } as Teacher;
+      let obj = {
+        name: "",
+        initials: "",
+        teacherId: "",
+        imgUrl: "",
+        imgSrc: "",
+      } as Teacher;
       const $elem = $(elem);
       const $name = $elem.find("> span > span");
       const name = $name.text();
@@ -39,6 +57,11 @@ export async function getAllTeachers({ lectioCookies, schoolCode }: StandardProp
   if (teachers.length === 0) {
     return "No data";
   }
+
+  global.cache.set(tag, {
+    data: teachers,
+    expires: new Date().getTime() + getTimeInMs({ days: 1 }),
+  });
 
   return teachers;
 }

@@ -51,11 +51,16 @@ export function setInformationProps(
     } else if (foundTitle === "gradeSystem") {
       assignment.gradeSystem = $td.find("span").text();
     } else if (foundTitle === "teacher") {
-      const splitName = $td.find("span").text().split(" (");
+      const $teacherSpan = $td.find("span");
+      const splitName = $teacherSpan.text().split(" (");
       const name = splitName[0];
       const initials = splitName[1].replace(")", "");
+      const teacherId = $teacherSpan.attr("data-lectiocontextcard");
       assignment.teacher.name = name;
       assignment.teacher.initials = initials;
+      if (teacherId) {
+        assignment.teacher.teacherId = teacherId.replace("T", "");
+      }
     } else if (foundTitle === "studentTime") {
       const studentTime = $td.find("span").text().split(" ")[0];
       if (!isNaN(Number(studentTime))) {

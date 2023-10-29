@@ -1,11 +1,12 @@
-import { getSubjectName } from "@/api-functions/util/getSubjectFromClass";
+import "server-only";
 import { getAuthenticatedPage } from "@/api-functions/getPage";
 import { getTeacherByInitials } from "..";
 import { setInformationProps } from "./setInformationProps";
 import { setAdditionalProps } from "./setAdditionalProps";
 import { setSubmitProps } from "./setSubmitProps";
+import { getTimeInMs } from "@/util/getTimeInMs";
 
-type Props = { href: string } & StandardProps;
+type Props = { assignmentId: string } & StandardProps;
 
 type Titles =
   | "title"
@@ -33,8 +34,17 @@ export const titleMap: { [key: string]: Titles } = {
 export async function getAssignment({
   lectioCookies,
   schoolCode,
-  href,
+  assignmentId,
+  userId,
 }: Props) {
+  const tag = `${userId}-assignments-${assignmentId}`;
+  const foundCache = global.cache.get(tag);
+
+  if (foundCache && new Date().getTime() < foundCache.expires) {
+    return foundCache.data as FullAssignment;
+  }
+
+  const href = `ElevAflevering.aspx?elevid=${userId}&exerciseid=${assignmentId}`;
   const res = await getAuthenticatedPage({
     lectioCookies: lectioCookies,
     schoolCode: schoolCode,
@@ -87,11 +97,18 @@ export async function getAssignment({
   const teacher = await getTeacherByInitials({
     lectioCookies: lectioCookies,
     schoolCode: schoolCode,
-    initials: assignment.teacher.initials,
+    teacherId: assignment.teacher.teacherId,
+    userId: userId,
   });
 
   if (typeof teacher === "object" && teacher !== null) {
     assignment.teacher = teacher;
   }
+
+  global.cache.set(tag, {
+    data: assignment,
+    expires: new Date().getTime() + getTimeInMs({ minutes: 1 }),
+  });
+
   return assignment;
 }

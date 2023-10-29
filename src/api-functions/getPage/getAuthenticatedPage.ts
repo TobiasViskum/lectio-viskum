@@ -1,8 +1,8 @@
+import "server-only";
 import { load } from "cheerio";
 import { getFetchCookie } from "../getFetchCookie";
 import { getPageFromMap } from "./page-map";
 import { getSchoolBySchoolCode } from "../scrapeFunctions/getSchoolBySchoolCode";
-import { getLectioProps } from "@/lib/auth/getLectioProps";
 
 type Props = {
   page?: Pages;

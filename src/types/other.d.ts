@@ -45,8 +45,7 @@ type Pages =
   | "studyPlan-educationDescription"
   | "studyPlan-studyDirection"
   | "studyPlan-elective"
-  | "teachers"
-  | "student-by-credentials";
+  | "teachers";
 
 type GetPageReturn =
   | "Not authenticated"

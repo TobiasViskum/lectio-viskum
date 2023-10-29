@@ -1,15 +1,22 @@
-import { getAllTeachers } from ".";
+import { getTimeInMs } from "@/util/getTimeInMs";
 import { getAuthenticatedPage } from "../getPage";
 
 type Props = {
-  initials: string;
+  teacherId: string;
 };
 
 export async function getTeacherByInitials({
   lectioCookies,
-  initials,
+  teacherId,
   schoolCode,
 }: StandardProps & Props) {
+  const tag = `${teacherId}-user`;
+  const foundCache = global.cache.get(tag);
+
+  if (foundCache && new Date().getTime() < foundCache.expires) {
+    return foundCache.data as Teacher;
+  }
+
   const res = await getAuthenticatedPage({
     page: "teachers",
     lectioCookies: lectioCookies,
@@ -57,7 +64,7 @@ export async function getTeacherByInitials({
   }
 
   const foundTeacher = teachers.find((teacher) => {
-    return teacher.initials.toLowerCase() === initials.toLowerCase();
+    return teacher.teacherId === teacherId;
   });
 
   if (foundTeacher === undefined) {
@@ -84,6 +91,11 @@ export async function getTeacherByInitials({
     });
 
   if (imageBase64) foundTeacher.imgSrc = imageBase64;
+
+  global.cache.set(tag, {
+    data: foundTeacher,
+    expires: new Date().getTime() + getTimeInMs({ days: 1 }),
+  });
 
   return foundTeacher;
 }

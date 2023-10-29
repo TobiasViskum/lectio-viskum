@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext } from "react";
 import { ScheduleContext } from "../schedule-context";
 
 type Props = { children: React.ReactNode };
@@ -27,7 +27,7 @@ export function Wrapper({ children }: Props) {
 
   return (
     <div
-      className="flex h-full transition-transform duration-500 sm:duration-300"
+      className="flex h-full"
       style={{ transform: `translateX(${getNewTransform()}%)` }}
     >
       {children}

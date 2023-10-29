@@ -1,12 +1,15 @@
+import "server-only";
 import { load } from "cheerio";
 import { getAuthenticatedPage } from ".";
 import { getAssignmentsForm } from "./getForm/assignment-form";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 
-export async function getAssignmentsPage({
-  lectioCookies,
-  schoolCode,
-}: StandardProps) {
+type Props = {
+  lectioCookies: string;
+  schoolCode: string;
+};
+
+export async function getAssignmentsPage({ lectioCookies, schoolCode }: Props) {
   const res = await getAuthenticatedPage({
     lectioCookies: lectioCookies,
     schoolCode: schoolCode,

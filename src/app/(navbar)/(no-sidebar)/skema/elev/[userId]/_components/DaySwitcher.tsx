@@ -4,7 +4,7 @@ import TooltipHover from "@/components/global/TooltipHover";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useContext } from "react";
-import { ScheduleContext } from "../schedule-context";
+import { ScheduleContext, getMaxDay } from "../schedule-context";
 
 export function DaySwitcher() {
   const context = useContext(ScheduleContext);

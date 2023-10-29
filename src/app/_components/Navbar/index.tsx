@@ -11,8 +11,11 @@ import { HomeIcon2 } from "@/components/icons/HomeIcon";
 import { AccountWrapper } from "./AccountWrapper";
 import { Suspense } from "react";
 import { getCurrWeekAndYear } from "@/lib/utils";
+import { getLectioProps } from "@/lib/auth/getLectioProps";
 
 export async function Navbar() {
+  const lectioProps = getLectioProps();
+
   return (
     <div className="fixed top-0 z-50 h-16 w-full bg-black bg-opacity-50 backdrop-blur-sm">
       <nav className="flex h-full items-center gap-x-4 px-4 sm:px-8">
@@ -33,13 +36,21 @@ export async function Navbar() {
         </Link>
         <div>
           <Link
-            href={{ pathname: "/skema", query: getCurrWeekAndYear() }}
+            href={{
+              pathname: `/skema/elev/${lectioProps.userId}`,
+              query: getCurrWeekAndYear(),
+            }}
             className="hidden items-center gap-x-2 rounded-md px-4 py-2 text-sm font-semibold hover:bg-accent sm:flex"
           >
             Skema
             <CalendarIcon />
           </Link>
-          <Link href={{ pathname: "/skema", query: getCurrWeekAndYear() }}>
+          <Link
+            href={{
+              pathname: `/skema/elev/${lectioProps.userId}`,
+              query: getCurrWeekAndYear(),
+            }}
+          >
             <CalendarIcon className="mx-3 block h-6 w-6 sm:hidden" />
           </Link>
         </div>

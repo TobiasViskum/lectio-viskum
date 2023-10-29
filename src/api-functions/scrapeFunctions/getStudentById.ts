@@ -1,13 +1,23 @@
+import "server-only";
+import { getTimeInMs } from "@/util/getTimeInMs";
 import { getAuthenticatedPage } from "../getPage";
 
-export async function getStudentByCredentials({
+export async function getStudentById({
   lectioCookies,
   schoolCode,
+  userId,
 }: StandardProps) {
+  const tag = `${userId}-user`;
+  const foundCache = global.cache.get(tag);
+
+  if (foundCache && new Date().getTime() < foundCache.expires) {
+    return foundCache.data as Student;
+  }
+
   const res = await getAuthenticatedPage({
     lectioCookies: lectioCookies,
     schoolCode: schoolCode,
-    page: "student-by-credentials",
+    specificPage: `DokumentOversigt.aspx?folderid=S60631246942__&elevid=${userId}`,
   });
 
   if (res === null) return res;
@@ -51,12 +61,11 @@ export async function getStudentByCredentials({
     studentId = studentId.replace("S", "");
   }
 
-  const nameAndClass = $(
-    "div#s_m_HeaderContent_MainTitle > span.ls-hidden-smallscreen",
-  ).text();
+  const nameAndClass = $("div#s_m_HeaderContent_MainTitle").text();
 
   let name = "";
   let studentClass = "";
+
   const nameMatch = nameAndClass.match(/Eleven ([a-z0-9 ]+), /i);
   const classMatch = nameAndClass.match(/Eleven [a-z0-9 ]+, ([a-z0-9-]+) /i);
 
@@ -67,11 +76,20 @@ export async function getStudentByCredentials({
     studentClass = classMatch[1];
   }
 
-  return {
+  const data = {
     name: name,
     studentClass: studentClass,
     studentId: studentId || "",
     imgUrl: imgHref,
     imgSrc: imageBase64,
   } as Student;
+
+  if (name && studentClass) {
+    global.cache.set(tag, {
+      data: data,
+      expires: new Date().getTime() + getTimeInMs({ days: 1 }),
+    });
+  }
+
+  return data;
 }

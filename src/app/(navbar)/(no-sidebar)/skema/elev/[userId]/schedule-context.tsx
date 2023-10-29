@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { createContext, useEffect, useRef, useState } from "react";
 
 type ScheduleContext = {
@@ -31,14 +32,18 @@ export function getMaxDay() {
 
 export function ScheduleProvider({ children }: { children: React.ReactNode }) {
   const [day, setDay] = useState(0);
-  const dayRef = useRef(day); // create a reference for 'day'
+  const router = useRouter();
+  const dayRef = useRef(day);
+  const prevMaxDay = useRef(0);
   dayRef.current = day;
 
   useEffect(() => {
+    prevMaxDay.current = getMaxDay();
     function handleResize() {
       if (getMaxDay() < dayRef.current) {
         setDay(getMaxDay());
-      } else {
+      } else if (prevMaxDay.current !== getMaxDay()) {
+        prevMaxDay.current = getMaxDay();
         setDay(0);
       }
     }
@@ -49,6 +54,11 @@ export function ScheduleProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   function changeDay(action: "forwards" | "backwards") {
+    if (action === "forwards" && dayRef.current === getMaxDay()) {
+      console.log("Next week");
+    } else if (action === "backwards" && dayRef.current === 0) {
+      console.log("Previous week");
+    }
     if (action === "forwards") {
       setDay((prev) => Math.min(prev + 1, getMaxDay()));
     } else if (action === "backwards") {

@@ -1,16 +1,15 @@
 import "server-only";
-import { getAssignment } from "@/api-functions/scrapeFunctions/getAssignment";
 import { processResult } from "./processResult";
+import { getStudentById as _getStudentById } from "@/api-functions/scrapeFunctions/getStudentById";
 import { validateResult } from "./validateResult";
 
-type MainType = Prettify<FullAssignment>;
-type FunctionProps = APIProps<StandardProps & { assignmentId: string }>;
+type MainType = Student;
+type FunctionProps = APIProps<StandardProps>;
 
-export const getAssignmentByHref = async (props: FunctionProps) => {
-  const result = await getAssignment({
-    assignmentId: props.assignmentId,
-    lectioCookies: props.lectioCookies,
+export const getStudentById = async (props: FunctionProps) => {
+  const result = await _getStudentById({
     schoolCode: props.schoolCode,
+    lectioCookies: props.lectioCookies,
     userId: props.userId,
   });
   const processedResult = processResult<MainType>(result);

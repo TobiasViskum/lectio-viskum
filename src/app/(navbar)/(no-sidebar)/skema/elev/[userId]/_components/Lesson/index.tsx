@@ -88,7 +88,7 @@ export async function Lesson({
   return (
     <Link
       key={Math.random()}
-      href={`/skema/${lesson.id}`}
+      href={`/skema/elev/${lesson.id}`}
       className={cn(
         `group absolute ml-1 flex w-full gap-x-1 overflow-hidden rounded-md bg-opacity-50 transition-[transform,_background-color] @container hover:scale-[1.025] hover:bg-opacity-90 sm:gap-x-1.5`,
         backgroundColor,

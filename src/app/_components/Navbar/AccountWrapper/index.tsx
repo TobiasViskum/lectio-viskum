@@ -22,7 +22,7 @@ export async function AccountWrapper() {
 
   const lectioProps = getLectioProps();
 
-  const user = await lectioAPI.getStudent.byCredentials({
+  const user = await lectioAPI.getStudent.byId({
     ...lectioProps,
   });
 

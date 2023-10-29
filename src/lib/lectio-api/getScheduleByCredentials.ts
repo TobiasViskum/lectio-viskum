@@ -24,6 +24,7 @@ export const getScheduleByCredentials = async (props: FunctionProps) => {
     year: props.year,
     schoolCode: props.schoolCode,
     lectioCookies: props.lectioCookies,
+    userId: userId,
   });
   const processedResult = processResult<MainType>(result);
   validateResult(processedResult);

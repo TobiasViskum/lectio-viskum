@@ -18,6 +18,16 @@ export async function middleware(req: NextRequest) {
     });
   }
 
+  if (
+    req.nextUrl.pathname === "/skema" ||
+    req.nextUrl.pathname === "/skema/elev" ||
+    req.nextUrl.pathname === "/skema/lære"
+  ) {
+    return NextResponse.redirect(new URL(`/skema/elev/${userId}`, req.url), {
+      headers: requestHeaders,
+    });
+  }
+
   if (req.nextUrl.pathname === "/opdater-adgang") {
     const res = await lectioAPI.getIsAuthenticated({
       username: username,
