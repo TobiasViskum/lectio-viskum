@@ -48,9 +48,11 @@ export default async function SchedulePage({ searchParams, params }: Props) {
   const lectioProps = getLectioProps();
 
   const schedulePromise = lectioAPI.getSchedule.byCredentials({
-    ...lectioProps,
+    lectioCookies: lectioProps.lectioCookies,
+    schoolCode: lectioProps.schoolCode,
     userId: params.userId,
-    ...searchParamsObj,
+    week: searchParamsObj.week,
+    year: searchParamsObj.year,
   });
   const studentPromise = lectioAPI.getStudent.byId({
     lectioCookies: lectioProps.lectioCookies,
@@ -69,7 +71,7 @@ export default async function SchedulePage({ searchParams, params }: Props) {
 
   const timestamps = generateTimestamps(schedule);
 
-  const indexToDayMap: { [key: number]: Day } = {
+  const indexToDayMap: { [key: number]: string } = {
     0: "Mandag",
     1: "Tirsdag",
     2: "Onsdag",
@@ -179,6 +181,7 @@ export default async function SchedulePage({ searchParams, params }: Props) {
                         timestamps={timestamps}
                         day={indexToDayMap[index]}
                         key={index}
+                        userId={params.userId}
                       />
                     );
                   })}

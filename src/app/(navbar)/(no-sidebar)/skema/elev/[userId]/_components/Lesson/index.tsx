@@ -3,17 +3,20 @@ import { cn } from "@/lib/utils";
 import { NoteIcon } from "@/components/icons/NoteIcon";
 import { getNumericLessonTimes } from "../../_util/getNumericLessonTimes";
 import { BookmarkFilledIcon } from "@radix-ui/react-icons";
+import { getLectioProps } from "@/lib/auth/getLectioProps";
 
 type Props = {
   lesson: Lesson;
   timestamps: number[];
   lessonsAddedAtTimestamp: { start: number; end: number; totalAdded: number }[];
+  userId: string;
 };
 
 export async function Lesson({
   lesson,
   timestamps,
   lessonsAddedAtTimestamp,
+  userId,
 }: Props) {
   const time = lesson.time;
   const startTime =
@@ -88,7 +91,7 @@ export async function Lesson({
   return (
     <Link
       key={Math.random()}
-      href={`/skema/elev/${lesson.id}`}
+      href={`/skema/elev/${userId}/${lesson.id}`}
       className={cn(
         `group absolute ml-1 flex w-full gap-x-1 overflow-hidden rounded-md bg-opacity-50 transition-[transform,_background-color] @container hover:scale-[1.025] hover:bg-opacity-90 sm:gap-x-1.5`,
         backgroundColor,

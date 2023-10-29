@@ -5,7 +5,7 @@ type Props = {
   teacherId: string;
 };
 
-export async function getTeacherByInitials({
+export async function getTeacherById({
   lectioCookies,
   teacherId,
   schoolCode,

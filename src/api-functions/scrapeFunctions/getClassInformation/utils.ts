@@ -2,10 +2,18 @@ export function getSubjectTheme($: cheerio.Root) {
   const $theme = $('a[title="Tilknyttet forløb"]');
   const name = $theme.text();
   const href = $theme.attr("href");
+  let themeId = "";
+  if (href) {
+    const themeIdMatch = href.match(/phaseid=([0-9]+)/);
+    if (themeIdMatch) {
+      themeId = themeIdMatch[1];
+    }
+  }
+
   if (name !== "" && href) {
-    return { theme: name.trim(), href: href };
+    return { theme: name.trim(), themeId: themeId };
   } else {
-    return { theme: "", href: "" };
+    return { theme: "", themeId: "" };
   }
 }
 export function getNote($: cheerio.Root) {
@@ -15,7 +23,7 @@ export function getNote($: cheerio.Root) {
 export function getHomework(
   $parent: cheerio.Cheerio,
   $: cheerio.Root,
-  homework: Homework[],
+  homework: LessonHomework[],
 ) {
   const $sibling = $parent.next();
 
@@ -29,7 +37,11 @@ export function getHomework(
   const id = $sibling.attr("id");
 
   if (id && id.includes("ACH")) {
-    let currHomework: Homework = { titleHref: "", title: "", description: [] };
+    let currHomework: LessonHomework = {
+      titleHref: "",
+      title: "",
+      description: [],
+    };
 
     const $article = $sibling.children().first();
 
@@ -44,9 +56,9 @@ export function getHomework(
 }
 export function getHomeworkAndOtherAndPresentation($: cheerio.Root) {
   type ResultHolder = {
-    homework: Homework[];
-    other: Homework[];
-    presentation: Homework[][];
+    homework: LessonHomework[];
+    other: LessonHomework[];
+    presentation: LessonHomework[][];
   };
 
   let resultHolder: ResultHolder = {
@@ -56,8 +68,8 @@ export function getHomeworkAndOtherAndPresentation($: cheerio.Root) {
   };
 
   $("h1.ls-paper-section-heading").each((index, elem) => {
-    let homework: Homework[] = [];
-    let presentation: Homework[][] = [];
+    let homework: LessonHomework[] = [];
+    let presentation: LessonHomework[][] = [];
 
     const $elem = $(elem);
     const $parent = $elem.parent();
@@ -99,7 +111,7 @@ function getText(text: string) {
 
   return text;
 }
-function trimLineBreaks(currHomework: Homework) {
+function trimLineBreaks(currHomework: LessonHomework) {
   let hasChanged = false;
   if (currHomework.description[0] === "\n") {
     hasChanged = true;
@@ -114,7 +126,7 @@ function trimLineBreaks(currHomework: Homework) {
   }
 }
 
-function setTitle($article: cheerio.Cheerio, currHomework: Homework) {
+function setTitle($article: cheerio.Cheerio, currHomework: LessonHomework) {
   const $title = $article.children().first();
   let title = $title.text().trim();
   if (title === "image.png") {
@@ -131,9 +143,32 @@ function setTitle($article: cheerio.Cheerio, currHomework: Homework) {
     }
   }
 }
+function getDescriptionVideoOrImage($elem: cheerio.Cheerio, $: cheerio.Root) {
+  const src = $elem.attr("src");
+  const iframe = $elem.attr("data-embed-xhtml");
+  let isVideo = iframe !== undefined;
+
+  if (src) {
+    let fullSrc = src;
+    if (src.includes("/lectio/")) {
+      fullSrc = ["https://lectio.dk", $elem.attr("src")].join("");
+    }
+    if (!isVideo) {
+      return { img: fullSrc };
+    } else if (isVideo) {
+      const $iframe = $(iframe);
+      const videoHref = $iframe.attr("src") || "";
+
+      return {
+        thumbnail: fullSrc,
+        videoHref: videoHref.split("?")[0],
+      };
+    }
+  }
+}
 function setDescription(
   $article: cheerio.Cheerio,
-  currHomework: Homework,
+  currHomework: LessonHomework,
   $: cheerio.Root,
 ) {
   const $elements = $article.find("*");
@@ -161,10 +196,9 @@ function setDescription(
       if (elem.name === "p") {
         currHomework.description.push(text);
       } else if (elem.name === "img") {
-        const src = $elem.attr("src");
-        if (src) {
-          const fullSrc = ["https://lectio.dk", $elem.attr("src")].join("");
-          currHomework.description.push({ img: fullSrc });
+        const res = getDescriptionVideoOrImage($elem, $);
+        if (res) {
+          currHomework.description.push(res);
         }
       }
     }
@@ -174,7 +208,7 @@ function setDescription(
 }
 function setPresentation(
   $presentationsHolder: cheerio.Cheerio,
-  presentation: Homework[][],
+  presentation: LessonHomework[][],
   $: cheerio.Root,
 ) {
   $presentationsHolder.each((index, elem) => {
@@ -221,10 +255,9 @@ function setPresentation(
           if (elem.name === "p") {
             presentation[index][currIndex].description.push(text);
           } else if (elem.name === "img") {
-            const src = $elem.attr("src");
-            if (src) {
-              const fullSrc = ["https://lectio.dk", $elem.attr("src")].join("");
-              presentation[index][currIndex].description.push({ img: fullSrc });
+            const res = getDescriptionVideoOrImage($elem, $);
+            if (res) {
+              presentation[index][currIndex].description.push(res);
             }
           }
         }

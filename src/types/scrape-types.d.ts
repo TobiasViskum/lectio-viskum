@@ -41,6 +41,12 @@ type LessonTime = Prettify<{
   startDate: Date;
   endDate: Date;
 }>;
+type SchoolClass = Prettify<{
+  class: string;
+  fullClass: string;
+  subject: string;
+  classId: string;
+}>;
 type Lesson = Prettify<{
   id: string;
   status: LessonStatus;
@@ -102,9 +108,38 @@ type FullAssignment = Prettify<{
   studentNote: string;
   submits: Submit[];
 }>;
-
-type Homework = Prettify<{
+type HomeworkDescription = Prettify<
+  (
+    | string
+    | string[]
+    | { img: string }
+    | { thumbnail: string; videoHref: string }
+  )[]
+>;
+type LessonHomework = Prettify<{
   titleHref: string;
   title: string;
-  description: (string | string[] | { img: string })[];
+  description: Prettify<HomeworkDescription>;
 }>;
+type AdditionalLessonInfo = Prettify<{
+  title: string;
+  status: string;
+  time: { startDate: Date; endDate: Date };
+  lessonNumber: number;
+  teachers: Teacher[];
+  classes: SchoolClass[];
+  subjects: string[];
+  classrooms: string[];
+}>;
+type FullLesson = Prettify<
+  AdditionalLessonInfo & {
+    subjectTheme: {
+      theme: string;
+      themeId: string;
+    };
+    note: string;
+    homework: LessonHomework[];
+    other: LessonHomework[];
+    presentation: LessonHomework[][];
+  }
+>;

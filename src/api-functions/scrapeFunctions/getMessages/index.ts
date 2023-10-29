@@ -1,6 +1,8 @@
+import "server-only";
 import { getAuthenticatedPage } from "../../getPage/getAuthenticatedPage";
 import { getAllMessagesPage } from "../../getPage/getAllMessagesPage";
 import { getMessageInformation } from "./utils";
+import { getLectioProps } from "@/lib/auth/getLectioProps";
 
 type Message = {
   title: string;
@@ -12,7 +14,11 @@ type Message = {
 
 type Props = { type: MessagesTypes };
 
-export async function getMessages({ lectioCookies, schoolCode, type }: StandardProps & Props) {
+export async function getMessages({
+  lectioCookies,
+  schoolCode,
+  type,
+}: StandardProps & Props) {
   const typeMap = {
     personal: "messages-personal",
     all: "messages-all",
@@ -22,11 +28,13 @@ export async function getMessages({ lectioCookies, schoolCode, type }: StandardP
   } as const;
 
   let res: GetPageReturn = null;
+  const props = getLectioProps();
 
   if (type === "all") {
     res = await getAllMessagesPage({
       lectioCookies: lectioCookies,
       schoolCode: schoolCode,
+      userId: props.userId,
     });
   } else {
     res = await getAuthenticatedPage({
@@ -47,19 +55,26 @@ export async function getMessages({ lectioCookies, schoolCode, type }: StandardP
   }
 
   const allGroupReceivers = Array.from(
-    $('div[lec-node-id="-20"] > div[lec-role="ltv-sublist"] > div > div > a > div')
+    $(
+      'div[lec-node-id="-20"] > div[lec-role="ltv-sublist"] > div > div > a > div',
+    ),
   ).map((value, index) => {
     const $value = $(value);
     return $value.text();
   });
 
-  const messages: Message[] = $("#s_m_Content_Content_threadGV_ctl00 > tbody > tr:not([class])")
+  const messages: Message[] = $(
+    "#s_m_Content_Content_threadGV_ctl00 > tbody > tr:not([class])",
+  )
     .map((_index, _elem) => {
       const $_elem = $(_elem);
       const message = $_elem
         .map((index, elem) => {
           const $elem = $(elem);
-          const messageInformation = getMessageInformation($elem, allGroupReceivers);
+          const messageInformation = getMessageInformation(
+            $elem,
+            allGroupReceivers,
+          );
 
           return messageInformation;
         })

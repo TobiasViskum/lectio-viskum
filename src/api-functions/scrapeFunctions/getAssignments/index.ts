@@ -44,7 +44,7 @@ export async function getAssignments({
 
   global.cache.set(tag, {
     data: assignments,
-    expires: new Date().getTime() + getTimeInMs({ minutes: 5 }),
+    expires: new Date().getTime() + getTimeInMs({ minutes: 1 }),
   });
 
   return assignments;

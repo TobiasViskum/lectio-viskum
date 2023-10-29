@@ -1,6 +1,6 @@
 import "server-only";
 import { getAuthenticatedPage } from "@/api-functions/getPage";
-import { getTeacherByInitials } from "..";
+import { getTeacherById } from "..";
 import { setInformationProps } from "./setInformationProps";
 import { setAdditionalProps } from "./setAdditionalProps";
 import { setSubmitProps } from "./setSubmitProps";
@@ -94,7 +94,7 @@ export async function getAssignment({
 
   assignment.submits = assignment.submits.reverse();
 
-  const teacher = await getTeacherByInitials({
+  const teacher = await getTeacherById({
     lectioCookies: lectioCookies,
     schoolCode: schoolCode,
     teacherId: assignment.teacher.teacherId,

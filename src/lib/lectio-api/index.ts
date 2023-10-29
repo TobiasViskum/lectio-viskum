@@ -6,6 +6,7 @@ import { getStudentById } from "./getStudentById";
 import { getScheduleByCredentials } from "./getScheduleByCredentials";
 import { getAllAssignments } from "./getAllAssignments";
 import { getAssignmentByHref } from "./getAssignmentById";
+import { getLessonById } from "./getLesson";
 
 const lectioAPI = {
   getSchool: getSchool,
@@ -21,6 +22,7 @@ const lectioAPI = {
     all: getAllAssignments,
     byHref: getAssignmentByHref,
   },
+  getLessonById: getLessonById,
 };
 
 export { lectioAPI };

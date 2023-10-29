@@ -1,9 +1,9 @@
 import { Badge } from "@/components/ui/badge";
 import { Lesson } from "./Lesson";
 
-type Props = { week: Week; timestamps: number[]; day: Day };
+type Props = { week: Week; timestamps: number[]; day: string; userId: string };
 
-export async function Weekday({ week, timestamps, day }: Props) {
+export async function Weekday({ week, timestamps, day, userId }: Props) {
   let lessonsAddedAtTimestamp: {
     start: number;
     end: number;
@@ -24,6 +24,7 @@ export async function Weekday({ week, timestamps, day }: Props) {
                 lesson={lesson}
                 timestamps={timestamps}
                 lessonsAddedAtTimestamp={lessonsAddedAtTimestamp}
+                userId={userId}
               />
             );
           })}
