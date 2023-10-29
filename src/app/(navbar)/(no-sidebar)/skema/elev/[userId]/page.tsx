@@ -13,10 +13,10 @@ import { Wrapper } from "./_components/Wrapper";
 import { ScheduleProvider } from "./schedule-context";
 import Image from "next/image";
 import { profile } from "@/assets";
-import { DatePickerDemo } from "@/components/ui/datepicker";
+import { DatePicker } from "@/components/ui/datepicker";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { FetchAdjacentWeeks } from "./_components/FetchAdjacentWeeks";
-import { LessonWrapper } from "./_components/Lesson/LessonWrapper";
+import { LessonWrapper } from "./_components/AnimateWrapper";
 
 type Props = {
   searchParams: { [key: string]: string };
@@ -106,7 +106,7 @@ export default async function SchedulePage({ searchParams, params }: Props) {
             </div>
           </div>
           <div className="flex items-center gap-x-2">
-            <DatePickerDemo />
+            <DatePicker />
             <div className="flex h-2/3 items-center rounded-md border bg-background">
               <Link
                 href={{

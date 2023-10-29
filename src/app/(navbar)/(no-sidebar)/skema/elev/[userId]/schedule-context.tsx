@@ -83,7 +83,7 @@ export function ScheduleProvider({ children }: { children: React.ReactNode }) {
         ].join("");
 
         setTimeout(() => {
-          router.push(newUrl);
+          router.push(newUrl, { scroll: false });
         }, 300);
       }
     } else if (action === "backwards" && dayRef.current === 0) {
@@ -99,7 +99,7 @@ export function ScheduleProvider({ children }: { children: React.ReactNode }) {
         ].join("");
 
         setTimeout(() => {
-          router.push(newUrl);
+          router.push(newUrl, { scroll: false });
         }, 300);
       }
     } else if (action === "forwards") {
