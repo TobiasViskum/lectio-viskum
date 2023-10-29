@@ -1,11 +1,15 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { ScheduleContext } from "../schedule-context";
+import { useSearchParams } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 type Props = { children: React.ReactNode };
 export function Wrapper({ children }: Props) {
   const context = useContext(ScheduleContext);
+  const searchParams = useSearchParams();
+  const transform = useRef("transition-transform duration-300");
 
   function getNewTransform() {
     if (typeof window !== "undefined") {
@@ -25,9 +29,20 @@ export function Wrapper({ children }: Props) {
     return 0;
   }
 
+  useEffect(() => {
+    transform.current = "";
+    setTimeout(() => {
+      transform.current = "transition-transform duration-300";
+    }, 100);
+  }, [searchParams]);
+
   return (
     <div
-      className="flex h-full"
+      onWheel={(e) => {
+        e.preventDefault();
+        console.log(e.deltaX);
+      }}
+      className={cn("flex h-full", transform.current)}
       style={{ transform: `translateX(${getNewTransform()}%)` }}
     >
       {children}

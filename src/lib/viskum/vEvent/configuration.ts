@@ -5,4 +5,5 @@ export type EventMap = {
     filter: "all" | "submitted" | "pending" | "missing";
     search: string;
   };
+  fade: { action: "in" | "out" };
 };

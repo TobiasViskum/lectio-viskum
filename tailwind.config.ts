@@ -93,11 +93,53 @@ const tailwindConfig: Config = {
             backgroundColor: "rgba(113, 113, 122, 0.2)",
           },
         },
+        "small-explosion": {
+          "0%": {
+            transform: "scale(1)",
+          },
+          "50%": {
+            transform: "scale(1.015)",
+          },
+          "100%": {
+            transform: "scale(1)",
+          },
+        },
+        "small-implosion": {
+          "0%": {
+            transform: "scale(1)",
+          },
+          "50%": {
+            transform: "scale(0.965)",
+          },
+          "100%": {
+            transform: "scale(1)",
+          },
+        },
+        "fade-in": {
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "100",
+          },
+        },
+        "fade-out": {
+          "0%": {
+            opacity: "100",
+          },
+          "100%": {
+            opacity: "0",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "dot-flashing": "dot-flashing 1s infinite alternate",
+        "small-explosion": "small-explosion 0.15s ease-out",
+        "small-implosion": "small-implosion 0.15s ease-out",
+        "fade-in": "fade-in 0.10s ease-in",
+        "fade-out": "fade-out 0.10s ease-out",
       },
     },
   },

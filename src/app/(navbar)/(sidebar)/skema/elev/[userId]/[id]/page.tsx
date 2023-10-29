@@ -19,7 +19,7 @@ export default async function LessonPage({ params }: Props) {
 
   return (
     <div>
-      hej
+      {lesson?.subjects}
       {/* <iframe
         width="420"
         height="315"

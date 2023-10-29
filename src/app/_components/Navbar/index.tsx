@@ -18,7 +18,7 @@ export async function Navbar() {
 
   return (
     <div className="fixed top-0 z-50 h-16 w-full bg-black bg-opacity-50 backdrop-blur-sm">
-      <nav className="flex h-full items-center gap-x-4 px-4 sm:px-8">
+      <nav className="flex h-full items-center gap-x-4 px-2 sm:px-4">
         <Link
           href={"/forside"}
           className="hidden aspect-[3.375_/_1] h-8 sm:block"

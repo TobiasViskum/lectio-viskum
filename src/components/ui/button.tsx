@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -39,6 +40,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   loading?: boolean;
+  disableAnimation?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -49,16 +51,36 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       size,
       asChild = false,
       loading = false,
+      disableAnimation = false,
       children,
+      onClick,
       ...props
     },
     ref,
   ) => {
+    const [animate, setAnimate] = React.useState("");
+
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(
+          buttonVariants({ variant, size, className }),
+          animate,
+          "",
+        )}
         ref={ref}
+        onClick={(e) => {
+          const event = e as React.MouseEvent<HTMLButtonElement, MouseEvent>;
+          if (onClick) {
+            onClick(event);
+          }
+          if (disableAnimation === false) {
+            setAnimate("animate-small-implosion");
+            setTimeout(() => {
+              setAnimate("");
+            }, 150);
+          }
+        }}
         {...props}
       >
         {children}{" "}

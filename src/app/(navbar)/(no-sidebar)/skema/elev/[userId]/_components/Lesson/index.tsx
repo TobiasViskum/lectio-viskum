@@ -3,7 +3,6 @@ import { cn } from "@/lib/utils";
 import { NoteIcon } from "@/components/icons/NoteIcon";
 import { getNumericLessonTimes } from "../../_util/getNumericLessonTimes";
 import { BookmarkFilledIcon } from "@radix-ui/react-icons";
-import { getLectioProps } from "@/lib/auth/getLectioProps";
 
 type Props = {
   lesson: Lesson;
@@ -93,7 +92,7 @@ export async function Lesson({
       key={Math.random()}
       href={`/skema/elev/${userId}/${lesson.id}`}
       className={cn(
-        `group absolute ml-1 flex w-full gap-x-1 overflow-hidden rounded-md bg-opacity-50 transition-[transform,_background-color] @container hover:scale-[1.025] hover:bg-opacity-90 sm:gap-x-1.5`,
+        `group absolute ml-1 flex w-full gap-x-1 overflow-hidden rounded-md bg-opacity-50 transition-[transform,_background-color] @container hover:scale-[1.015] hover:bg-opacity-90 sm:gap-x-1.5`,
         backgroundColor,
       )}
       style={{

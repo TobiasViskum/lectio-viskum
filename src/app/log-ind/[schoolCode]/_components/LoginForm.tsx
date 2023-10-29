@@ -112,20 +112,21 @@ export function LoginForm() {
               <EyeIcon
                 className="h-full w-full"
                 onClick={() => {
-                  setIsShowingPassword(false);
+                  setIsShowingPassword(true);
                 }}
               />
             ) : (
               <EyeOffIcon
                 className="h-full w-full"
                 onClick={() => {
-                  setIsShowingPassword(true);
+                  setIsShowingPassword(false);
                 }}
               />
             )}
           </button>
         </div>
         <Button
+          disableAnimation
           loading={isSubmitting}
           disabled={isSubmitting}
           className="mt-2 gap-x-2"

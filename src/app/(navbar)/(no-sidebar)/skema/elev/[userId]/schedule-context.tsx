@@ -1,6 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { vEvent } from "@/lib/viskum/vEvent";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createContext, useEffect, useRef, useState } from "react";
 
 type ScheduleContext = {
@@ -33,9 +34,24 @@ export function getMaxDay() {
 export function ScheduleProvider({ children }: { children: React.ReactNode }) {
   const [day, setDay] = useState(0);
   const router = useRouter();
+  const path = usePathname();
+  const searchParams = useSearchParams();
+  const numberWeek = Number(searchParams.get("week"));
+  const numberYear = Number(searchParams.get("year"));
   const dayRef = useRef(day);
   const prevMaxDay = useRef(0);
   dayRef.current = day;
+  const nextAction = useRef<"none" | "min" | "max">("none");
+
+  useEffect(() => {
+    if (nextAction.current === "min") {
+      setDay(0);
+    } else if (nextAction.current === "max") {
+      setDay(getMaxDay());
+    }
+    vEvent.dispatch("fade", { action: "in" });
+    nextAction.current = "none";
+  }, [searchParams]);
 
   useEffect(() => {
     prevMaxDay.current = getMaxDay();
@@ -55,11 +71,38 @@ export function ScheduleProvider({ children }: { children: React.ReactNode }) {
 
   function changeDay(action: "forwards" | "backwards") {
     if (action === "forwards" && dayRef.current === getMaxDay()) {
-      console.log("Next week");
+      if (!isNaN(numberWeek) && !isNaN(numberYear)) {
+        vEvent.dispatch("fade", { action: "out" });
+        nextAction.current = "min";
+        const newUrl = [
+          path,
+          "?week=",
+          numberWeek + 1,
+          "&year=",
+          numberYear,
+        ].join("");
+
+        setTimeout(() => {
+          router.push(newUrl);
+        }, 300);
+      }
     } else if (action === "backwards" && dayRef.current === 0) {
-      console.log("Previous week");
-    }
-    if (action === "forwards") {
+      if (!isNaN(numberWeek) && !isNaN(numberYear)) {
+        vEvent.dispatch("fade", { action: "out" });
+        nextAction.current = "max";
+        const newUrl = [
+          path,
+          "?week=",
+          numberWeek - 1,
+          "&year=",
+          numberYear,
+        ].join("");
+
+        setTimeout(() => {
+          router.push(newUrl);
+        }, 300);
+      }
+    } else if (action === "forwards") {
       setDay((prev) => Math.min(prev + 1, getMaxDay()));
     } else if (action === "backwards") {
       setDay((prev) => Math.max(prev - 1, 0));

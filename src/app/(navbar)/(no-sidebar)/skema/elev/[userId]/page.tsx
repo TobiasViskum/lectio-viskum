@@ -15,6 +15,8 @@ import Image from "next/image";
 import { profile } from "@/assets";
 import { DatePickerDemo } from "@/components/ui/datepicker";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { FetchAdjacentWeeks } from "./_components/FetchAdjacentWeeks";
+import { LessonWrapper } from "./_components/Lesson/LessonWrapper";
 
 type Props = {
   searchParams: { [key: string]: string };
@@ -81,24 +83,13 @@ export default async function SchedulePage({ searchParams, params }: Props) {
     6: "Søndag",
   };
 
-  lectioAPI.getSchedule.byCredentials({
-    ...lectioProps,
-    week: (Number(searchParamsObj.week) - 1).toString(),
-    year: searchParamsObj.year,
-  });
-  lectioAPI.getSchedule.byCredentials({
-    ...lectioProps,
-    week: (Number(searchParamsObj.week) + 1).toString(),
-    year: searchParamsObj.year,
-  });
-
   return (
     <ScheduleProvider>
       <div id="schedule-main" className="w-full">
         <h1 className="pt-4 text-3xl font-bold text-muted-foreground">
           Uge {searchParamsObj.week}, {searchParamsObj.year}
         </h1>
-        <div className="flex flex-col gap-x-4 pb-4 sm:flex-row sm:items-center sm:pb-0">
+        <div className="flex flex-col gap-x-4 pb-4 ">
           <div className="flex items-center gap-x-2 py-4">
             <Image
               src={student?.imgSrc || profile}
@@ -173,24 +164,27 @@ export default async function SchedulePage({ searchParams, params }: Props) {
                 >
                   <TimestampsLines timestamps={timestamps} />
                 </div>
-                <Wrapper>
-                  {schedule.map((week, index) => {
-                    return (
-                      <Weekday
-                        week={week}
-                        timestamps={timestamps}
-                        day={indexToDayMap[index]}
-                        key={index}
-                        userId={params.userId}
-                      />
-                    );
-                  })}
-                </Wrapper>
+                <LessonWrapper>
+                  <Wrapper>
+                    {schedule.map((week, index) => {
+                      return (
+                        <Weekday
+                          week={week}
+                          timestamps={timestamps}
+                          day={indexToDayMap[index]}
+                          key={index}
+                          userId={params.userId}
+                        />
+                      );
+                    })}
+                  </Wrapper>
+                </LessonWrapper>
               </div>
             </>
           )}
         </div>
       </div>
+      <FetchAdjacentWeeks searchParamsObj={searchParamsObj} />
     </ScheduleProvider>
   );
 }
