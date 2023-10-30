@@ -4,9 +4,9 @@ import TooltipHover from "@/components/global/TooltipHover";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useContext } from "react";
-import { ScheduleContext, getMaxDay } from "../schedule-context";
+import { ScheduleContext } from "../../../schedule-context";
 
-export function DaySwitcher() {
+export function DateNavigationTouch() {
   const context = useContext(ScheduleContext);
 
   function handleClick(action: "forwards" | "backwards") {
@@ -14,7 +14,7 @@ export function DaySwitcher() {
   }
 
   return (
-    <div className="flex w-full justify-between 2xl:hidden">
+    <div className="flex w-full justify-between">
       <TooltipHover html={<p>{"⌘⇧←"}</p>}>
         <Button
           variant={"outline"}

@@ -22,5 +22,9 @@ export function MainClientHandler() {
     debouncedFunction();
   }, [path, searchParams, router, debouncedFunction]);
 
+  // useEffect(() => {
+  //   router.refresh();
+  // }, [path, searchParams, router]);
+
   return null;
 }

@@ -1,6 +1,8 @@
 "use client";
 
 import { vEvent } from "@/lib/viskum/vEvent";
+import { getWeekAndYear } from "@/util/getWeekAndYear";
+import { getWeekStartEnd } from "@/util/getWeekStartEnd";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createContext, useEffect, useRef, useState } from "react";
 
@@ -69,38 +71,75 @@ export function ScheduleProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
+  function pushPreviousWeek(noDelay: boolean = false) {
+    const { start } = getWeekStartEnd(numberYear, numberWeek);
+    start.setDate(start.getDate() - 7);
+    const nextWeek = getWeekAndYear(start);
+
+    const newUrl = [
+      path,
+      "?week=",
+      nextWeek.week,
+      "&year=",
+      nextWeek.year,
+    ].join("");
+
+    if (noDelay) {
+      router.push(newUrl, { scroll: false });
+    } else {
+      // setTimeout(() => {
+      router.push(newUrl, { scroll: false });
+      // }, 300);
+    }
+  }
+  function pushNextWeek(noDelay: boolean = false) {
+    const { start } = getWeekStartEnd(numberYear, numberWeek);
+    start.setDate(start.getDate() + 7);
+    const nextWeek = getWeekAndYear(start);
+
+    const newUrl = [
+      path,
+      "?week=",
+      nextWeek.week,
+      "&year=",
+      nextWeek.year,
+    ].join("");
+
+    if (noDelay) {
+      router.push(newUrl, { scroll: false });
+    } else {
+      // setTimeout(() => {
+      router.push(newUrl, { scroll: false });
+      // }, 300);
+    }
+  }
+
   function changeDay(action: "forwards" | "backwards") {
-    if (action === "forwards" && dayRef.current === getMaxDay()) {
+    if (document.getElementById("no_schedule_activities")) {
+      if (action === "forwards") {
+        if (!isNaN(numberWeek) && !isNaN(numberYear)) {
+          vEvent.dispatch("fade", { action: "out" });
+          nextAction.current = "min";
+          pushNextWeek();
+        }
+      } else if (action === "backwards") {
+        if (!isNaN(numberWeek) && !isNaN(numberYear)) {
+          vEvent.dispatch("fade", { action: "out" });
+          nextAction.current = "max";
+          pushPreviousWeek();
+        }
+      }
+    } else if (action === "forwards" && dayRef.current === getMaxDay()) {
       if (!isNaN(numberWeek) && !isNaN(numberYear)) {
         vEvent.dispatch("fade", { action: "out" });
         nextAction.current = "min";
-        const newUrl = [
-          path,
-          "?week=",
-          numberWeek + 1,
-          "&year=",
-          numberYear,
-        ].join("");
-
-        setTimeout(() => {
-          router.push(newUrl, { scroll: false });
-        }, 300);
+        pushNextWeek();
       }
     } else if (action === "backwards" && dayRef.current === 0) {
       if (!isNaN(numberWeek) && !isNaN(numberYear)) {
         vEvent.dispatch("fade", { action: "out" });
         nextAction.current = "max";
-        const newUrl = [
-          path,
-          "?week=",
-          numberWeek - 1,
-          "&year=",
-          numberYear,
-        ].join("");
-
-        setTimeout(() => {
-          router.push(newUrl, { scroll: false });
-        }, 300);
+        pushPreviousWeek();
       }
     } else if (action === "forwards") {
       setDay((prev) => Math.min(prev + 1, getMaxDay()));

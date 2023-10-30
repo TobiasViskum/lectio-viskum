@@ -138,11 +138,13 @@ export async function Lesson({
           <div
             className={cn(
               isSubjectsEmpty
-                ? `@[124px]:semibold flex flex-wrap items-start gap-x-1.5 font-bold leading-3 transition-colors ${getTitleSize()}`
-                : "w-full text-2xs transition-colors @[124px]:text-xs",
-              lesson.title.length > 20 && !displayOnlyTitle
-                ? "text-3xs @[124px]:text-2xs"
-                : "text-sm",
+                ? `@[124px]:semibold flex flex-wrap items-start gap-x-1.5 break-words break-all font-bold leading-3 transition-colors ${getTitleSize()}`
+                : `w-full text-2xs transition-colors @[124px]:text-xs ${
+                    lesson.title.length > 20 && !displayOnlyTitle
+                      ? "text-3xs @[124px]:text-2xs"
+                      : "text-2xs @[124px]:text-xs"
+                  }`,
+
               textColor,
               hoverTextColor,
             )}

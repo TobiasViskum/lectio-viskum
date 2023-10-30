@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from "@/lib/utils";
+import { capitalizeFirstLetter } from "@/util/capitalizeFirstLetter";
 
 export function getTitle(info: string) {
   const pattern1 = /([0-9:]+ [-|til] [0-9:]+)/i;

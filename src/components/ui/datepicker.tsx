@@ -1,39 +1,56 @@
 "use client";
 
 import * as React from "react";
-import { CalendarIcon } from "@radix-ui/react-icons";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Button } from "./button";
 
-export function DatePicker() {
+type Props = {
+  children: React.ReactNode;
+  onChange?: (e: Date | undefined) => void;
+  disabled?: boolean;
+};
+export function DatePicker({ children, onChange, disabled = false }: Props) {
   const [date, setDate] = React.useState<Date>();
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  function changeDate(e: Date | undefined) {
+    if (onChange) {
+      onChange(e);
+    }
+    setIsOpen(false);
+    setDate(e);
+  }
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>{children}</PopoverTrigger>
+      <PopoverContent
+        align="start"
+        className="flex w-auto flex-col space-y-2 p-2"
+      >
         <Button
+          disabled={disabled}
+          disableAnimation
           variant={"outline"}
-          className={cn(
-            "aspect-square h-10 w-10 justify-start px-1.5 py-1.5 text-left font-normal",
-            !date && "text-muted-foreground",
-          )}
+          onClick={() => changeDate(new Date())}
         >
-          <CalendarIcon className="h-full w-full" />
+          I dag
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-          initialFocus
-        />
+        <div className="rounded-md border">
+          <Calendar
+            disabled={disabled}
+            mode="single"
+            selected={date}
+            onSelect={changeDate}
+            defaultMonth={date}
+            initialFocus
+          />
+        </div>
       </PopoverContent>
     </Popover>
   );

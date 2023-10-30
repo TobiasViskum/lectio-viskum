@@ -1,41 +1,34 @@
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { lectioAPI } from "@/lib/lectio-api";
-import { generateTimestamps } from "./_util/generateTimestamps";
-import { Timestamps } from "./_components/Timestamps";
-import { TimestampsLines } from "./_components/TimestampsLines";
-import { Weekday } from "./_components/Weekday";
 import { z } from "zod";
-import { getCurrWeekAndYear } from "@/lib/utils";
-import Link from "next/link";
+import { getWeekAndYear } from "@/util/getWeekAndYear";
 import { redirect } from "next/navigation";
-import { DaySwitcher } from "./_components/DaySwitcher";
-import { Wrapper } from "./_components/Wrapper";
 import { ScheduleProvider } from "./schedule-context";
-import Image from "next/image";
-import { profile } from "@/assets";
-import { DatePicker } from "@/components/ui/datepicker";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { FetchAdjacentWeeks } from "./_components/FetchAdjacentWeeks";
-import { LessonWrapper } from "./_components/AnimateWrapper";
+import { MainContent } from "./_components/MainContent";
+import { ScheduleHeader } from "./_components/ScheduleHeader";
+import { Suspense } from "react";
+import { TimestampSkeleton } from "./_components/TimestampSkeleton";
+import { ScheduleHeaderSkeleton } from "./_components/ScheduleHeaderSkeleton";
 
 type Props = {
   searchParams: { [key: string]: string };
   params: { userId: string };
 };
 
-export default async function SchedulePage({ searchParams, params }: Props) {
+export default function SchedulePage({ searchParams, params }: Props) {
   const schema = z.object({
     week: z.string().min(1),
     year: z.string().length(4),
   });
-  let searchParamsObj = getCurrWeekAndYear();
+  let searchParamsObj = getWeekAndYear(new Date());
 
   try {
     const data = schema.parse(searchParams);
     searchParamsObj = data;
 
     if (isNaN(Number(data.week)) || isNaN(Number(data.year))) {
-      const newObj = getCurrWeekAndYear();
+      const newObj = getWeekAndYear(new Date());
 
       redirect(
         `/skema/elev/${params.userId}?week=${newObj.week}&year=${newObj.year}`,
@@ -56,132 +49,27 @@ export default async function SchedulePage({ searchParams, params }: Props) {
     week: searchParamsObj.week,
     year: searchParamsObj.year,
   });
-  const studentPromise = lectioAPI.getStudent.byId({
-    lectioCookies: lectioProps.lectioCookies,
-    schoolCode: lectioProps.schoolCode,
-    userId: params.userId,
-  });
-
-  const [schedule, student] = await Promise.all([
-    schedulePromise,
-    studentPromise,
-  ]);
-
-  if (schedule === null) {
-    redirect("/log-ind");
-  }
-
-  const timestamps = generateTimestamps(schedule);
-
-  const indexToDayMap: { [key: number]: string } = {
-    0: "Mandag",
-    1: "Tirsdag",
-    2: "Onsdag",
-    3: "Torsdag",
-    4: "Fredag",
-    5: "Lørdag",
-    6: "Søndag",
-  };
 
   return (
     <ScheduleProvider>
       <div id="schedule-main" className="w-full">
-        <h1 className="pt-4 text-3xl font-bold text-muted-foreground">
+        <h1 className="pt-4 text-2xl font-bold">
           Uge {searchParamsObj.week}, {searchParamsObj.year}
         </h1>
-        <div className="flex flex-col gap-x-4 pb-4 ">
-          <div className="flex items-center gap-x-2 py-4">
-            <Image
-              src={student?.imgSrc || profile}
-              width={56}
-              height={56}
-              alt="img"
-              className="obj aspect-square rounded-full object-cover"
-            />
-            <div>
-              <p className="text-lg font-semibold">{student?.name}</p>
-              <p className="text-sm text-muted-foreground">
-                Klasse: {student?.studentClass}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-x-2">
-            <DatePicker />
-            <div className="flex h-2/3 items-center rounded-md border bg-background">
-              <Link
-                href={{
-                  query: {
-                    week: Number(searchParamsObj.week) - 1,
-                    year: searchParamsObj.year,
-                  },
-                }}
-                className="pr-2"
-              >
-                <ChevronLeft className="h-6 w-6 text-muted-foreground" />
-              </Link>
-              <p className="text-xs">27/10 - 03/11</p>
-              <Link
-                href={{
-                  query: {
-                    week: Number(searchParamsObj.week) + 1,
-                    year: searchParamsObj.year,
-                  },
-                }}
-                className="pl-2"
-              >
-                <ChevronRight className="h-6 w-6 text-muted-foreground" />
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        <DaySwitcher />
-
+        <Suspense fallback={<ScheduleHeaderSkeleton />}>
+          <ScheduleHeader
+            schedulePromise={schedulePromise}
+            searchParamsObj={searchParamsObj}
+            userId={params.userId}
+          />
+        </Suspense>
         <div className="relative flex w-full justify-center rounded-md pt-8">
-          {schedule.length === 0 ? (
-            <div className="text-center">
-              <p>Der er ingen aktiviteter i denne uge!</p>
-              <p>Nyd ugen!</p>
-            </div>
-          ) : (
-            <>
-              <div className="flex h-full w-14 flex-col">
-                <div
-                  className="grid w-16 pl-1 text-muted-foreground opacity-70"
-                  style={{ paddingTop: "var(--offset-top-text)" }}
-                >
-                  <Timestamps timestamps={timestamps} />
-                </div>
-              </div>
-
-              <div className="relative w-full max-w-[1600px] overflow-x-hidden overflow-y-hidden">
-                <div
-                  className="pointer-events-none absolute h-full w-full bg-transparent"
-                  style={{
-                    paddingTop: "var(--offset-top-lesson)",
-                    width: "calc(100% - 12px)",
-                  }}
-                >
-                  <TimestampsLines timestamps={timestamps} />
-                </div>
-                <LessonWrapper>
-                  <Wrapper>
-                    {schedule.map((week, index) => {
-                      return (
-                        <Weekday
-                          week={week}
-                          timestamps={timestamps}
-                          day={indexToDayMap[index]}
-                          key={index}
-                          userId={params.userId}
-                        />
-                      );
-                    })}
-                  </Wrapper>
-                </LessonWrapper>
-              </div>
-            </>
-          )}
+          <Suspense fallback={<TimestampSkeleton />}>
+            <MainContent
+              schedulePromise={schedulePromise}
+              userId={params.userId}
+            />
+          </Suspense>
         </div>
       </div>
       <FetchAdjacentWeeks searchParamsObj={searchParamsObj} />

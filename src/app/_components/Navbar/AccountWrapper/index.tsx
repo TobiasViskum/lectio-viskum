@@ -36,7 +36,7 @@ export async function AccountWrapper() {
             <ChevronDown className="text-muted-foreground" />
           </Button>
         </MenubarTrigger>
-        <MenubarContent className="mr-2">
+        <MenubarContent>
           <MenubarItem className="flex flex-col items-start">
             <p className="text-base font-bold">{user?.name}</p>
             <p className="text-sm text-muted-foreground">

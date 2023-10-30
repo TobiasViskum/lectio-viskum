@@ -6,7 +6,7 @@ import { FilterButtonsSkeleton } from "./_components/FilterButtons/FilterButtons
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { lectioAPI } from "@/lib/lectio-api";
 
-export default async function AssignmentsPage() {
+export default function AssignmentsPage() {
   const lectioProps = getLectioProps();
   const assignmentsPromise = lectioAPI.getAssignment.all({
     ...lectioProps,

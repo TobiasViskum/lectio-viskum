@@ -10,7 +10,7 @@ import Link from "next/link";
 import { HomeIcon2 } from "@/components/icons/HomeIcon";
 import { AccountWrapper } from "./AccountWrapper";
 import { Suspense } from "react";
-import { getCurrWeekAndYear } from "@/lib/utils";
+import { getWeekAndYear } from "@/util/getWeekAndYear";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 
 export async function Navbar() {
@@ -38,7 +38,7 @@ export async function Navbar() {
           <Link
             href={{
               pathname: `/skema/elev/${lectioProps.userId}`,
-              query: getCurrWeekAndYear(),
+              query: getWeekAndYear(new Date()),
             }}
             className="hidden items-center gap-x-2 rounded-md px-4 py-2 text-sm font-semibold hover:bg-accent sm:flex"
           >
@@ -48,7 +48,7 @@ export async function Navbar() {
           <Link
             href={{
               pathname: `/skema/elev/${lectioProps.userId}`,
-              query: getCurrWeekAndYear(),
+              query: getWeekAndYear(new Date()),
             }}
           >
             <CalendarIcon className="mx-3 block h-6 w-6 sm:hidden" />

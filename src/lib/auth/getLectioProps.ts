@@ -20,7 +20,6 @@ export function getLectioProps() {
     } as StandardProps & {
       username: string;
       password: string;
-      userId: string;
     };
   }
   redirect("/log-ind?redirected=true");
