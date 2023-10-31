@@ -16,44 +16,50 @@ export async function AssignmentInfo({ assignmentPromise }: Props) {
 
   const isAssignmentDue = date.getTime() - new Date().getTime() < 0;
 
+  const divTw = "flex justify-between";
+  const p_1Tw = "";
+  const p_2Tw = "text-muted-foreground";
+
   return (
-    <div className="w-96 text-sm">
-      <Separator />
-      <div className="flex flex-col gap-y-0.5 py-2 pl-2">
-        <div className="grid grid-cols-[auto_1fr] gap-x-2">
-          <p className="font-bold">Frist:</p>
-          <p className="text-muted-foreground">{formattedDate}</p>
+    <div className="w-full max-w-md text-sm">
+      <p className="pb-2 text-xs text-muted-foreground">INFO OM OPGAVEN:</p>
+
+      <div className="flex flex-col gap-y-2 px-2 py-2 md:px-0">
+        <div className={divTw}>
+          <p className={p_1Tw}>Frist:</p>
+          <p className={p_2Tw}>{formattedDate}</p>
         </div>
-        <div className="grid grid-cols-[auto_1fr] gap-x-2">
-          <p className="font-bold">Status:</p>
-          <p className="text-muted-foreground">{assignment.status}</p>
+        <Separator />
+        <div className={divTw}>
+          <p className={p_1Tw}>Status:</p>
+          <p className={p_2Tw}>{assignment.status}</p>
         </div>
-        <div className="grid grid-cols-[auto_1fr] gap-x-2">
-          <p className="font-bold">Fravær:</p>
-          <p className="text-muted-foreground">
-            {isAssignmentDue ? assignment.absence : "0%"}
-          </p>
+        <Separator />
+        <div className={divTw}>
+          <p className={p_1Tw}>Fravær:</p>
+          <p className={p_2Tw}>{isAssignmentDue ? assignment.absence : "0%"}</p>
         </div>
-        <div className="grid grid-cols-[auto_1fr] gap-x-2">
-          <p className="font-bold">Afventer:</p>
-          <p className="text-muted-foreground">{assignment.awaiter}</p>
+        <Separator />
+        <div className={divTw}>
+          <p className={p_1Tw}>Afventer:</p>
+          <p className={p_2Tw}>{assignment.awaiter}</p>
         </div>
-        <div className="grid grid-cols-[auto_1fr] gap-x-2">
-          <p className="font-bold">Karakter:</p>
-          <p className="text-muted-foreground">{assignment.grade || "-"}</p>
+        <Separator />
+        <div className={divTw}>
+          <p className={p_1Tw}>Karakter:</p>
+          <p className={p_2Tw}>{assignment.grade}</p>
         </div>
-        <div className="grid grid-cols-[auto_1fr] gap-x-2">
-          <p className="font-bold">Elevnote:</p>
-          <p className="text-muted-foreground">
-            {assignment.studentNote || "-"}
-          </p>
+        <Separator />
+        <div className={divTw}>
+          <p className={p_1Tw}>Elevnote:</p>
+          <p className={p_2Tw}>{assignment.studentNote}</p>
         </div>
-        <div className="grid grid-cols-[auto_1fr] gap-x-2">
-          <p className="font-bold">Karakternote:</p>
-          <p className="text-muted-foreground">{assignment.gradeNote || "-"}</p>
+        <Separator />
+        <div className={divTw}>
+          <p className={p_1Tw}>Karakternote:</p>
+          <p className={p_2Tw}>{assignment.gradeNote}</p>
         </div>
       </div>
-      <Separator />
     </div>
   );
 }

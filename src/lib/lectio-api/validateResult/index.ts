@@ -5,9 +5,17 @@ import { ReturnType } from "../types/types";
 export function validateResult(result: ReturnType<any>) {
   if (result.status === "error") {
     if (result.message.includes("too many requests")) {
-      return redirect("/adgang-forbudt");
+      try {
+        redirect("/adgang-forbudt");
+      } catch {
+        return;
+      }
     } else if (result.message.includes("auth")) {
-      return redirect("/opdater-adgang");
+      try {
+        redirect("/opdater-adgang");
+      } catch {
+        return;
+      }
     }
   } else {
     return;

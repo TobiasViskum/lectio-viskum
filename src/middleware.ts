@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { lectioAPI } from "./lib/lectio-api";
+import { revalidatePath } from "next/cache";
 
 export async function middleware(req: NextRequest) {
   const requestHeaders = new Headers(req.headers);

@@ -1,39 +1,21 @@
 export function getWeekAndYear(date: Date) {
-  // Create a copy of the date and set time to midday to avoid issues with daylight saving time
-  const midday = new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
-    12,
-    0,
-    0,
-  );
+  // Create a copy of the date
+  let tempDate = new Date(date.valueOf());
+  // Get the first day of the year
+  let startOfYear = new Date(tempDate.getFullYear(), 0, 1);
+  // Calculate the difference in milliseconds
+  let diff = tempDate.getTime() - startOfYear.getTime();
+  // Convert to days and add 1 for the first day of the year
+  let dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
+  // Calculate the week number (ISO-8601)
+  let week = Math.ceil(dayOfYear / 7);
+  // Return the week number and year
 
-  // Calculate day of the year - January 1st will be 1, January 2nd will be 2, etc.
-  const startOfYear = new Date(midday.getFullYear(), 0, 0);
-  const diff = midday.getTime() - startOfYear.getTime();
-  const oneDay = 1000 * 60 * 60 * 24;
-  const dayOfYear = Math.floor(diff / oneDay);
-
-  // Calculate week number according to ISO-8601
-  const startDayOfYear = (startOfYear.getDay() + 6) % 7;
-
-  let weekNumber = Math.ceil((dayOfYear + startDayOfYear) / 7);
-
-  // Adjust for years where Jan 1-3 fall on Friday through Sunday
-  if (startDayOfYear >= 4 && weekNumber === 53) {
-    weekNumber = 1;
-  } else if (startDayOfYear < 4 && weekNumber === 0) {
-    weekNumber =
-      new Date(midday.getFullYear() - 1, 11, 31).getDay() >= 4 ? 53 : 52;
+  let strWeek = week.toString();
+  if (strWeek.length === 1) {
+    strWeek = "0" + strWeek;
   }
+  let strYear = tempDate.getFullYear().toString();
 
-  let week = weekNumber.toString();
-  let year = midday.getFullYear().toString();
-
-  if (week.length === 1) {
-    week = "0" + week;
-  }
-
-  return { week: week, year: year };
+  return { week: strWeek, year: strYear };
 }
