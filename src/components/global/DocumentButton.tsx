@@ -28,7 +28,10 @@ export function DocumentButton({ strDocument, className }: Props) {
         setIsDownloading(false);
         return "Download startet!";
       },
-      error: "Der skete en fejl",
+      error: (res) => {
+        setIsDownloading(false);
+        return "Der skete en fejl";
+      },
     });
   }
 

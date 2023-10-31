@@ -17,7 +17,7 @@ export function SidebarWrapper({ children, AssignmentsComponent }: Props) {
     if (splitPath.length === 1) {
       setBackPath("/forside");
     } else {
-      setBackPath(splitPath.join("/"));
+      setBackPath("/" + splitPath[1]);
     }
   }, [path]);
 

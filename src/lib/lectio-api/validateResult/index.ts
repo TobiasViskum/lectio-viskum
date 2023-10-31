@@ -8,13 +8,13 @@ export function validateResult(result: ReturnType<any>) {
       try {
         redirect("/adgang-forbudt");
       } catch {
-        return;
+        redirect("/adgang-forbudt");
       }
     } else if (result.message.includes("auth")) {
       try {
         redirect("/opdater-adgang");
       } catch {
-        return;
+        redirect("/opdater-adgang");
       }
     }
   } else {

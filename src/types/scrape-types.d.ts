@@ -112,7 +112,7 @@ type HomeworkDescription = Prettify<
   (
     | string
     | string[]
-    | { img: string }
+    | { img: string; height: number; width: number }
     | { thumbnail: string; videoHref: string }
   )[]
 >;

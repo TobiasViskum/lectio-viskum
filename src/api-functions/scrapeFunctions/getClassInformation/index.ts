@@ -38,6 +38,7 @@ export async function getClassInformation({
   if (res === "Invalid school") return res;
   if (res === null) return res;
 
+  const fetchCookie = res.fetchCookie;
   const $ = res.$;
 
   let additionalInfo: AdditionalLessonInfo = {
@@ -118,6 +119,41 @@ export async function getClassInformation({
 
   const note = getNote($);
   const homeWorkAndOtherAndPresentation = getHomeworkAndOtherAndPresentation($);
+
+  for (let i = 0; i < homeWorkAndOtherAndPresentation.homework.length; i++) {
+    const homework = homeWorkAndOtherAndPresentation.homework[i];
+
+    for (let j = 0; j < homework.description.length; j++) {
+      const item = homework.description[j];
+      if (typeof item === "object" && "img" in item) {
+        if (item.img.includes("/lectio/")) {
+          const imageBase64 = await fetchCookie(item.img, {
+            method: "GET",
+            headers: { Cookie: lectioCookies },
+          })
+            .then(async (res) => {
+              try {
+                const arrayBuffer = await res.arrayBuffer();
+                const contentType = res.headers.get("content-type");
+                const base64 = Buffer.from(arrayBuffer).toString("base64");
+                const fullSrc = `data:${contentType};base64,${base64}`;
+                return fullSrc;
+              } catch {
+                return null;
+              }
+            })
+            .catch((err) => {
+              return null;
+            });
+          if (imageBase64) {
+            //@ts-ignore
+            homeWorkAndOtherAndPresentation.homework[i].description[j].img =
+              imageBase64;
+          }
+        }
+      }
+    }
+  }
 
   return {
     ...additionalInfo,

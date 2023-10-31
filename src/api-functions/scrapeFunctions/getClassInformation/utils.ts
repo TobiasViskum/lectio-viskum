@@ -145,6 +145,9 @@ function setTitle($article: cheerio.Cheerio, currHomework: LessonHomework) {
 }
 function getDescriptionVideoOrImage($elem: cheerio.Cheerio, $: cheerio.Root) {
   const src = $elem.attr("src");
+  const imgHeight = Number($elem.attr("height"));
+  const imgWidth = Number($elem.attr("width"));
+
   const iframe = $elem.attr("data-embed-xhtml");
   let isVideo = iframe !== undefined;
 
@@ -153,8 +156,8 @@ function getDescriptionVideoOrImage($elem: cheerio.Cheerio, $: cheerio.Root) {
     if (src.includes("/lectio/")) {
       fullSrc = ["https://lectio.dk", $elem.attr("src")].join("");
     }
-    if (!isVideo) {
-      return { img: fullSrc };
+    if (!isVideo && !isNaN(imgHeight) && !isNaN(imgWidth)) {
+      return { img: fullSrc, height: imgHeight, width: imgWidth };
     } else if (isVideo) {
       const $iframe = $(iframe);
       const videoHref = $iframe.attr("src") || "";
@@ -194,7 +197,11 @@ function setDescription(
         isAddingToUl = false;
       }
       if (elem.name === "p") {
-        currHomework.description.push(text);
+        if (text.split("\n").length > 1) {
+          currHomework.description.push(text.split("\n"));
+        } else {
+          currHomework.description.push(text);
+        }
       } else if (elem.name === "img") {
         const res = getDescriptionVideoOrImage($elem, $);
         if (res) {

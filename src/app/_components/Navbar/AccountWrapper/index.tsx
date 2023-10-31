@@ -22,7 +22,7 @@ export async function AccountWrapper() {
   });
 
   return (
-    <Menubar className="border-0 px-0 py-0">
+    <Menubar className="border-0 bg-transparent px-0 py-0">
       <MenubarMenu>
         <MenubarTrigger asChild className="cursor-pointer">
           <Button variant={"ghost"} className="flex h-12 gap-x-2 px-2">
