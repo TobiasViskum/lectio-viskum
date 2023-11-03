@@ -3,8 +3,12 @@ import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { lectioAPI } from "@/lib/lectio-api";
 import { cn } from "@/lib/utils";
 import { capitalizeFirstLetter } from "@/util/capitalizeFirstLetter";
+import { load } from "cheerio";
 import Image from "next/image";
 import Link from "next/link";
+import React, { Fragment } from "react";
+import { TextPart } from "./_components/RenderHomework/Parts/TextPart";
+import { RenderHomework } from "./_components/RenderHomework";
 
 type Props = {
   params: {
@@ -25,6 +29,8 @@ export default async function LessonPage({ params }: Props) {
   if (lesson === null) {
     return <p>An error happened</p>;
   }
+
+  console.log(lesson.other);
 
   const formattedStartTime = new Intl.DateTimeFormat("da-dk", {
     weekday: "long",
@@ -48,12 +54,28 @@ export default async function LessonPage({ params }: Props) {
         <p className="pb-1 pt-4 text-sm text-muted-foreground">NOTE:</p>
         <p>{lesson.note}</p>
       </div>
+
       <div>
         <p className="pb-1 pt-4 text-sm text-muted-foreground">LEKTIER:</p>
-        <div>
-          {lesson.homework.map((homework) => {
+        <div className="flex flex-col gap-y-4">
+          {lesson.homework.map((homework, _index) => {
             return (
-              <div key={homework.title} className="py-2">
+              <div key={_index} className="flex flex-col gap-y-4 border-b pb-4">
+                <RenderHomework homework={homework} key={_index} />
+              </div>
+            );
+          })}
+
+          {/* {lesson.homework.map((homework, index) => {
+            return (
+              <div key={index} className="py-2">
+                {homework.title.map((title) => {
+                  return (
+                    <p key={title.text} className="py-8 text-xl">
+                      {title.text}
+                    </p>
+                  );
+                })}
                 <div
                   className={cn(
                     "pb-1 text-xl",
@@ -66,7 +88,7 @@ export default async function LessonPage({ params }: Props) {
                         <DocumentButton
                           strDocument={JSON.stringify({
                             name: homework.title,
-                            href: homework.titleHref.split("lectio.dk")[1],
+                            href: homework.titleHref,
                           })}
                         />
                       ) : (
@@ -113,17 +135,24 @@ export default async function LessonPage({ params }: Props) {
                 })}
               </div>
             );
-          })}
+          })} */}
         </div>
       </div>
       <div>
         <p className="pb-1 pt-4 text-sm text-muted-foreground">
           ØVRIGT INDHOLD:
         </p>
-        <div>
-          {lesson.other.map((homework) => {
+        <div className="flex flex-col gap-y-4">
+          {lesson.other.map((homework, _index) => {
             return (
-              <div key={homework.title} className="py-2">
+              <div key={_index} className="flex flex-col gap-y-4 border-b pb-4">
+                <RenderHomework homework={homework} key={_index} />
+              </div>
+            );
+          })}
+          {/* {lesson.other.map((homework) => {
+            return (
+              <div key={homework.title[0].text} className="py-2">
                 <div
                   className={cn(
                     "pb-1 text-xl",
@@ -134,11 +163,11 @@ export default async function LessonPage({ params }: Props) {
                     <DocumentButton
                       strDocument={JSON.stringify({
                         name: homework.title,
-                        href: homework.titleHref.split("lectio.dk")[1],
+                        href: homework.titleHref,
                       })}
                     />
                   ) : (
-                    <p>{homework.title}</p>
+                    <p>{homework.title[0].text}</p>
                   )}
                 </div>
                 {homework.description.map((item, index) => {
@@ -170,7 +199,7 @@ export default async function LessonPage({ params }: Props) {
                 })}
               </div>
             );
-          })}
+          })} */}
         </div>
       </div>
     </div>

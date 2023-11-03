@@ -1,19 +1,16 @@
 import { getAuthenticatedPage } from "../../getPage";
 import { getClassroom } from "../getSchedule/getClassroom";
-import {
-  getHomeworkAndOtherAndPresentation,
-  getNote,
-  getSubjectTheme,
-} from "./utils";
+import { getHomeworkAndOtherAndPresentation } from "./utils";
 import { setAllTeachersObject } from "./setAllTeacherObjects";
 import { getTitle } from "../getSchedule/getTitle";
 import { setClasses } from "./setClasses";
-import { sub } from "date-fns";
 import {
   getTimeFromPattern1,
   getTimeFromPattern2,
   getTimeFromPattern3,
 } from "./getTime";
+import { getSubjectTheme } from "./getSubjectTheme";
+import { getNote } from "./getNote";
 
 type Props = { lessonId: string; year: string };
 
@@ -123,8 +120,8 @@ export async function getClassInformation({
   for (let i = 0; i < homeWorkAndOtherAndPresentation.homework.length; i++) {
     const homework = homeWorkAndOtherAndPresentation.homework[i];
 
-    for (let j = 0; j < homework.description.length; j++) {
-      const item = homework.description[j];
+    for (let j = 0; j < homework.length; j++) {
+      const item = homework[j];
       if (typeof item === "object" && "img" in item) {
         if (item.img.includes("/lectio/")) {
           const imageBase64 = await fetchCookie(item.img, {

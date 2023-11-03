@@ -108,19 +108,27 @@ type FullAssignment = Prettify<{
   studentNote: string;
   submits: Submit[];
 }>;
-type HomeworkDescription = Prettify<
+
+type LessonText = {
+  text: string;
+  href: string;
+  isTitle: boolean;
+  isBold: boolean;
+};
+type LessonVideo = {
+  thumbnail: string;
+  videoHref: string;
+  aspectRatio: string;
+};
+type LessonHomework = Prettify<
   (
-    | string
-    | string[]
-    | { img: string; height: number; width: number }
-    | { thumbnail: string; videoHref: string }
+    | Prettify<LessonText[]>
+    | Prettify<LessonText>
+    | { listContent: LessonHomework; listType: "ol" | "ul" }
+    | { img: string; aspectRatio: string }
+    | Prettify<LessonVideo>
   )[]
 >;
-type LessonHomework = Prettify<{
-  titleHref: string;
-  title: string;
-  description: Prettify<HomeworkDescription>;
-}>;
 type AdditionalLessonInfo = Prettify<{
   title: string;
   status: string;

@@ -72,6 +72,8 @@ export async function downloadAsset(href: string, name: string) {
     });
 
   if (targetPageContent) {
+    console.log(targetPageContent);
+
     const res = await fetchCookie(href, { method: "GET" })
       .then((res) => {
         return res.blob();

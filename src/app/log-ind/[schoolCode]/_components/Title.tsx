@@ -25,19 +25,19 @@ export function Title({ schoolPromise, name }: Props) {
   const router = useRouter();
 
   const titleTw =
-    "sm:text-4xl text-3xl leading-snug font-semibold flex flex-col [text-wrap:balance] text-center";
+    "sm:text-4xl text-3xl leading-snug font-semibold flex flex-col [text-wrap:balance] text-center drop-shadow-[0_0_0.3rem_#ffffff70]";
 
-  // useEffect(() => {
-  //   async function verifySchool() {
-  //     const school = await schoolPromise;
-  //     if (school === null) {
-  //       router.push("/log-ind");
-  //     } else if (school.name !== name) {
-  //       setSchoolName(school.name);
-  //     }
-  //   }
-  //   verifySchool();
-  // }, [schoolPromise, router, name]);
+  useEffect(() => {
+    async function verifySchool() {
+      const school = await schoolPromise;
+      if (school === null) {
+        router.push("/log-ind");
+      } else if (school.name !== name) {
+        setSchoolName(school.name);
+      }
+    }
+    verifySchool();
+  }, [schoolPromise, router, name]);
 
   return (
     <>
