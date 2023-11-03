@@ -120,12 +120,16 @@ type LessonVideo = {
   videoHref: string;
   aspectRatio: string;
 };
+type LessonTable = { tableContent: LessonText[][] };
+type LessonList = { listContent: LessonHomework; listType: "ol" | "ul" | "" };
+type LessonImage = { img: string; width: number; height: number };
+
 type LessonHomework = Prettify<
   (
-    | Prettify<LessonText[]>
     | Prettify<LessonText>
-    | { listContent: LessonHomework; listType: "ol" | "ul" }
-    | { img: string; aspectRatio: string }
+    | Prettify<LessonTable>
+    | Prettify<LessonList>
+    | Prettify<LessonImage>
     | Prettify<LessonVideo>
   )[]
 >;

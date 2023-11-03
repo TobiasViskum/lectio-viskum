@@ -11,6 +11,7 @@ import {
 } from "./getTime";
 import { getSubjectTheme } from "./getSubjectTheme";
 import { getNote } from "./getNote";
+import { getTimeInMs } from "@/util/getTimeInMs";
 
 type Props = { lessonId: string; year: string };
 
@@ -122,9 +123,16 @@ export async function getClassInformation({
 
     for (let j = 0; j < homework.length; j++) {
       const item = homework[j];
+
       if (typeof item === "object" && "img" in item) {
         if (item.img.includes("/lectio/")) {
-          const imageBase64 = await fetchCookie(item.img, {
+          const src = ["https://lectio.dk", item.img].join("");
+          const cachedImage = global.longTermCache.get(src);
+          if (cachedImage) {
+            return cachedImage.data;
+          }
+
+          const imageBase64 = await fetchCookie(src, {
             method: "GET",
             headers: { Cookie: lectioCookies },
           })
@@ -142,10 +150,13 @@ export async function getClassInformation({
             .catch((err) => {
               return null;
             });
+
           if (imageBase64) {
-            //@ts-ignore
-            homeWorkAndOtherAndPresentation.homework[i].description[j].img =
-              imageBase64;
+            global.longTermCache.set(src, {
+              data: imageBase64,
+              expires: new Date().getTime() + getTimeInMs({ days: 1 }),
+            });
+            item.img = imageBase64;
           }
         }
       }

@@ -11,7 +11,7 @@ export async function getTeacherById({
   schoolCode,
 }: StandardProps & Props) {
   const tag = `${teacherId}-user`;
-  const foundCache = global.cache.get(tag);
+  const foundCache = global.longTermCache.get(tag);
 
   if (foundCache && new Date().getTime() < foundCache.expires) {
     return foundCache.data as Teacher;
@@ -92,7 +92,7 @@ export async function getTeacherById({
 
   if (imageBase64) foundTeacher.imgSrc = imageBase64;
 
-  global.cache.set(tag, {
+  global.longTermCache.set(tag, {
     data: foundTeacher,
     expires: new Date().getTime() + getTimeInMs({ days: 1 }),
   });

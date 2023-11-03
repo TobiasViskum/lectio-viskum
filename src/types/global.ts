@@ -1,2 +1,5 @@
-var cache: Map<string, { data: any; expires: number }> = new Map();
+var cache: CacheMap = new Map();
 global.cache = cache;
+
+var longTermCache: CacheMap = new Map();
+global.longTermCache = longTermCache;

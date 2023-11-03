@@ -30,7 +30,7 @@ export default async function LessonPage({ params }: Props) {
     return <p>An error happened</p>;
   }
 
-  console.log(lesson.other);
+  // console.log(lesson.other);
 
   const formattedStartTime = new Intl.DateTimeFormat("da-dk", {
     weekday: "long",
@@ -42,7 +42,7 @@ export default async function LessonPage({ params }: Props) {
   }).format(lesson.time.endDate);
 
   return (
-    <div className="flex flex-col gap-y-2">
+    <div className="flex max-w-4xl flex-col gap-y-2">
       <p className="text-muted-foreground">
         {capitalizeFirstLetter(formattedStartTime.replaceAll(".", "/"))}
       </p>

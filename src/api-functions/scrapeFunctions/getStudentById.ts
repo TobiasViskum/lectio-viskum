@@ -8,7 +8,7 @@ export async function getStudentById({
   userId,
 }: StandardProps) {
   const tag = `${userId}-user`;
-  const foundCache = global.cache.get(tag);
+  const foundCache = global.longTermCache.get(tag);
 
   if (foundCache && new Date().getTime() < foundCache.expires) {
     return foundCache.data as Student;
@@ -85,7 +85,7 @@ export async function getStudentById({
   } as Student;
 
   if (name && studentClass) {
-    global.cache.set(tag, {
+    global.longTermCache.set(tag, {
       data: data,
       expires: new Date().getTime() + getTimeInMs({ days: 1 }),
     });
