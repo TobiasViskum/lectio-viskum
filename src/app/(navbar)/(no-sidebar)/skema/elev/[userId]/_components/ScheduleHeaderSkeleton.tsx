@@ -10,7 +10,9 @@ import { Button } from "@/components/ui/button";
 
 export function ScheduleHeaderSkeleton() {
   const lectioProps = getLectioProps();
-  const foundStudentObj = global.cache.get(`${lectioProps.userId}-user`);
+  const foundStudentObj = global.longTermCache.get(
+    `${lectioProps.userId}-user`,
+  );
   let name = "";
   let studentClass = "";
   let userSrc = null;
