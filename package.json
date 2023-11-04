@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "deploy": "pnpm run build && git add . && git commit -m \"Update\" && git push",
-    "git-store": "git config --global credential.helper store"
+    "git-store": "git config --global credential.helper store",
+    "startup": "npm run build && npm start"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.0.4",
