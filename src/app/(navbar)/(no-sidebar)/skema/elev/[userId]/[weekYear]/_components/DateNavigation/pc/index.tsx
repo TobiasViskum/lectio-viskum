@@ -2,6 +2,7 @@
 
 import { CalendarBack } from "@/components/icons/CalendarBack";
 import { DatePicker } from "@/components/ui/datepicker";
+import { getCookies } from "@/lib/auth/getLectioCookies";
 import { cn } from "@/lib/utils";
 import { getWeekAndYear } from "@/util/getWeekAndYear";
 import { getWeekStartEnd } from "@/util/getWeekStartEnd";
@@ -59,7 +60,16 @@ export function DateNavigationPc({ searchParamsObj }: Props) {
       <button
         disabled={!canUseCalendarBack}
         onClick={() => {
-          router.push(`?week=${nowWeek.week}&year=${nowWeek.year}`);
+          const { userId } = getCookies();
+          const newUrl = [
+            "/skema/elev/",
+            userId,
+            "/",
+            nowWeek.week,
+            "-",
+            nowWeek.year,
+          ].join("");
+          router.push(newUrl);
         }}
       >
         <CalendarBack
@@ -71,12 +81,9 @@ export function DateNavigationPc({ searchParamsObj }: Props) {
       </button>
       <div className="flex h-2/3 w-72 items-center justify-between rounded-md border bg-background">
         <Link
-          href={{
-            query: previousWeek || {
-              week: Number(searchParamsObj.week) - 1,
-              year: searchParamsObj.year,
-            },
-          }}
+          href={`/skema/elev/${getCookies().userId}/${
+            Number(searchParamsObj.week) - 1
+          }-${searchParamsObj.year}`}
           className="pr-6"
         >
           <ChevronLeft className="h-6 w-6 text-muted-foreground" />
@@ -85,8 +92,19 @@ export function DateNavigationPc({ searchParamsObj }: Props) {
         <DatePicker
           onChange={(e) => {
             if (e) {
+              const { userId } = getCookies();
               const { week, year } = getWeekAndYear(e);
-              router.push(`?week=${week}&year=${year}`);
+              const newUrl = [
+                "/skema/elev/",
+                userId,
+                "/",
+                week,
+                "-",
+                year,
+              ].join("");
+              router.push(newUrl);
+
+              router.push(newUrl);
             }
           }}
         >
@@ -95,12 +113,9 @@ export function DateNavigationPc({ searchParamsObj }: Props) {
           </button>
         </DatePicker>
         <Link
-          href={{
-            query: nextWeek || {
-              week: Number(searchParamsObj.week) + 1,
-              year: searchParamsObj.year,
-            },
-          }}
+          href={`/skema/elev/${getCookies().userId}/${
+            Number(searchParamsObj.week) + 1
+          }-${searchParamsObj.year}`}
           className="pl-6"
         >
           <ChevronRight className="h-6 w-6 text-muted-foreground" />

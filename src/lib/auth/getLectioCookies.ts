@@ -1,4 +1,14 @@
 export function getCookies() {
+  if (typeof document === "undefined") {
+    return {
+      username: "",
+      password: "",
+      schoolCode: "",
+      lectioCookies: "",
+      userId: "",
+    };
+  }
+
   const splitCookies = document.cookie.split("; ");
 
   let cookies = {

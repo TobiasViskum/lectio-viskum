@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { NoteIcon } from "@/components/icons/NoteIcon";
 import { getNumericLessonTimes } from "../../_util/getNumericLessonTimes";
 import { BookmarkFilledIcon } from "@radix-ui/react-icons";
+import { getWeekAndYear } from "@/util/getWeekAndYear";
 
 type Props = {
   lesson: Lesson;
@@ -87,10 +88,15 @@ export async function Lesson({
     return titleSize;
   }
 
+  const { week, year } = getWeekAndYear(lesson.time.startDate);
+
   return (
     <Link
       key={Math.random()}
-      href={`/skema/elev/${userId}/modul/${lesson.id}`}
+      href={{
+        pathname: `/skema/elev/${userId}/modul/${lesson.id}`,
+        query: { prevWeek: week, prevYear: year },
+      }}
       className={cn(
         `group absolute ml-1 flex w-full gap-x-1 overflow-hidden rounded-md bg-opacity-50 transition-[transform,_background-color] @container hover:scale-[1.015] hover:bg-opacity-90 sm:gap-x-1.5`,
         backgroundColor,

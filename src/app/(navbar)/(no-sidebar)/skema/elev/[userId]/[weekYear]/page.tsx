@@ -12,11 +12,10 @@ import { TimestampSkeleton } from "./_components/TimestampSkeleton";
 import { ScheduleHeaderSkeleton } from "./_components/ScheduleHeaderSkeleton";
 
 type Props = {
-  searchParams: { [key: string]: string };
-  params: { userId: string };
+  params: { userId: string; weekYear: string };
 };
 
-export default function SchedulePage({ searchParams, params }: Props) {
+export default function SchedulePage({ params }: Props) {
   const schema = z.object({
     week: z.string().min(1),
     year: z.string().length(4),
@@ -24,7 +23,12 @@ export default function SchedulePage({ searchParams, params }: Props) {
   let searchParamsObj = getWeekAndYear(new Date());
 
   try {
-    const data = schema.parse(searchParams);
+    const splitParams = params.weekYear.split("-");
+
+    const data = schema.parse({
+      week: splitParams[0],
+      year: splitParams[1],
+    });
     searchParamsObj = data;
 
     if (isNaN(Number(data.week)) || isNaN(Number(data.year))) {

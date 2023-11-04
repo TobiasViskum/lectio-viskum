@@ -1,9 +1,15 @@
 "use client";
 
+import { getCookies } from "@/lib/auth/getLectioCookies";
 import { vEvent } from "@/lib/viskum/vEvent";
 import { getWeekAndYear } from "@/util/getWeekAndYear";
 import { getWeekStartEnd } from "@/util/getWeekStartEnd";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { createContext, useEffect, useRef, useState } from "react";
 
 type ScheduleContext = {
@@ -37,9 +43,10 @@ export function ScheduleProvider({ children }: { children: React.ReactNode }) {
   const [day, setDay] = useState(0);
   const router = useRouter();
   const path = usePathname();
-  const searchParams = useSearchParams();
-  const numberWeek = Number(searchParams.get("week"));
-  const numberYear = Number(searchParams.get("year"));
+  const params = useParams();
+  const splitWeekYear = (params.weekYear as string).split("-");
+  const numberWeek = Number(splitWeekYear[0]);
+  const numberYear = Number(splitWeekYear[1]);
   const dayRef = useRef(day);
   const prevMaxDay = useRef(0);
   dayRef.current = day;
@@ -53,7 +60,7 @@ export function ScheduleProvider({ children }: { children: React.ReactNode }) {
     }
     vEvent.dispatch("fade", { action: "in" });
     nextAction.current = "none";
-  }, [searchParams]);
+  }, [path]);
 
   useEffect(() => {
     prevMaxDay.current = getMaxDay();
@@ -72,15 +79,17 @@ export function ScheduleProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   function pushPreviousWeek(noDelay: boolean = false) {
+    const { userId } = getCookies();
     const { start } = getWeekStartEnd(numberYear, numberWeek);
     start.setDate(start.getDate() - 7);
     const nextWeek = getWeekAndYear(start);
 
     const newUrl = [
-      path,
-      "?week=",
+      "/skema/elev/",
+      userId,
+      "/",
       nextWeek.week,
-      "&year=",
+      "-",
       nextWeek.year,
     ].join("");
 
@@ -93,15 +102,18 @@ export function ScheduleProvider({ children }: { children: React.ReactNode }) {
     }
   }
   function pushNextWeek(noDelay: boolean = false) {
+    const { userId } = getCookies();
+
     const { start } = getWeekStartEnd(numberYear, numberWeek);
     start.setDate(start.getDate() + 7);
     const nextWeek = getWeekAndYear(start);
 
     const newUrl = [
-      path,
-      "?week=",
+      "/skema/elev/",
+      userId,
+      "/",
       nextWeek.week,
-      "&year=",
+      "-",
       nextWeek.year,
     ].join("");
 

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 export function TablePart({ content }: { content: LessonTable }) {
   const tableContent = content.tableContent;
   return (
-    <div className="relative grid max-w-2xl grid-cols-1 gap-y-1 rounded-md border">
+    <div className="relative grid max-w-2xl grid-cols-1 gap-y-1 rounded-sm border text-sm">
       <Separator
         orientation="vertical"
         className="absolute left-[calc(50%-2px)] top-0"
