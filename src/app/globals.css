@@ -59,3 +59,25 @@
     --multi: 1;
   }
 }
+
+@media screen and (display-mode: standalone) {
+  * {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  img {
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+    pointer-events: none;
+  }
+  a {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+}
