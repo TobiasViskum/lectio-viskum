@@ -27,7 +27,15 @@ export function SmartNavigation() {
       });
     }
   } else if (path.includes("/skema/elev/")) {
-    linkPath.push({ href: `/skema/elev/${splitPath[2]}`, name: "Skema" });
+    const prevWeek = searchParams.get("prevWeek");
+    const prevYear = searchParams.get("prevYear");
+
+    let url = `/skema/elev/${splitPath[2]}`;
+    if (prevWeek && prevYear) {
+      url = [url, prevWeek, "-", prevYear].join("");
+    }
+
+    linkPath.push({ href: url, name: "Skema" });
     if (/\/skema\/elev\/[0-9]+\/modul\/[0-9]+/.test(path)) {
       linkPath.push({
         href: `/skema/elev/${splitPath[2]}/modul/${splitPath[4]}?${search}`,
