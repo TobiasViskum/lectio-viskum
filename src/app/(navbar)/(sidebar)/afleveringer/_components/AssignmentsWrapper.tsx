@@ -53,7 +53,7 @@ export function AssignmentsWrapper({ strAssignments }: Props) {
   return (
     <>
       {assignments.length === 0 && (
-        <div className="flex w-full flex-col items-center justify-center gap-y-1 pt-16 lg:items-start lg:gap-y-2 lg:pt-8">
+        <div className="flex w-full flex-col items-center justify-center gap-y-1 pt-16 text-center lg:items-start lg:gap-y-2 lg:pt-8">
           <p className="text-lg font-semibold text-muted-foreground">
             Ingen Opgaver
           </p>

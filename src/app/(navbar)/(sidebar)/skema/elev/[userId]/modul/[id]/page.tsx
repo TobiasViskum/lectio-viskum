@@ -1,6 +1,5 @@
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { lectioAPI } from "@/lib/lectio-api";
-import { capitalizeFirstLetter } from "@/util/capitalizeFirstLetter";
 import { RenderHomework } from "./_components/RenderHomework";
 import { Teacher } from "@/components/global/Teacher";
 import { LessonTime } from "./_components/LessonTime";
@@ -25,18 +24,8 @@ export default async function LessonPage({ params }: Props) {
     return <p>An error happened</p>;
   }
 
-  const formattedStartDate = new Intl.DateTimeFormat("da-dk", {
-    dateStyle: "full",
-  }).format(lesson.time.startDate);
-  const formattedStartTime = new Intl.DateTimeFormat("da-dk", {
-    timeStyle: "short",
-  }).format(lesson.time.startDate);
-  const formattedEndTime = new Intl.DateTimeFormat("da-dk", {
-    timeStyle: "short",
-  }).format(lesson.time.endDate);
-
   return (
-    <div className="flex max-w-4xl flex-col gap-y-2 pt-2">
+    <div className="flex max-w-4xl flex-col gap-y-2 pt-4">
       <h1 className="drop-shadow-glow-sm pb-4 text-3xl font-semibold">
         {lesson.subjects.length !== 0 ? lesson.subjects : lesson.title}
       </h1>

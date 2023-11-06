@@ -14,7 +14,7 @@ export default function AssignmentsPage() {
 
   return (
     <>
-      <h1 className="pt-6 text-4xl font-medium max-md:pl-4">Afleveringer</h1>
+      <h1 className="pt-6 text-4xl font-medium">Afleveringer</h1>
       <div className="sticky top-12 z-40 block bg-black bg-opacity-50 pb-4 pt-6 backdrop-blur-sm md:hidden ">
         <Suspense fallback={<FilterButtonsSkeleton />}>
           <FilterButtons assignmentsPromise={assignmentsPromise} />
