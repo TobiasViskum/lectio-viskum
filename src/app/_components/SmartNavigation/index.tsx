@@ -32,7 +32,7 @@ export function SmartNavigation() {
 
     let url = `/skema/elev/${splitPath[2]}`;
     if (prevWeek && prevYear) {
-      url = [url, prevWeek, "-", prevYear].join("");
+      url = [url, "/", prevWeek, "-", prevYear].join("");
     }
 
     linkPath.push({ href: url, name: "Skema" });
