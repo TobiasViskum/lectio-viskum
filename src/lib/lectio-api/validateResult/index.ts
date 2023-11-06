@@ -7,11 +7,15 @@ export function validateResult(result: ReturnType<any>) {
     if (result.message.includes("too many requests")) {
       try {
         redirect("/adgang-forbudt");
-      } catch {}
+      } catch {
+        redirect("/adgang-forbudt");
+      }
     } else if (result.message.includes("auth")) {
       try {
         redirect("/opdater-adgang");
-      } catch {}
+      } catch {
+        redirect("/opdater-adgang");
+      }
     }
   } else {
     return;
