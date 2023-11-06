@@ -16,7 +16,9 @@ export default function SmallScreen(props: Props) {
       }
     >
       <div className="w-full">
-        <SmartNavigation />
+        <Suspense>
+          <SmartNavigation />
+        </Suspense>
         {props.children}
       </div>
     </SidebarWrapper>

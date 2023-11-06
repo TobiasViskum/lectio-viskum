@@ -1,4 +1,5 @@
 import { SmartNavigation } from "@/app/_components/SmartNavigation";
+import { Suspense } from "react";
 
 export default function NoSidebarLayot({
   children,
@@ -7,7 +8,9 @@ export default function NoSidebarLayot({
 }) {
   return (
     <>
-      <SmartNavigation />
+      <Suspense>
+        <SmartNavigation />
+      </Suspense>
       {children}
     </>
   );
