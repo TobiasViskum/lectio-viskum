@@ -1,19 +1,21 @@
+import { pattern1, pattern2, pattern3 } from "./timePatterns";
+
 type LessonDate = { week: number; year: number; day: number };
 
 export function getTime(info: string, dateInfo: LessonDate): LessonTime {
   const splitInfo = info.split("\n");
 
-  const pattern1 = /([0-9]{1,2}:[0-9]{1,2} (-|til) [0-9]{1,2}:[0-9]{1,2})/i;
-  const pattern2 =
-    /([0-9\/-]+ [0-9]{1,2}:[0-9]{1,2} (-|til) [0-9\/-]+ [0-9]{1,2}:[0-9]{1,2})/i;
-
   let time = "";
   let patternUsed = 0;
+  /*
+    pattern 2 isn't used yet (make it in the future, if it breaks)
+  */
   for (let i = 0; i < splitInfo.length; i++) {
     const infoText = splitInfo[i];
 
     const foundMatch1 = infoText.match(pattern1);
     const foundMatch2 = infoText.match(pattern2);
+    const foundMatch3 = infoText.match(pattern3);
     if (foundMatch1) {
       time = foundMatch1[1];
       patternUsed = 1;
@@ -22,8 +24,16 @@ export function getTime(info: string, dateInfo: LessonDate): LessonTime {
       time = foundMatch2[1];
       patternUsed = 2;
       break;
+    } else if (foundMatch3) {
+      time = foundMatch3[1];
+      patternUsed = 3;
+      break;
     }
   }
+  if (patternUsed === 2) {
+    console.log("Missing functionality for time-pattern-2 (schedule/getTime)");
+  }
+
   if (time === "") {
     return { startDate: new Date(1970), endDate: new Date(1970) };
   }
@@ -79,7 +89,7 @@ export function getTime(info: string, dateInfo: LessonDate): LessonTime {
 
       return { startDate: startDate, endDate: endDate };
     }
-  } else if (patternUsed === 2) {
+  } else if (patternUsed === 3) {
     const splitTime = time.split(" ");
     const startDateArr = splitTime[0].split(/(\/|-)/);
     const startTimeArr = splitTime[1].split(":");

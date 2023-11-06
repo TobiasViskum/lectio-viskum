@@ -35,6 +35,9 @@ const tailwindConfig: Config = {
         "6xs": "0.55rem",
         "7xs": "0.5rem",
       },
+      dropShadow: {
+        "glow-sm": "[0_0_0.3rem_#ffffff70]",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

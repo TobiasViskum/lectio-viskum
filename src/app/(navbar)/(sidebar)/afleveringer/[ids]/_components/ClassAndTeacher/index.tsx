@@ -1,3 +1,4 @@
+import { Teacher } from "@/components/global/Teacher";
 import Image from "next/image";
 
 type Props = { assignmentPromise: Promise<FullAssignment | null> };
@@ -17,16 +18,7 @@ export async function ClassAndTeacher({ assignmentPromise }: Props) {
           {[assignment.subject, assignment.class].join(", ")}
         </p>
       </div>
-      <button className="flex w-max items-center gap-x-2 rounded-lg py-2 pl-1 pr-3 transition-colors hover:bg-accent">
-        <Image
-          src={assignment.teacher.imgSrc}
-          width={48}
-          height={48}
-          alt="img"
-          className="obj aspect-square rounded-full object-cover"
-        />
-        <p className="text-xl font-medium">{assignment.teacher.name}</p>
-      </button>
+      <Teacher teacher={assignment.teacher} />
     </div>
   );
 }

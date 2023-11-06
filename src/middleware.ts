@@ -42,6 +42,7 @@ export async function middleware(req: NextRequest) {
       const response = NextResponse.redirect(new URL("/forside", req.url), {
         headers: requestHeaders,
       });
+
       response.cookies.set({
         name: "lectioCookies",
         value: res.lectioCookies,

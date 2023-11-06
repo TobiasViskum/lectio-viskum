@@ -34,12 +34,15 @@ export async function getAuthenticatedPage({
     `${baseUrl}/${schoolCode}/${targetPage}`,
     {
       method: "GET",
-      headers: { Cookie: lectioCookies },
+      headers: {
+        Cookie: lectioCookies,
+      },
     },
   )
     .then(async (res) => {
       try {
         const text = await res.text();
+
         if (text.includes("Log ind")) {
           return "Not authenticated";
         } else if (text.includes("Der opstod en ukendt fejl")) {

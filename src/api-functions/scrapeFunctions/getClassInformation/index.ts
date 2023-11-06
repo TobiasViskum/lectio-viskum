@@ -108,7 +108,9 @@ export async function getClassInformation({
     const subject = additionalInfo.classes[i].subject;
 
     if (subjects.find((str) => str === subject) === undefined) {
-      subjects.push(subject);
+      if (subject !== "") {
+        subjects.push(subject);
+      }
     }
   }
   additionalInfo.subjects = subjects;

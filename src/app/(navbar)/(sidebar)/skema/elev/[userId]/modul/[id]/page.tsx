@@ -2,6 +2,8 @@ import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { lectioAPI } from "@/lib/lectio-api";
 import { capitalizeFirstLetter } from "@/util/capitalizeFirstLetter";
 import { RenderHomework } from "./_components/RenderHomework";
+import { Teacher } from "@/components/global/Teacher";
+import { LessonTime } from "./_components/LessonTime";
 
 type Props = {
   params: {
@@ -23,55 +25,92 @@ export default async function LessonPage({ params }: Props) {
     return <p>An error happened</p>;
   }
 
-  const formattedStartTime = new Intl.DateTimeFormat("da-dk", {
+  const formattedStartDate = new Intl.DateTimeFormat("da-dk", {
     dateStyle: "full",
+  }).format(lesson.time.startDate);
+  const formattedStartTime = new Intl.DateTimeFormat("da-dk", {
     timeStyle: "short",
   }).format(lesson.time.startDate);
   const formattedEndTime = new Intl.DateTimeFormat("da-dk", {
-    dateStyle: "full",
     timeStyle: "short",
   }).format(lesson.time.endDate);
 
   return (
-    <div className="flex max-w-4xl flex-col gap-y-2">
-      <p className="text-muted-foreground">
-        {capitalizeFirstLetter(formattedStartTime)}
-      </p>
-      <p className="text-muted-foreground">
-        {capitalizeFirstLetter(formattedEndTime)}
-      </p>
-      <p className="text-xl">Fag: {lesson.subjects}</p>
+    <div className="flex max-w-4xl flex-col gap-y-2 pt-2">
+      <h1 className="drop-shadow-glow-sm pb-4 text-3xl font-semibold">
+        {lesson.subjects.length !== 0 ? lesson.subjects : lesson.title}
+      </h1>
+      <LessonTime lessonNumber={lesson.lessonNumber} time={lesson.time} />
+
+      {lesson.teachers.map((teacher) => {
+        return <Teacher key={teacher.name} teacher={teacher} />;
+      })}
+
       <div>
-        <p className="pb-1 pt-4 text-sm text-muted-foreground">NOTE:</p>
-        <p>{lesson.note}</p>
+        <p className="pb-1 pt-4 text-sm text-muted-foreground">KLASSER:</p>
+        {lesson.classes.map((schoolClass) => {
+          return <div key={schoolClass.fullClass}>{schoolClass.fullClass}</div>;
+        })}
       </div>
 
       <div>
-        <p className="pb-1 pt-4 text-sm text-muted-foreground">LEKTIER:</p>
-        <div className="flex flex-col gap-y-4">
-          {lesson.homework.map((homework, _index) => {
-            return (
-              <div key={_index} className="flex flex-col gap-y-4 border-b pb-4">
-                <RenderHomework homework={homework} key={_index} />
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      <div>
         <p className="pb-1 pt-4 text-sm text-muted-foreground">
-          ØVRIGT INDHOLD:
+          {lesson.classrooms.length === 1 ? "LOKALE:" : "LOKALER:"}
         </p>
-        <div className="flex flex-col gap-y-4">
-          {lesson.other.map((homework, _index) => {
-            return (
-              <div key={_index} className="flex flex-col gap-y-4 border-b pb-4">
-                <RenderHomework homework={homework} key={_index} />
-              </div>
-            );
-          })}
-        </div>
+        <div className="">{lesson.classrooms.join(", ")}</div>
       </div>
+
+      {lesson.note !== "" && (
+        <div>
+          <p className="pb-1 pt-4 text-sm text-muted-foreground">NOTE:</p>
+          <p>{lesson.note}</p>
+        </div>
+      )}
+
+      {lesson.homework.length !== 0 && (
+        <div>
+          <p className="pb-1 pt-4 text-sm text-muted-foreground">LEKTIER:</p>
+          <div className="flex flex-col gap-y-4">
+            {lesson.homework.map((homework, _index) => {
+              return (
+                <div
+                  key={_index}
+                  className="flex flex-col gap-y-4 border-b pb-4"
+                >
+                  <RenderHomework homework={homework} key={_index} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {lesson.other.length !== 0 && (
+        <div>
+          <p className="pb-1 pt-4 text-sm text-muted-foreground">
+            ØVRIGT INDHOLD:
+          </p>
+          <div className="flex flex-col gap-y-4">
+            {lesson.other.map((homework, _index) => {
+              return (
+                <div
+                  key={_index}
+                  className="flex flex-col gap-y-4 border-b pb-4"
+                >
+                  <RenderHomework homework={homework} key={_index} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+      {lesson.note === "" &&
+        lesson.homework.length === 0 &&
+        lesson.other.length === 0 && (
+          <div className="pt-8 text-lg text-muted-foreground">
+            Der er ikke lagt noget indhold ind
+          </div>
+        )}
     </div>
   );
 }

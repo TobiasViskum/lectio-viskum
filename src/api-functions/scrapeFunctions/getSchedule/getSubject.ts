@@ -19,7 +19,7 @@ export function getSubject(info: string) {
       return [subject1, subject2];
     }
 
-    return [""];
+    return [];
   }
 
   const pattern = /Hold: ([a-zæøå0-9. ()-]+(, [a-zæøå0-9. ()-]+)*)/i;
@@ -30,12 +30,12 @@ export function getSubject(info: string) {
     const classroom = info.substring(i + 6, i + strLength);
 
     if (classroom.split(", ").length > 3) {
-      return [""];
+      return [];
     }
 
     const subject = getSubjectName(classroom);
 
     return [subject];
   }
-  return [""];
+  return [];
 }

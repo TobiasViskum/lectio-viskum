@@ -1,18 +1,25 @@
 import { getSubjectName } from "@/api-functions/util/getSubjectFromClass";
 import { titleMap } from ".";
+import { getSubject } from "../getSubject";
 
-export function setInformationProps(
+export async function setInformationProps(
   $: cheerio.Root,
   assignment: FullAssignment,
 ) {
-  $("div#m_Content_registerAfl_pa > table > tbody > tr").map((index, item) => {
-    const $item = $(item);
+  const $_tr = $("div#m_Content_registerAfl_pa > table > tbody > tr");
+
+  for (let i = 0; i < $_tr.length; i++) {
+    const tr = $_tr[i];
+    const $item = $(tr);
     const $td = $item.find("td");
+    const $_a = $td.find("a");
+
     const foundTitle = titleMap[$item.find("th").text()];
     if (foundTitle === "title") {
       assignment.title = $td.find("span").text();
     } else if (foundTitle === "documents") {
-      $td.find("a").each((index, a) => {
+      for (let j = 0; j < $_a.length; j++) {
+        const a = $_a[j];
         const $a = $(a);
         const name = $a.text().trim();
         const splitName = name.split(".");
@@ -35,18 +42,18 @@ export function setInformationProps(
         if (href) {
           assignment.documents[i].href = href;
         }
-      });
+      }
     } else if (foundTitle === "note") {
       assignment.description = $td.text().split("\n");
 
-      for (let i = 0; i < assignment.description.length; i++) {
-        assignment.description[i] = assignment.description[i].replace(
+      for (let l = 0; l < assignment.description.length; l++) {
+        assignment.description[l] = assignment.description[l].replace(
           /\s{2,}/g,
           " ",
         );
       }
     } else if (foundTitle === "class") {
-      assignment.subject = getSubjectName($td.find("span").text());
+      assignment.subject = await getSubject($td.find("span").text());
       assignment.class = $td.find("span").text().split(" ")[0];
     } else if (foundTitle === "gradeSystem") {
       assignment.gradeSystem = $td.find("span").text();
@@ -73,5 +80,5 @@ export function setInformationProps(
       const inTeachingDescription = $td.text() === "Ja";
       assignment.inTeachingDescription = inTeachingDescription;
     }
-  });
+  }
 }

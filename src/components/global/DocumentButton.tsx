@@ -39,7 +39,7 @@ export function DocumentButton({ strDocument, className }: Props) {
     <button
       onClick={handleClick}
       className={cn(
-        "w-max text-left text-blue-400",
+        "break-all text-left text-blue-400",
         isDownloading ? "animate-pulse" : "",
         className,
       )}

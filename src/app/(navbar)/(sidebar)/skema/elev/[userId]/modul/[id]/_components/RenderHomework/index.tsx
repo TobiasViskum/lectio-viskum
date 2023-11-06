@@ -13,7 +13,7 @@ export function RenderHomework({
   listType?: "ol" | "ul" | "";
 }) {
   return (
-    <>
+    <div>
       {homework.map((content, index) => {
         const isArray = Array.isArray(content);
         let html = <></>;
@@ -34,6 +34,6 @@ export function RenderHomework({
 
         return <Fragment key={index}>{html}</Fragment>;
       })}
-    </>
+    </div>
   );
 }

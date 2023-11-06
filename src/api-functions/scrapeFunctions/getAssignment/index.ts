@@ -40,9 +40,9 @@ export async function getAssignment({
   const tag = `${userId}-assignments-${assignmentId}`;
   const foundCache = global.cache.get(tag);
 
-  if (foundCache && new Date().getTime() < foundCache.expires) {
-    return foundCache.data as FullAssignment;
-  }
+  // if (foundCache && new Date().getTime() < foundCache.expires) {
+  //   return foundCache.data as FullAssignment;
+  // }
 
   const href = `ElevAflevering.aspx?elevid=${userId}&exerciseid=${assignmentId}`;
   const res = await getAuthenticatedPage({
@@ -88,7 +88,7 @@ export async function getAssignment({
     assignment.studentName = studentNameMatch[1].trim();
   }
 
-  setInformationProps($, assignment);
+  await setInformationProps($, assignment);
   setAdditionalProps($, assignment);
   setSubmitProps($, assignment);
 

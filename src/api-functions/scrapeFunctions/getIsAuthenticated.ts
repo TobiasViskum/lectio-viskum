@@ -76,23 +76,27 @@ export async function getIsAuthenticated({
 
         let lectiogsc = null;
         let ASP_NET_SessionId = null;
+        let autologinkey = null;
         try {
           lectiogsc = cookies.find((obj: any) => obj.key === "lectiogsc");
           ASP_NET_SessionId = cookies.find(
             (obj: any) => obj.key === "ASP.NET_SessionId",
           );
+          autologinkey = cookies.find((obj: any) => obj.key === "autologinkey");
         } catch {}
 
-        if (lectiogsc && ASP_NET_SessionId) {
+        if (lectiogsc && ASP_NET_SessionId && autologinkey) {
           const date = new Date()
             .toString()
             .replace(/\(.*\)/, "(Central European Summer Time)");
-          const encodedDate = encodeURI(date);
+          // const encodedDate = encodeURI(date);
 
           let lectioCookies = "";
           lectioCookies += `ASP.NET_SessionId=${ASP_NET_SessionId.value};`;
           lectioCookies += `lectiogsc=${lectiogsc.value};`;
-          lectioCookies += `LastAuthenticatedPageLoad=${encodedDate};`;
+          lectioCookies += `autologinkey=${autologinkey.value};`;
+          lectioCookies += "isloggedin3=Y;";
+          // lectioCookies += `LastAuthenticatedPageLoad=${encodedDate};`;
 
           return {
             isAuthenticated: true,
