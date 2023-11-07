@@ -35,6 +35,9 @@ export function getSubject(info: string) {
 
     const subject = getSubjectName(classroom);
 
+    if (subject === "") {
+      return [];
+    }
     return [subject];
   }
   return [];

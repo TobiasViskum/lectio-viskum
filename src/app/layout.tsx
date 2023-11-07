@@ -28,7 +28,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="da-dk">
       <head>
         <link rel="manifest" href="/manifest.json" />
       </head>

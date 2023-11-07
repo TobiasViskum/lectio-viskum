@@ -33,22 +33,24 @@ export async function Lesson({
   let hoverSidebarColor = "group-hover:bg-blue-200";
   let hoverTextColor = "group-hover:text-white";
   let hoverFillColor = "group-hover:fill-white";
-  if (lesson.status === "changed") {
-    backgroundColor = "bg-green-500";
-    sidebarColor = "bg-green-400";
-    textColor = "text-green-300";
-    fillColor = "fill-green-300";
-    hoverSidebarColor = "group-hover:bg-green-200";
-    hoverTextColor = "group-hover:text-white";
-    hoverFillColor = "group-hover:fill-white";
-  } else if (lesson.status === "cancelled") {
+  if (lesson.status === "cancelled") {
     backgroundColor = "bg-red-500";
     sidebarColor = "bg-red-400";
     textColor = "text-red-300";
     fillColor = "fill-red-300";
     hoverSidebarColor = "group-hover:bg-red-200";
-    hoverTextColor = "group-hover:text-white";
-    hoverFillColor = "group-hover:fill-white";
+  } else if (lesson.hasPossibleTest && lesson.subjects.length === 1) {
+    backgroundColor = "bg-yellow-500";
+    sidebarColor = "bg-yellow-400";
+    textColor = "text-yellow-300";
+    fillColor = "fill-yellow-300";
+    hoverSidebarColor = "group-hover:bg-yellow-200";
+  } else if (lesson.status === "changed") {
+    backgroundColor = "bg-green-500";
+    sidebarColor = "bg-green-400";
+    textColor = "text-green-300";
+    fillColor = "fill-green-300";
+    hoverSidebarColor = "group-hover:bg-green-200";
   }
 
   let leftOffset = "";
@@ -67,7 +69,7 @@ export async function Lesson({
     foundLesson.totalAdded += 1;
   }
 
-  const isSubjectsEmpty = lesson.subjects[0] === "";
+  const isSubjectsEmpty = lesson.subjects.length === 0;
   const hasNote = lesson.hasNote;
   const hasHomework = lesson.hasHomework;
 
@@ -144,7 +146,7 @@ export async function Lesson({
           <div
             className={cn(
               isSubjectsEmpty
-                ? `@[124px]:semibold flex flex-wrap items-start gap-x-1.5 break-words break-all font-bold leading-3 transition-colors ${getTitleSize()}`
+                ? `@[124px]:semibold flex flex-wrap items-start gap-x-1.5 break-words break-all font-bold  leading-3 transition-colors ${getTitleSize()}`
                 : `w-full text-2xs transition-colors @[124px]:text-xs ${
                     lesson.title.length > 20 && !displayOnlyTitle
                       ? "text-3xs @[124px]:text-2xs"

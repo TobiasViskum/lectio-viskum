@@ -1,0 +1,57 @@
+type ACommandName =
+  | "backColor"
+  | "bold"
+  | "contentReadOnly"
+  | "copy"
+  | "createLink"
+  | "cut"
+  | "decreaseFontSize"
+  | "defaultParagraphSeparator"
+  | "delete"
+  | "enableAbsolutePositionEditor"
+  | "enableInlineTableEditing"
+  | "enableObjectResizing"
+  | "fontName"
+  | "fontSize"
+  | "foreColor"
+  | "formatBlock"
+  | "forwardDelete"
+  | "heading"
+  | "hiliteColor"
+  | "increaseFontSize"
+  | "indent"
+  | "insertBrOnReturn"
+  | "insertHorizontalRule"
+  | "insertHTML"
+  | "insertImage"
+  | "insertOrderedList"
+  | "insertUnorderedList"
+  | "insertParagraph"
+  | "insertText"
+  | "italic"
+  | "justifyCenter"
+  | "justifyFull"
+  | "justifyLeft"
+  | "justifyRight"
+  | "outdent"
+  | "paste"
+  | "redo"
+  | "removeFormat"
+  | "selectAll"
+  | "strikeThrough"
+  | "subscript"
+  | "superscript"
+  | "underline"
+  | "undo"
+  | "unlink"
+  | "useCss"
+  | "styleWithCss"
+  | "AutoUrlDetect";
+
+export function execCommand(
+  aCommandName: ACommandName,
+  aShowDefaultUI?: boolean,
+  aValueArgument?: any,
+) {
+  document.execCommand(aCommandName, aShowDefaultUI, aValueArgument);
+}

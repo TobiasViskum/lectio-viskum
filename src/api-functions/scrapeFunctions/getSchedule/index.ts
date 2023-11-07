@@ -83,6 +83,7 @@ export async function getSchedule({
             hasOtherContent: false,
             hasPresentation: false,
             overlappingLessons: 0,
+            hasPossibleTest: false,
           };
 
           if (info) {
@@ -104,6 +105,9 @@ export async function getSchedule({
             lesson.hasPresentation = info.includes(
               "Aktiviteten har en præsentation.",
             );
+            lesson.hasPossibleTest =
+              info.toLowerCase().includes("prøve ") ||
+              info.toLowerCase().includes(" prøve");
           }
 
           if (

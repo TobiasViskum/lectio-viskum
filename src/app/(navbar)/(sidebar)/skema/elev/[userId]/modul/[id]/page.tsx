@@ -3,6 +3,7 @@ import { lectioAPI } from "@/lib/lectio-api";
 import { RenderHomework } from "./_components/RenderHomework";
 import { Teacher } from "@/components/global/Teacher";
 import { LessonTime } from "./_components/LessonTime";
+import { StudentFeedback } from "./_components/StudentFeedback";
 
 type Props = {
   params: {
@@ -34,6 +35,8 @@ export default async function LessonPage({ params }: Props) {
       {lesson.teachers.map((teacher) => {
         return <Teacher key={teacher.name} teacher={teacher} />;
       })}
+
+      <StudentFeedback />
 
       <div>
         <p className="pb-1 pt-4 text-sm text-muted-foreground">KLASSER:</p>
