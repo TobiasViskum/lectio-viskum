@@ -2,6 +2,7 @@ import { load } from "cheerio";
 import { getLoginForm } from "../getPage/getForm/login-form";
 import makeFetchCookie from "fetch-cookie";
 import { getSchoolBySchoolCode } from "./getSchoolBySchoolCode";
+import { standardFetchOptions } from "../standardFetchOptions";
 
 export async function getIsAuthenticated({
   username,
@@ -13,7 +14,9 @@ export async function getIsAuthenticated({
   const store = new makeFetchCookie.toughCookie.CookieJar();
   const fetchCookie = makeFetchCookie(fetch, store);
 
-  const form = await fetchCookie(`${baseUrl}/${schoolCode}/login.aspx`)
+  const form = await fetchCookie(`${baseUrl}/${schoolCode}/login.aspx`, {
+    ...standardFetchOptions,
+  })
     .then(async (res) => {
       try {
         const text = await res.text();
@@ -49,6 +52,7 @@ export async function getIsAuthenticated({
   const cookies = await fetchCookie(`${baseUrl}/${schoolCode}/login.aspx`, {
     method: "POST",
     body: form,
+    ...standardFetchOptions,
   })
     .then(async (res) => {
       const text = await res.text();

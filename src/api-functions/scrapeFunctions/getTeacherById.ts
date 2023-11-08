@@ -1,5 +1,6 @@
 import { getTimeInMs } from "@/util/getTimeInMs";
 import { getAuthenticatedPage } from "../getPage";
+import { standardFetchOptions } from "../standardFetchOptions";
 
 type Props = {
   teacherId: string;
@@ -74,6 +75,7 @@ export async function getTeacherById({
   const imageBase64 = await fetchCookie(foundTeacher.imgUrl, {
     method: "GET",
     headers: { Cookie: lectioCookies },
+    ...standardFetchOptions,
   })
     .then(async (res) => {
       try {

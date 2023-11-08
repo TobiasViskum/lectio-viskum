@@ -12,6 +12,7 @@ import {
 import { getSubjectTheme } from "./getSubjectTheme";
 import { getNote } from "./getNote";
 import { getTimeInMs } from "@/util/getTimeInMs";
+import { standardFetchOptions } from "@/api-functions/standardFetchOptions";
 
 type Props = { lessonId: string; year: string };
 
@@ -137,6 +138,7 @@ export async function getClassInformation({
           const imageBase64 = await fetchCookie(src, {
             method: "GET",
             headers: { Cookie: lectioCookies },
+            ...standardFetchOptions,
           })
             .then(async (res) => {
               try {

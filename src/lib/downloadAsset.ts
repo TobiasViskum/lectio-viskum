@@ -1,3 +1,4 @@
+import { standardFetchOptions } from "@/api-functions/standardFetchOptions";
 import { getCookies } from "./auth/getLectioCookies";
 import { getFetchCookie } from "./getFetchCookie";
 import { getLoginForm } from "./login-form";
@@ -12,6 +13,7 @@ export async function downloadAsset(href: string, name: string) {
       method: "GET",
       next: { revalidate: 0 },
       cache: "no-cache",
+      ...standardFetchOptions,
     })
       .then(async (res) => await res.text())
       .catch((err) => null);
@@ -50,7 +52,7 @@ export async function downloadAsset(href: string, name: string) {
 
   const targetPageContent = await fetchCookie(
     `/lectio/${cookies.schoolCode}/login.aspx?prevurl=forside.aspx`,
-    { method: "POST", body: form },
+    { method: "POST", body: form, ...standardFetchOptions },
   )
     .then(async (res) => {
       try {
@@ -72,7 +74,10 @@ export async function downloadAsset(href: string, name: string) {
     });
 
   if (targetPageContent) {
-    const res = await fetchCookie(href, { method: "GET" })
+    const res = await fetchCookie(href, {
+      method: "GET",
+      ...standardFetchOptions,
+    })
       .then((res) => {
         return res.blob();
       })

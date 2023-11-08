@@ -1,6 +1,7 @@
 import "server-only";
 import { getTimeInMs } from "@/util/getTimeInMs";
 import { getAuthenticatedPage } from "../getPage";
+import { standardFetchOptions } from "../standardFetchOptions";
 
 export async function getStudentById({
   lectioCookies,
@@ -37,6 +38,7 @@ export async function getStudentById({
   const imageBase64 = await fetchCookie(imgHref, {
     method: "GET",
     headers: { Cookie: lectioCookies },
+    ...standardFetchOptions,
   })
     .then(async (res) => {
       try {

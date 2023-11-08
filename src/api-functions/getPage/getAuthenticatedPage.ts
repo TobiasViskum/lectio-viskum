@@ -3,6 +3,7 @@ import { load } from "cheerio";
 import { getFetchCookie } from "../getFetchCookie";
 import { getPageFromMap } from "./page-map";
 import { getSchoolBySchoolCode } from "../scrapeFunctions/getSchoolBySchoolCode";
+import { standardFetchOptions } from "../standardFetchOptions";
 
 type Props = {
   page?: Pages;
@@ -37,6 +38,7 @@ export async function getAuthenticatedPage({
       headers: {
         Cookie: lectioCookies,
       },
+      ...standardFetchOptions,
     },
   )
     .then(async (res) => {

@@ -3,6 +3,7 @@ import { load } from "cheerio";
 import { getAuthenticatedPage } from ".";
 import { getAssignmentsForm } from "./getForm/assignment-form";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
+import { standardFetchOptions } from "../standardFetchOptions";
 
 type Props = {
   lectioCookies: string;
@@ -41,6 +42,7 @@ export async function getAssignmentsPage({ lectioCookies, schoolCode }: Props) {
         method: "POST",
         body: form,
         headers: { Cookie: cookies.lectioCookies },
+        ...standardFetchOptions,
       },
     ).then(async (res) => {
       try {

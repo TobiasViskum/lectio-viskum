@@ -1,4 +1,5 @@
 import { load } from "cheerio";
+import { standardFetchOptions } from "../standardFetchOptions";
 
 type UnauthenticatedPages = "school";
 
@@ -10,7 +11,11 @@ type Props = { page: UnauthenticatedPages };
 
 export async function getBasicPage({ page }: Props) {
   const targetPage = pageMap[page];
-  const targetPageContent = await fetch(targetPage, { method: "GET" })
+
+  const targetPageContent = await fetch(targetPage, {
+    method: "GET",
+    ...standardFetchOptions,
+  })
     .then(async (res) => {
       try {
         const text = await res.text();

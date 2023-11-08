@@ -1,6 +1,7 @@
 import { load } from "cheerio";
 import { getAuthenticatedPage } from ".";
 import { getAllMessagesForm } from "./getForm/all-messages-form";
+import { standardFetchOptions } from "../standardFetchOptions";
 
 export async function getAllMessagesPage({
   lectioCookies,
@@ -34,6 +35,7 @@ export async function getAllMessagesPage({
       {
         method: "POST",
         body: form,
+        ...standardFetchOptions,
       },
     ).then(async (res) => {
       try {
