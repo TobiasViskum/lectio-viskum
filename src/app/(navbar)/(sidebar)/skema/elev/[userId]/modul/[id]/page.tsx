@@ -52,10 +52,20 @@ export default async function LessonPage({ params }: Props) {
         <div className="">{lesson.classrooms.join(", ")}</div>
       </div>
 
-      {lesson.note !== "" && (
+      {lesson.note.length !== 0 && (
         <div>
           <p className="pb-1 pt-4 text-sm text-muted-foreground">NOTE:</p>
-          <p>{lesson.note}</p>
+          <div className="flex flex-col">
+            {lesson.note.map((note) => {
+              console.log(note.split(/<a.*<\/a>/));
+
+              return (
+                <p key={note} className="min-h-[24px]">
+                  {note}
+                </p>
+              );
+            })}
+          </div>
         </div>
       )}
 
@@ -67,7 +77,7 @@ export default async function LessonPage({ params }: Props) {
               return (
                 <div
                   key={_index}
-                  className="flex flex-col gap-y-4 border-b pb-4"
+                  className="flex flex-col gap-y-2 border-b pb-4"
                 >
                   <RenderHomework homework={homework} key={_index} />
                 </div>
@@ -96,7 +106,7 @@ export default async function LessonPage({ params }: Props) {
           </div>
         </div>
       )}
-      {lesson.note === "" &&
+      {lesson.note.length === 0 &&
         lesson.homework.length === 0 &&
         lesson.other.length === 0 && (
           <div className="pt-8 text-lg text-muted-foreground">

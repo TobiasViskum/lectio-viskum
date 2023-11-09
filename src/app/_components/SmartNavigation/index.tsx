@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Fragment } from "react";
@@ -44,22 +45,34 @@ export function SmartNavigation() {
     }
   }
 
-  const linkTw = "hover:underline";
+  let linkTw = "hover:underline hover:text-blue-600";
 
   return (
-    <div className="flex w-full gap-x-4 pt-4">
+    <div className="flex w-full gap-x-1.5 pt-4 text-sm">
       {linkPath.map((linkItem, i) => {
+        const isLast = i === linkPath.length - 1;
+        let textColor = "text-blue-500";
+        if (isLast) {
+          textColor = "text-muted-foreground";
+          linkTw = [linkTw, "pointer-events-none"].join(" ");
+        }
+
         if (i === 0) {
           return (
-            <Link className={linkTw} href={linkItem.href} key={linkItem.href}>
+            <Link
+              className={cn(linkTw, textColor)}
+              href={linkItem.href}
+              key={linkItem.href}
+            >
               {linkItem.name}
             </Link>
           );
         } else {
           return (
             <Fragment key={linkItem.href}>
-              <p>{"→"}</p>
-              <Link className={linkTw} href={linkItem.href}>
+              <p className={"text-muted-foreground"}>{">" /*{"→"}*/}</p>
+
+              <Link className={cn(linkTw, textColor)} href={linkItem.href}>
                 {linkItem.name}
               </Link>
             </Fragment>

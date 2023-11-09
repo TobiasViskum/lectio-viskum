@@ -150,7 +150,7 @@ type FullLesson = Prettify<
       theme: string;
       themeId: string;
     };
-    note: string;
+    note: string[];
     homework: LessonHomework[];
     other: LessonHomework[];
     presentation: LessonHomework[][];

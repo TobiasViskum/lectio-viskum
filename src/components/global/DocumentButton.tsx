@@ -23,7 +23,7 @@ export function DocumentButton({ strDocument, className }: Props) {
     const promise = downloadAssetWithCheck();
 
     toast.promise(promise, {
-      loading: "Forbereder download...",
+      loading: "Henter fra Lectio...",
       success: (res) => {
         setIsDownloading(false);
         return "Download startet!";

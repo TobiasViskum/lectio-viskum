@@ -41,25 +41,6 @@ export function EditableTextArea() {
         >
           U
         </Toggle>
-        <div className="h-7 w-[1px] rounded-full bg-accent" />
-        <Toggle
-          className="aspect-square p-0"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            execCommand("subscript");
-          }}
-        >
-          <SubscriptIcon />
-        </Toggle>
-        <Toggle
-          className="aspect-square p-0"
-          onMouseDown={(e) => {
-            e.preventDefault();
-            execCommand("superscript");
-          }}
-        >
-          <SuperscriptIcon />
-        </Toggle>
       </div>
       <div
         lang="da-dk"
