@@ -36,9 +36,7 @@ export function ScheduleHeaderSkeleton() {
           />
           <div>
             <div className="text-lg font-semibold">{name}</div>
-            <div className="text-sm text-muted-foreground">
-              Klasse: {studentClass}
-            </div>
+            <div className="text-sm text-muted-foreground">{studentClass}</div>
           </div>
         </div>
         <div className="hidden 2xl:block">

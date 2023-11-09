@@ -38,14 +38,25 @@ export function SmartNavigation() {
 
     linkPath.push({ href: url, name: "Skema" });
     if (/\/skema\/elev\/[0-9]+\/modul\/[0-9]+/.test(path)) {
-      linkPath.push({
-        href: `/skema/elev/${splitPath[2]}/modul/${splitPath[4]}?${search}`,
-        name: "Modul",
-      });
+      if (path.includes("/elevfeedback")) {
+        linkPath.push({
+          href: `/skema/elev/${splitPath[2]}/modul/${splitPath[4]}?${search}`,
+          name: "Modul",
+        });
+        linkPath.push({
+          href: `/skema/elev/${splitPath[2]}/modul/${splitPath[4]}/elevfeedback`,
+          name: "Elevfeedback",
+        });
+      } else {
+        linkPath.push({
+          href: `/skema/elev/${splitPath[2]}/modul/${splitPath[4]}?${search}`,
+          name: "Modul",
+        });
+      }
     }
   }
 
-  let linkTw = "hover:underline hover:text-blue-600";
+  let linkTw = "hover:underline hover:text-blue-600 ";
 
   return (
     <div className="flex w-full gap-x-1.5 pt-4 text-sm">
@@ -62,14 +73,14 @@ export function SmartNavigation() {
             <Link
               className={cn(linkTw, textColor)}
               href={linkItem.href}
-              key={linkItem.href}
+              key={linkItem.href + `${Math.random()}`}
             >
               {linkItem.name}
             </Link>
           );
         } else {
           return (
-            <Fragment key={linkItem.href}>
+            <Fragment key={linkItem.href + `${Math.random()}`}>
               <p className={"text-muted-foreground"}>{">" /*{"→"}*/}</p>
 
               <Link className={cn(linkTw, textColor)} href={linkItem.href}>

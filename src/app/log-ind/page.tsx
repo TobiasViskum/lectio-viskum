@@ -13,8 +13,9 @@ export default function LoginPage() {
     <>
       <div className="grid place-items-center gap-y-8 pt-8 sm:gap-y-12">
         {/* <div className="before:bg-gradient-radial after:bg-gradient-conic absolute z-10 flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px]" /> */}
-        <h1 className="drop-shadow-glow-sm flex flex-col text-center text-3xl font-semibold leading-snug [text-wrap:balance] sm:text-4xl">
-          Velkommen til et nyt og opgraderet Lectio!
+
+        <h1 className="drop-shadow-glow-sm bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-center text-5xl font-bold tracking-tighter text-transparent [text-wrap:balance] sm:text-6xl">
+          Velkommen til et Moderne & Forbedret Lectio!
         </h1>
 
         <div className="flex w-full flex-col items-center gap-y-4">
