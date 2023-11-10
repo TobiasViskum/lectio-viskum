@@ -1,8 +1,8 @@
-import { urlifyNote } from "@/util/urlify";
+import { urlify } from "@/util/urlify";
 
 export function getNote($: cheerio.Root) {
   let note = $("#s_m_Content_Content_tocAndToolbar_ActNoteTB_tb").text();
-  note = urlifyNote(note);
+  note = urlify(note);
   if (note === "") {
     return [];
   }

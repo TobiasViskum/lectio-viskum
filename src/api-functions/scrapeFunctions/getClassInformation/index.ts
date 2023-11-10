@@ -13,6 +13,7 @@ import { getSubjectTheme } from "./getSubjectTheme";
 import { getNote } from "./getNote";
 import { getTimeInMs } from "@/util/getTimeInMs";
 import { standardFetchOptions } from "@/api-functions/standardFetchOptions";
+import { getTeachers } from "../getSchedule/getTeachers";
 
 type Props = { lessonId: string; year: string };
 
@@ -61,6 +62,7 @@ export async function getClassInformation({
       : info.includes("Aflyst!")
       ? "cancelled"
       : "normal";
+    additionalInfo.teachers = getTeachers(info);
   }
 
   const $div = $("div.s2skemabrikcontent.OnlyDesktop");

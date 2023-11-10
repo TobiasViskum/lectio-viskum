@@ -1,4 +1,4 @@
-export function urlifyNote(text: string) {
+export function urlify(text: string) {
   const linkTw = "text-blue-400 font-medium";
 
   const urlRegex = /(https?:\/\/[^\s<]+)/g;

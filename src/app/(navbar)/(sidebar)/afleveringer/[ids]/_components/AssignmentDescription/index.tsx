@@ -1,4 +1,4 @@
-import { urlifyNote } from "@/util/urlify";
+import { urlify } from "@/util/urlify";
 
 type Props = { assignmentPromise: Promise<FullAssignment | null> };
 
@@ -17,7 +17,7 @@ export async function AssignmentDescription({ assignmentPromise }: Props) {
       <p
         className="text-sm text-muted-foreground"
         dangerouslySetInnerHTML={{
-          __html: urlifyNote(assignment.description.join("<br/>")),
+          __html: urlify(assignment.description.join("<br/>")),
         }}
       ></p>
     </div>
