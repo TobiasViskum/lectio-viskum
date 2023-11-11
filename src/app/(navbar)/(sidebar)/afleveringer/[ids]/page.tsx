@@ -21,7 +21,7 @@ type Props = {
   };
 };
 
-export default async function AssignmentPage({ params, searchParams }: Props) {
+export default function AssignmentPage({ params, searchParams }: Props) {
   const assignmentId = params.ids;
 
   const lectioProps = getLectioProps();

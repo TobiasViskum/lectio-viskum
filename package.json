@@ -10,7 +10,7 @@
     "lint": "next lint",
     "deploy": "pnpm run build && git add . && git commit -m \"Update\" && git push",
     "git-store": "git config --global credential.helper store",
-    "startup": "npm run build && npm start"
+    "startup": "git pull origin main --rebase && npm i && npm run build && npm start"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.0.5",
@@ -36,7 +36,7 @@
     "fetch-cookie": "^2.1.0",
     "html-react-parser": "^5.0.6",
     "lucide-react": "^0.284.0",
-    "next": "14.0.3-canary.2",
+    "next": "14.0.2",
     "next-themes": "^0.2.1",
     "react": "^18",
     "react-day-picker": "^8.9.1",
