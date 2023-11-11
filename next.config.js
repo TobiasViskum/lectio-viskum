@@ -2,6 +2,9 @@
 const nextConfig = {
   experimental: {
     instrumentationHook: true,
+    serverActions: {
+      allowedOrigins: ["http://localhost:3000, https://lectio.muksiv.dk"],
+    },
   },
   images: {
     remotePatterns: [
