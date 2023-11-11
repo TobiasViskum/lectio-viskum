@@ -14,7 +14,9 @@ type APIResponse<T> = Prettify<
   )
 >;
 
-type APIProps<T> = Prettify<{ userId: string } & T>;
+type XSidebar = Prettify<
+  "none" | "all-assignments" | "assignment" | "lesson" | "student-feedback"
+>;
 
 type Day =
   | "Mandag"

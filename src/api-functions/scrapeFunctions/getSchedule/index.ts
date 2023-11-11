@@ -1,3 +1,4 @@
+import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { getAuthenticatedPage } from "../../getPage";
 import { getClass } from "./getClass";
 import { getClassroom } from "./getClassroom";
@@ -13,26 +14,18 @@ type Props = {
   studentId?: string;
 };
 
-export async function getSchedule({
-  lectioCookies,
-  week,
-  year,
-  schoolCode,
-  teacherId,
-  studentId,
-}: StandardProps & Props) {
-  let targetPage = `SkemaNy.aspx?week=${week.toString() + year.toString()}`;
+export async function getSchedule({ week, year, teacherId, studentId }: Props) {
+  const personalUserId = getLectioProps().userId;
+  let targetPage = `SkemaNy.aspx?week=${week + year}&elevid=${personalUserId}`; //In case none of the ids is provided
   if (teacherId) {
     targetPage = `SkemaNy.aspx?week=${week + year}&laererid=${teacherId}`;
   } else if (studentId) {
-    targetPage = `SkemaNy.aspx?week=${week + year}&elevid=${teacherId}`;
+    targetPage = `SkemaNy.aspx?week=${week + year}&elevid=${studentId}`;
   }
   let numberWeek = !isNaN(Number(week)) ? Number(week) : -1;
   let numberYear = !isNaN(Number(year)) ? Number(year) : -1;
 
   const res = await getAuthenticatedPage({
-    lectioCookies: lectioCookies,
-    schoolCode: schoolCode,
     specificPage: targetPage,
   });
 

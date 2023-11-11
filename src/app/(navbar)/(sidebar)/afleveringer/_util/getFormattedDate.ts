@@ -6,8 +6,9 @@ export function getFormattedDate(assignment: Assignment) {
   const msBetween = date.getTime() - new Date().getTime();
   const daysBetween = msBetween / (1000 * 60 * 60 * 24);
 
-  const hoursBetween =
-    Math.floor((msBetween % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) - 1;
+  const hoursBetween = Math.floor(
+    (msBetween % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+  );
   const minutesBetween = Math.floor(
     (msBetween % (1000 * 60 * 60)) / (1000 * 60),
   );

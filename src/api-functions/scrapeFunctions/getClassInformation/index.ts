@@ -1,180 +1,230 @@
-import { getAuthenticatedPage } from "../../getPage";
-import { getClassroom } from "../getSchedule/getClassroom";
-import { getHomeworkAndOtherAndPresentation } from "./utils";
-import { setAllTeachersObject } from "./setAllTeacherObjects";
-import { getTitle } from "../getSchedule/getTitle";
-import { setClasses } from "./setClasses";
-import {
-  getTimeFromPattern1,
-  getTimeFromPattern2,
-  getTimeFromPattern3,
-} from "./getTime";
-import { getSubjectTheme } from "./getSubjectTheme";
-import { getNote } from "./getNote";
-import { getTimeInMs } from "@/util/getTimeInMs";
+import { getLastAuthenticatedCookie } from "@/api-functions/getLastAuthenticatedCookie";
+import { getAuthenticatedPage } from "@/api-functions/getPage";
 import { standardFetchOptions } from "@/api-functions/standardFetchOptions";
-import { getTeachers } from "../getSchedule/getTeachers";
+import { getTimeInMs } from "@/util/getTimeInMs";
 
-type Props = { lessonId: string; year: string };
+export async function getClassInformation(classId: string) {
+  const tag = `${classId}-class`;
+  const foundCache = global.longTermCache.get(tag);
 
-export async function getClassInformation({
-  lectioCookies,
-  lessonId,
-  schoolCode,
-  userId,
-  year,
-}: StandardProps & Props) {
-  const href = `aktivitet/aktivitetforside2.aspx?absid=${lessonId}&elevid=${userId}`;
-  const numberYear = !isNaN(Number(year)) ? Number(year) : 1970;
+  // if (foundCache && new Date().getTime() < foundCache.expires) {
+  //   return foundCache.data;
+  // }
 
+  const href = `subnav/members.aspx?holdelementid=${classId}&showteachers=1&showstudents=1&reporttype=withpics`;
   const res = await getAuthenticatedPage({
-    lectioCookies: lectioCookies,
-    schoolCode: schoolCode,
     specificPage: href,
   });
 
-  if (res === "Not authenticated") return res;
-  if (res === "Forbidden access") return res;
-  if (res === "Invalid school") return res;
+  let classInformation: ClassInformation = {
+    teachers: [],
+    students: [],
+  };
+
+  if (res === "Not authenticated") return null;
+  if (res === "Forbidden access") return null;
+  if (res === "Invalid school") return null;
   if (res === null) return res;
 
   const fetchCookie = res.fetchCookie;
   const $ = res.$;
 
-  let additionalInfo: AdditionalLessonInfo = {
-    title: "",
-    status: "normal",
-    time: { startDate: new Date(1970), endDate: new Date(1970) },
-    lessonNumber: -1,
-    teachers: [],
-    subjects: [],
-    classes: [],
-    classrooms: [],
-  };
+  const $trs = $("#s_m_Content_Content_laerereleverpanel_alm_gv > tbody > tr");
 
-  const $infoDiv = $("a.s2skemabrik.lec-context-menu-instance");
-  const info = $infoDiv.attr("data-additionalinfo");
-  if (info) {
-    additionalInfo.title = getTitle(info);
-    additionalInfo.classrooms = getClassroom(info);
-    additionalInfo.status = info.includes("Ændret!")
-      ? "changed"
-      : info.includes("Aflyst!")
-      ? "cancelled"
-      : "normal";
-    additionalInfo.teachers = getTeachers(info);
-  }
+  for (let i = 0; i < $trs.length; i++) {
+    let student: Student = {
+      imgSrc: "",
+      imgUrl: "",
+      name: "",
+      studentClass: "",
+      studentId: "",
+    };
+    let teacher: Teacher = {
+      imgSrc: "",
+      imgUrl: "",
+      initials: "",
+      name: "",
+      teacherId: "",
+    };
 
-  const $div = $("div.s2skemabrikcontent.OnlyDesktop");
-  const text = $div.text();
+    const tr = $trs[i];
+    const $tr = $(tr);
+    const $children = $tr.children();
+    const $imageHolder = $children.eq(0);
+    const $userRecognitionHolder = $children.eq(2);
 
-  const lessonNumberMatch = text.match(/(.* modul)/);
-  if (lessonNumberMatch) {
-    const splitStr = lessonNumberMatch[1].split(" ");
-    additionalInfo.lessonNumber = Number(splitStr[2].replace(/[^0-9]+/g, ""));
-  }
+    let isTeacher = false;
 
-  const datePatterns = [
-    /[a-z]{2} [0-9]{1,2}\/[0-9]{1,2} [0-9]{2}:[0-9]{2} (-|til) [a-z]{2} [0-9]{1,2}\/[0-9]{1,2} [0-9]{2}:[0-9]{2}/i,
-    /[a-z]{2} [0-9]{1,2}\/[0-9]{1,2} [0-9]{2}:[0-9]{2} (-|til) [0-9]{2}:[0-9]{2}/i,
-    /[a-z]{2} [0-9]{1,2}\/[0-9]{1,2}/i,
-  ];
-  for (let i = 0; i < datePatterns.length; i++) {
-    const pattern = datePatterns[i];
-    const textMatch = text.match(pattern);
-    if (textMatch && info) {
-      if (i === 0) {
-        additionalInfo.time = getTimeFromPattern1(textMatch[0], numberYear);
-      } else if (i === 1) {
-        additionalInfo.time = getTimeFromPattern2(textMatch[0], numberYear);
-      } else if (i === 2) {
-        const startEndTimeMatch = info.match(
-          /[0-9]{2}:[0-9]{2} (-|til) [0-9]{2}:[0-9]{2}/i,
-        );
-        if (startEndTimeMatch) {
-          additionalInfo.time = getTimeFromPattern3(
-            textMatch[0],
-            startEndTimeMatch[0],
-            numberYear,
-          );
+    let foundId = $imageHolder.attr("data-lectiocontextcard");
+
+    if (foundId) {
+      if (foundId.includes("T")) {
+        isTeacher = true;
+      }
+      foundId = foundId.replace(/[a-z]+/i, "");
+      if (isTeacher) {
+        teacher.teacherId = foundId;
+      } else {
+        student.studentId = foundId;
+      }
+
+      const tag = `${foundId}-user`;
+
+      const foundCache = global.longTermCache.get(tag);
+
+      if (foundCache && new Date().getTime() < foundCache.expires) {
+        if (isTeacher) {
+          classInformation.teachers.push(foundCache.data);
+        } else {
+          classInformation.students.push(foundCache.data);
         }
+        continue;
       }
-      break;
+
+      let imgUrl = $imageHolder.find("img").attr("src") || "";
+
+      if (isTeacher) {
+        teacher.imgUrl = imgUrl;
+      } else {
+        student.imgUrl = imgUrl;
+      }
+
+      const userRecognition = $userRecognitionHolder.find("span").text().trim();
+      if (isTeacher) {
+        teacher.initials = userRecognition;
+      } else {
+        const splitUserRecognition = userRecognition.split(" ");
+        splitUserRecognition.pop();
+        student.studentClass = splitUserRecognition.join(" ");
+      }
+
+      const firstName = $children.eq(3).find("span > a").text().trim();
+      const lastName = $children.eq(4).find("span").text().trim();
+      const name = [firstName, lastName].join(" ");
+      if (isTeacher) {
+        teacher.name = name;
+      } else {
+        student.name = name;
+      }
+
+      if (isTeacher) {
+        classInformation.teachers.push(teacher);
+      } else {
+        classInformation.students.push(student);
+      }
     }
   }
 
-  await setAllTeachersObject($div, $, additionalInfo);
-  setClasses($div, $, additionalInfo);
+  let teacherPromises: Promise<string | null>[] = [];
+  let studentPromises: Promise<string | null>[] = [];
 
-  let subjects: string[] = [];
-  for (let i = 0; i < additionalInfo.classes.length; i++) {
-    const subject = additionalInfo.classes[i].subject;
+  for (let i = 0; i < classInformation.teachers.length; i++) {
+    const teacher = classInformation.teachers[i];
 
-    if (subjects.find((str) => str === subject) === undefined) {
-      if (subject !== "") {
-        subjects.push(subject);
-      }
-    }
-  }
-  additionalInfo.subjects = subjects;
+    const imgHref = ["https://lectio.dk", teacher.imgUrl, "&fullsize=1"].join(
+      "",
+    );
 
-  const subjectTheme = getSubjectTheme($);
+    const promise = fetchCookie(imgHref, {
+      method: "GET",
+      headers: { Cookie: getLastAuthenticatedCookie() },
+      ...standardFetchOptions,
+    })
+      .then(async (res) => {
+        try {
+          const arrayBuffer = await res.arrayBuffer();
+          const contentType = res.headers.get("content-type");
+          const base64 = Buffer.from(arrayBuffer).toString("base64");
+          const fullSrc = `data:${contentType};base64,${base64}`;
 
-  const note = getNote($);
-  const homeWorkAndOtherAndPresentation = getHomeworkAndOtherAndPresentation($);
-
-  for (let i = 0; i < homeWorkAndOtherAndPresentation.homework.length; i++) {
-    const homework = homeWorkAndOtherAndPresentation.homework[i];
-
-    for (let j = 0; j < homework.length; j++) {
-      const item = homework[j];
-
-      if (typeof item === "object" && "img" in item) {
-        if (item.img.includes("/lectio/")) {
-          const src = ["https://lectio.dk", item.img].join("");
-          const cachedImage = global.longTermCache.get(src);
-          if (cachedImage) {
-            return cachedImage.data;
-          }
-
-          const imageBase64 = await fetchCookie(src, {
-            method: "GET",
-            headers: { Cookie: lectioCookies },
-            ...standardFetchOptions,
-          })
-            .then(async (res) => {
-              try {
-                const arrayBuffer = await res.arrayBuffer();
-                const contentType = res.headers.get("content-type");
-                const base64 = Buffer.from(arrayBuffer).toString("base64");
-                const fullSrc = `data:${contentType};base64,${base64}`;
-                return fullSrc;
-              } catch {
-                return null;
-              }
-            })
-            .catch((err) => {
-              return null;
-            });
-
-          if (imageBase64) {
-            global.longTermCache.set(src, {
-              data: imageBase64,
-              expires: new Date().getTime() + getTimeInMs({ days: 1 }),
-            });
-            item.img = imageBase64;
-          }
+          return fullSrc;
+        } catch {
+          return null;
         }
+      })
+      .catch((err) => {
+        return null;
+      });
+    teacherPromises.push(promise);
+  }
+
+  for (let i = 0; i < classInformation.students.length; i++) {
+    const student = classInformation.students[i];
+
+    const imgHref = ["https://lectio.dk", student.imgUrl, "&fullsize=1"].join(
+      "",
+    );
+
+    const promise = fetchCookie(imgHref, {
+      method: "GET",
+      headers: { Cookie: getLastAuthenticatedCookie() },
+      ...standardFetchOptions,
+    })
+      .then(async (res) => {
+        try {
+          const arrayBuffer = await res.arrayBuffer();
+          const contentType = res.headers.get("content-type");
+          const base64 = Buffer.from(arrayBuffer).toString("base64");
+          const fullSrc = `data:${contentType};base64,${base64}`;
+
+          return fullSrc;
+        } catch {
+          return null;
+        }
+      })
+      .catch((err) => {
+        return null;
+      });
+    studentPromises.push(promise);
+  }
+
+  const [teacherImageSources, studentImageSources] = await Promise.all([
+    await Promise.all(teacherPromises),
+    await Promise.all(studentPromises),
+  ]);
+
+  for (let i = 0; i < teacherImageSources.length; i++) {
+    const imageSource = teacherImageSources[i];
+    if (imageSource !== null) {
+      classInformation.teachers[i].imgSrc = imageSource;
+      const teacherId = classInformation.teachers[i].teacherId;
+      const tag = `${teacherId}-user`;
+      const foundCache = global.longTermCache.get(tag);
+      if (
+        foundCache === undefined ||
+        new Date().getTime() > foundCache.expires
+      ) {
+        global.longTermCache.set(tag, {
+          data: classInformation.teachers[i],
+          expires: new Date().getTime() + getTimeInMs({ days: 1 }),
+        });
+      }
+    }
+  }
+  for (let i = 0; i < studentImageSources.length; i++) {
+    const imageSource = studentImageSources[i];
+    if (imageSource !== null) {
+      classInformation.students[i].imgSrc = imageSource;
+      const studentId = classInformation.students[i].studentId;
+      const tag = `${studentId}-user`;
+      const foundCache = global.longTermCache.get(tag);
+
+      if (
+        foundCache === undefined ||
+        new Date().getTime() > foundCache.expires
+      ) {
+        global.longTermCache.set(tag, {
+          data: classInformation.students[i],
+          expires: new Date().getTime() + getTimeInMs({ days: 1 }),
+        });
       }
     }
   }
 
-  return {
-    ...additionalInfo,
-    subjectTheme: subjectTheme,
-    note: note,
-    homework: homeWorkAndOtherAndPresentation.homework,
-    other: homeWorkAndOtherAndPresentation.other,
-    presentation: homeWorkAndOtherAndPresentation.presentation,
-  };
+  global.longTermCache.set(tag, {
+    data: classInformation,
+    expires: new Date().getTime() + getTimeInMs({ days: 1 }),
+  });
+
+  return classInformation;
 }

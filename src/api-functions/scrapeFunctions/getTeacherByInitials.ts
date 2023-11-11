@@ -1,16 +1,13 @@
 import { getTimeInMs } from "@/util/getTimeInMs";
 import { getAuthenticatedPage } from "../getPage";
 import { standardFetchOptions } from "../standardFetchOptions";
+import { getLastAuthenticatedCookie } from "../getLastAuthenticatedCookie";
 
 type Props = {
   teacherId: string;
 };
 
-export async function getTeacherById({
-  lectioCookies,
-  teacherId,
-  schoolCode,
-}: StandardProps & Props) {
+export async function getTeacherById({ teacherId }: Props) {
   const tag = `${teacherId}-user`;
   const foundCache = global.longTermCache.get(tag);
 
@@ -20,8 +17,6 @@ export async function getTeacherById({
 
   const res = await getAuthenticatedPage({
     page: "teachers",
-    lectioCookies: lectioCookies,
-    schoolCode: schoolCode,
   });
 
   if (res === "Not authenticated") return res;
@@ -74,7 +69,7 @@ export async function getTeacherById({
 
   const imageBase64 = await fetchCookie(foundTeacher.imgUrl, {
     method: "GET",
-    headers: { Cookie: lectioCookies },
+    headers: { Cookie: getLastAuthenticatedCookie() },
     ...standardFetchOptions,
   })
     .then(async (res) => {

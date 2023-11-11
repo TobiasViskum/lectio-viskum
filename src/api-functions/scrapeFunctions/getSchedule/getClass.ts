@@ -21,5 +21,5 @@ export function getClass(info: string) {
     });
     return splitClasses;
   }
-  return [""];
+  return [];
 }

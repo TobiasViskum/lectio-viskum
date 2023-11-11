@@ -4,14 +4,11 @@ import { processResult } from "./processResult";
 import { validateResult } from "./validateResult";
 
 type MainType = Prettify<FullAssignment>;
-type FunctionProps = APIProps<StandardProps & { assignmentId: string }>;
+type FunctionProps = { assignmentId: string };
 
-export const getAssignmentByHref = async (props: FunctionProps) => {
+export async function getAssignmentByHref({ assignmentId }: FunctionProps) {
   const result = await getAssignment({
-    assignmentId: props.assignmentId,
-    lectioCookies: props.lectioCookies,
-    schoolCode: props.schoolCode,
-    userId: props.userId,
+    assignmentId: assignmentId,
   });
   const processedResult = processResult<MainType>(result);
   validateResult(processedResult);
@@ -20,4 +17,4 @@ export const getAssignmentByHref = async (props: FunctionProps) => {
     processedResult.status === "success" ? processedResult.data : null;
 
   return data;
-};
+}

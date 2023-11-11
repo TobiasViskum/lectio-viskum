@@ -1,11 +1,8 @@
 import { getAuthenticatedPage } from "@/api-functions/getPage";
-import { getLectioProps } from "@/lib/auth/getLectioProps";
-import { load } from "cheerio";
 
 type Props = { lessonId: string };
 
-export async function getStudentFeedback({ lessonId }: StandardProps & Props) {
-  const lectioProps = getLectioProps();
+export async function getStudentFeedback({ lessonId }: Props) {
   const lessonNumber = Number(lessonId);
 
   if (isNaN(lessonNumber)) return null;
@@ -14,8 +11,6 @@ export async function getStudentFeedback({ lessonId }: StandardProps & Props) {
     lessonNumber + 1
   }&lectab=elevindhold`;
   const res = await getAuthenticatedPage({
-    lectioCookies: lectioProps.lectioCookies,
-    schoolCode: lectioProps.schoolCode,
     specificPage: href,
   });
 

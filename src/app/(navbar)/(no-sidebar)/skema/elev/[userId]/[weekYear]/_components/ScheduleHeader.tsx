@@ -1,9 +1,6 @@
-import { profile } from "@/assets";
-import Image from "next/image";
 import { DateNavigationPc } from "./DateNavigation/pc";
 import { DateNavigationTouch } from "./DateNavigation/touch";
 import { lectioAPI } from "@/lib/lectio-api";
-import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { Student } from "@/components/global/Student";
 
 type Props = {
@@ -12,10 +9,7 @@ type Props = {
   searchParamsObj: { week: string; year: string };
 };
 export async function ScheduleHeader({ userId, searchParamsObj }: Props) {
-  const lectioProps = getLectioProps();
   const student = await lectioAPI.getStudent.byId({
-    lectioCookies: lectioProps.lectioCookies,
-    schoolCode: lectioProps.schoolCode,
     userId: userId,
   });
 

@@ -3,7 +3,7 @@ import { getSchool } from "./getSchool";
 import { getAllSchools } from "./getAllSchools";
 import { getIsAuthenticated } from "./getIsAuthenticated";
 import { getStudentById } from "./getStudentById";
-import { getScheduleByCredentials } from "./getScheduleByCredentials";
+import { getScheduleByStudentId } from "./getScheduleByStudentId";
 import { getAllAssignments } from "./getAllAssignments";
 import { getAssignmentByHref } from "./getAssignmentById";
 import { getLessonById } from "./getLesson";
@@ -16,7 +16,7 @@ const lectioAPI = {
     byId: getStudentById,
   },
   getSchedule: {
-    byCredentials: getScheduleByCredentials,
+    byStudentId: getScheduleByStudentId,
   },
   getAssignment: {
     all: getAllAssignments,

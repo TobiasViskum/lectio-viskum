@@ -18,10 +18,7 @@ export async function setAllTeachersObject(
       teacherId = teacherId.replace("T", "");
 
       const promise = getTeacherById({
-        lectioCookies: lectioProps.lectioCookies,
-        schoolCode: lectioProps.schoolCode,
         teacherId: teacherId,
-        userId: lectioProps.userId,
       }).then((res) => {
         if (typeof res === "object") {
           return res;

@@ -1,4 +1,3 @@
-import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { lectioAPI } from "@/lib/lectio-api";
 import { ClassAndTeacher } from "./_components/ClassAndTeacher";
 import { AssignmentDescription } from "./_components/AssignmentDescription";
@@ -24,10 +23,7 @@ type Props = {
 export default function AssignmentPage({ params, searchParams }: Props) {
   const assignmentId = params.ids;
 
-  const lectioProps = getLectioProps();
-
   const assignmentPromise = lectioAPI.getAssignment.byHref({
-    ...lectioProps,
     assignmentId: assignmentId,
   });
 

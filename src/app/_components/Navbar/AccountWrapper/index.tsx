@@ -15,10 +15,10 @@ import { ChevronDown, Settings, StretchHorizontal } from "lucide-react";
 import { LogOutButton } from "./LogOutButton";
 
 export async function AccountWrapper() {
-  const lectioProps = getLectioProps();
+  const userId = getLectioProps().userId;
 
   const user = await lectioAPI.getStudent.byId({
-    ...lectioProps,
+    userId: userId,
   });
 
   return (

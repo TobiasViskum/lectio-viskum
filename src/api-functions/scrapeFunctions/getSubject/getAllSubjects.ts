@@ -3,10 +3,10 @@ import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { getAuthenticatedPage } from "@/api-functions/getPage";
 import { load } from "cheerio";
 import { getTimeInMs } from "@/util/getTimeInMs";
+import { getLastAuthenticatedCookie } from "@/api-functions/getLastAuthenticatedCookie";
 
 export async function getAllSubjects() {
-  const { lectioCookies, schoolCode } = getLectioProps();
-
+  const schoolCode = getLectioProps().schoolCode;
   const tag = `${schoolCode}-subjects`;
   const foundCache = global.longTermCache.get(tag);
 
@@ -15,8 +15,6 @@ export async function getAllSubjects() {
   }
 
   const res = await getAuthenticatedPage({
-    lectioCookies: lectioCookies,
-    schoolCode: schoolCode,
     specificPage: "FindSkema.aspx?type=hold",
   });
 
@@ -46,7 +44,10 @@ export async function getAllSubjects() {
   if (href !== "") {
     href = ["https://lectio.dk", href].join("");
     const _$ = await res
-      .fetchCookie(href, { headers: { Cookie: lectioCookies }, method: "GET" })
+      .fetchCookie(href, {
+        headers: { Cookie: getLastAuthenticatedCookie() },
+        method: "GET",
+      })
       .then(async (res) => {
         const text = await res.text();
         if (text.includes("Vis Hold")) {

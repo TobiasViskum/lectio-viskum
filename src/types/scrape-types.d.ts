@@ -1,9 +1,3 @@
-type StandardProps = Prettify<{
-  lectioCookies: string;
-  schoolCode: string;
-  userId: string;
-}>;
-
 type AuthProps = Prettify<{
   username: string;
   password: string;
@@ -24,8 +18,9 @@ type LectioAuth = Prettify<{
 type Student = Prettify<{
   name: string;
   studentClass: string;
+  studentId: string;
   imgUrl: string;
-  imgSrc: string | null;
+  imgSrc: string;
 }>;
 
 type Teacher = Prettify<{
@@ -139,6 +134,7 @@ type AdditionalLessonInfo = Prettify<{
   status: string;
   time: { startDate: Date; endDate: Date };
   lessonNumber: number;
+  students: Student[];
   teachers: Teacher[];
   classes: SchoolClass[];
   subjects: string[];
@@ -160,4 +156,9 @@ type FullLesson = Prettify<
 type StudentFeedback = Prettify<{
   title: string;
   content: string[];
+}>;
+
+type ClassInformation = Prettify<{
+  teachers: Teacher[];
+  students: Student[];
 }>;

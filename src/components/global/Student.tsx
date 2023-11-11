@@ -13,7 +13,7 @@ export function Student({ student, size = "normal" }: Props) {
   }
 
   return (
-    <div className="flex items-center gap-x-2 py-4">
+    <button className="flex max-h-[64px] w-full items-center gap-x-2 overflow-hidden rounded-lg py-2 pl-1 pr-3 transition-colors hover:bg-accent">
       <Image
         src={student.imgSrc || profile}
         width={sizeNumber}
@@ -21,10 +21,11 @@ export function Student({ student, size = "normal" }: Props) {
         alt="img"
         className="obj aspect-square rounded-full object-cover"
       />
-      <div>
+      <div className="flex flex-col overflow-hidden text-start">
         <p
           className={cn(
-            "text-lg font-semibold",
+            "line-clamp-2 break-words text-lg font-semibold",
+            size === "small" && "text-base",
             size === "large" && "text-2xl",
           )}
         >
@@ -42,6 +43,6 @@ export function Student({ student, size = "normal" }: Props) {
           </p>
         )}
       </div>
-    </div>
+    </button>
   );
 }

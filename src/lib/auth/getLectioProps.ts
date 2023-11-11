@@ -17,9 +17,12 @@ export function getLectioProps() {
       schoolCode: schoolCode.value,
       lectioCookies: decodeURIComponent(lectioCookies.value),
       userId: userId.value,
-    } as StandardProps & {
+    } as {
       username: string;
       password: string;
+      lectioCookies: string;
+      schoolCode: string;
+      userId: string;
     };
   }
   redirect("/log-ind?redirected=true");

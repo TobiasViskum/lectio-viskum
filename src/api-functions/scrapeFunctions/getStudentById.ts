@@ -2,12 +2,13 @@ import "server-only";
 import { getTimeInMs } from "@/util/getTimeInMs";
 import { getAuthenticatedPage } from "../getPage";
 import { standardFetchOptions } from "../standardFetchOptions";
+import { getLastAuthenticatedCookie } from "../getLastAuthenticatedCookie";
 
-export async function getStudentById({
-  lectioCookies,
-  schoolCode,
-  userId,
-}: StandardProps) {
+type Props = {
+  userId: string;
+};
+
+export async function getStudentById({ userId }: Props) {
   const tag = `${userId}-user`;
   const foundCache = global.longTermCache.get(tag);
 
@@ -16,8 +17,6 @@ export async function getStudentById({
   }
 
   const res = await getAuthenticatedPage({
-    lectioCookies: lectioCookies,
-    schoolCode: schoolCode,
     specificPage: `DokumentOversigt.aspx?folderid=S60631246942__&elevid=${userId}`,
   });
 
@@ -37,7 +36,7 @@ export async function getStudentById({
 
   const imageBase64 = await fetchCookie(imgHref, {
     method: "GET",
-    headers: { Cookie: lectioCookies },
+    headers: { Cookie: getLastAuthenticatedCookie() },
     ...standardFetchOptions,
   })
     .then(async (res) => {

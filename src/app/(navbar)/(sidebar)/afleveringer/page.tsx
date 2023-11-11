@@ -3,14 +3,10 @@ import { Suspense } from "react";
 import { LoadingDots } from "@/components/loading-components/LoadingDots";
 import { FilterButtons } from "./_components/FilterButtons/FilterButtons";
 import { FilterButtonsSkeleton } from "./_components/FilterButtons/FilterButtonsSkeleton";
-import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { lectioAPI } from "@/lib/lectio-api";
 
 export default function AssignmentsPage() {
-  const lectioProps = getLectioProps();
-  const assignmentsPromise = lectioAPI.getAssignment.all({
-    ...lectioProps,
-  });
+  const assignmentsPromise = lectioAPI.getAssignment.all();
 
   return (
     <>

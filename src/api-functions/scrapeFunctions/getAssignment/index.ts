@@ -5,8 +5,9 @@ import { setInformationProps } from "./setInformationProps";
 import { setAdditionalProps } from "./setAdditionalProps";
 import { setSubmitProps } from "./setSubmitProps";
 import { getTimeInMs } from "@/util/getTimeInMs";
+import { getLectioProps } from "@/lib/auth/getLectioProps";
 
-type Props = { assignmentId: string } & StandardProps;
+type Props = { assignmentId: string };
 
 type Titles =
   | "title"
@@ -31,23 +32,17 @@ export const titleMap: { [key: string]: Titles } = {
   "I undervisningsbeskrivelse:": "inTeachingDescription",
 };
 
-export async function getAssignment({
-  lectioCookies,
-  schoolCode,
-  assignmentId,
-  userId,
-}: Props) {
+export async function getAssignment({ assignmentId }: Props) {
+  const userId = getLectioProps().userId;
   const tag = `${userId}-assignments-${assignmentId}`;
   const foundCache = global.cache.get(tag);
 
-  // if (foundCache && new Date().getTime() < foundCache.expires) {
-  //   return foundCache.data as FullAssignment;
-  // }
+  if (foundCache && new Date().getTime() < foundCache.expires) {
+    return foundCache.data as FullAssignment;
+  }
 
   const href = `ElevAflevering.aspx?elevid=${userId}&exerciseid=${assignmentId}`;
   const res = await getAuthenticatedPage({
-    lectioCookies: lectioCookies,
-    schoolCode: schoolCode,
     specificPage: href,
   });
 
@@ -95,10 +90,7 @@ export async function getAssignment({
   assignment.submits = assignment.submits.reverse();
 
   const teacher = await getTeacherById({
-    lectioCookies: lectioCookies,
-    schoolCode: schoolCode,
     teacherId: assignment.teacher.teacherId,
-    userId: userId,
   });
 
   if (typeof teacher === "object" && teacher !== null) {

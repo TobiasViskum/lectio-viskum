@@ -1,12 +1,16 @@
 import "server-only";
-import { getClassInformation } from "@/api-functions/scrapeFunctions";
+import { getLessonInformation } from "@/api-functions/scrapeFunctions";
 import { processResult } from "./processResult";
 
 type MainType = FullLesson;
-type FunctionProps = StandardProps & { lessonId: string; year: string };
+type FunctionProps = Prettify<{
+  lessonId: string;
+  year: string;
+  userId: string;
+}>;
 
 export const getLessonById = async (props: FunctionProps) => {
-  const result = await getClassInformation(props);
+  const result = await getLessonInformation(props);
   const processedResult = processResult<MainType>(result);
 
   const data =

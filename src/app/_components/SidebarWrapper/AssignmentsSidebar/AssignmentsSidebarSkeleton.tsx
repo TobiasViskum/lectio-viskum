@@ -2,7 +2,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function ContentSkeleton() {
+export function AssignmentsSidebarSkeleton() {
   return (
     <div className="flex animate-pulse flex-col gap-y-6">
       <div className="flex flex-col gap-y-2">

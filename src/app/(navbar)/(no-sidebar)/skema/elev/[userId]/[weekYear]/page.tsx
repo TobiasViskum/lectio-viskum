@@ -1,4 +1,3 @@
-import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { lectioAPI } from "@/lib/lectio-api";
 import { z } from "zod";
 import { getWeekAndYear } from "@/util/getWeekAndYear";
@@ -44,11 +43,7 @@ export default function SchedulePage({ params }: Props) {
     );
   }
 
-  const lectioProps = getLectioProps();
-
-  const schedulePromise = lectioAPI.getSchedule.byCredentials({
-    lectioCookies: lectioProps.lectioCookies,
-    schoolCode: lectioProps.schoolCode,
+  const schedulePromise = lectioAPI.getSchedule.byStudentId({
     userId: params.userId,
     week: searchParamsObj.week,
     year: searchParamsObj.year,
@@ -76,7 +71,10 @@ export default function SchedulePage({ params }: Props) {
           </Suspense>
         </div>
       </div>
-      <FetchAdjacentWeeks searchParamsObj={searchParamsObj} />
+      <FetchAdjacentWeeks
+        searchParamsObj={searchParamsObj}
+        userId={params.userId}
+      />
     </ScheduleProvider>
   );
 }

@@ -4,20 +4,15 @@ import { getFetchCookie } from "@/lib/getFetchCookie";
 import { getPageFromMap } from "./page-map";
 import { getSchoolBySchoolCode } from "../scrapeFunctions/getSchoolBySchoolCode";
 import { standardFetchOptions } from "../standardFetchOptions";
+import { getLastAuthenticatedCookie } from "../getLastAuthenticatedCookie";
+import { getLectioProps } from "@/lib/auth/getLectioProps";
 
 type Props = {
   page?: Pages;
   specificPage?: string;
-  lectioCookies: string;
-  schoolCode: string;
 };
 
-export async function getAuthenticatedPage({
-  page,
-  specificPage,
-  lectioCookies,
-  schoolCode,
-}: Props) {
+export async function getAuthenticatedPage({ page, specificPage }: Props) {
   const baseUrl = "https://www.lectio.dk/lectio";
   let targetPage = "";
 
@@ -31,12 +26,14 @@ export async function getAuthenticatedPage({
 
   const { fetchCookie } = getFetchCookie();
 
+  const schoolCode = getLectioProps().schoolCode;
+
   const targetPageContent = await fetchCookie(
     `${baseUrl}/${schoolCode}/${targetPage}`,
     {
       method: "GET",
       headers: {
-        Cookie: lectioCookies,
+        Cookie: getLastAuthenticatedCookie(),
       },
       ...standardFetchOptions,
     },

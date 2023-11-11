@@ -3,13 +3,8 @@ import { getAuthenticatedPage } from ".";
 import { getAllMessagesForm } from "./getForm/all-messages-form";
 import { standardFetchOptions } from "../standardFetchOptions";
 
-export async function getAllMessagesPage({
-  lectioCookies,
-  schoolCode,
-}: StandardProps) {
+export async function getAllMessagesPage() {
   const res = await getAuthenticatedPage({
-    lectioCookies: lectioCookies,
-    schoolCode: schoolCode,
     page: "messages-all",
   });
 

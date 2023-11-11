@@ -4,13 +4,11 @@ import { getStudentById as _getStudentById } from "@/api-functions/scrapeFunctio
 import { validateResult } from "./validateResult";
 
 type MainType = Student;
-type FunctionProps = APIProps<StandardProps>;
+type FunctionProps = { userId: string };
 
-export const getStudentById = async (props: FunctionProps) => {
+export const getStudentById = async ({ userId }: FunctionProps) => {
   const result = await _getStudentById({
-    schoolCode: props.schoolCode,
-    lectioCookies: props.lectioCookies,
-    userId: props.userId,
+    userId: userId,
   });
   const processedResult = processResult<MainType>(result);
   validateResult(processedResult);

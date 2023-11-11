@@ -2,7 +2,6 @@ import "server-only";
 import { getAuthenticatedPage } from "../../getPage/getAuthenticatedPage";
 import { getAllMessagesPage } from "../../getPage/getAllMessagesPage";
 import { getMessageInformation } from "./utils";
-import { getLectioProps } from "@/lib/auth/getLectioProps";
 
 type Message = {
   title: string;
@@ -14,11 +13,7 @@ type Message = {
 
 type Props = { type: MessagesTypes };
 
-export async function getMessages({
-  lectioCookies,
-  schoolCode,
-  type,
-}: StandardProps & Props) {
+export async function getMessages({ type }: Props) {
   const typeMap = {
     personal: "messages-personal",
     all: "messages-all",
@@ -28,18 +23,11 @@ export async function getMessages({
   } as const;
 
   let res: GetPageReturn = null;
-  const props = getLectioProps();
 
   if (type === "all") {
-    res = await getAllMessagesPage({
-      lectioCookies: lectioCookies,
-      schoolCode: schoolCode,
-      userId: props.userId,
-    });
+    res = await getAllMessagesPage();
   } else {
     res = await getAuthenticatedPage({
-      lectioCookies: lectioCookies,
-      schoolCode: schoolCode,
       page: typeMap[type],
     });
   }

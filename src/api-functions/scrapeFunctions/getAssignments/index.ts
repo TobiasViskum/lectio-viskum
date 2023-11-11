@@ -2,12 +2,10 @@ import "server-only";
 import { getTimeInMs } from "@/util/getTimeInMs";
 import { getAssignmentsPage } from "../../getPage/getAssignmentsPage";
 import { getAssignmentProps } from "./getAssignmentProps";
+import { getLectioProps } from "@/lib/auth/getLectioProps";
 
-export async function getAssignments({
-  lectioCookies,
-  schoolCode,
-  userId,
-}: StandardProps) {
+export async function getAssignments() {
+  const userId = getLectioProps().userId;
   const tag = `${userId}-assignments`;
   const foundCache = global.cache.get(tag);
 
@@ -15,10 +13,7 @@ export async function getAssignments({
     return foundCache.data as Assignment[];
   }
 
-  const res = await getAssignmentsPage({
-    lectioCookies: lectioCookies,
-    schoolCode: schoolCode,
-  });
+  const res = await getAssignmentsPage();
 
   if (res === "Not authenticated") return res;
   if (res === "Forbidden access") return res;

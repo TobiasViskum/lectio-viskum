@@ -1,10 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { lectioAPI } from "./lib/lectio-api";
-import { revalidatePath } from "next/cache";
 
 export async function middleware(req: NextRequest) {
   const requestHeaders = new Headers(req.headers);
-  requestHeaders.set("x-url", req.url);
+  requestHeaders.set("x-url", req.nextUrl.pathname + req.nextUrl.search);
+
+  let xSidebar: XSidebar = "none";
+
+  requestHeaders.set("x-sidebar", "none");
+
+  if (req.nextUrl.pathname === "/afleveringer") {
+    xSidebar = "all-assignments";
+  } else if (req.nextUrl.pathname.includes("/afleveringer/")) {
+    xSidebar = "assignment";
+  } else if (req.nextUrl.pathname.includes("/elevfeedback")) {
+    xSidebar = "student-feedback";
+  } else if (req.nextUrl.pathname.includes("/modul/")) {
+    xSidebar = "lesson";
+  }
+  requestHeaders.set("x-sidebar", xSidebar);
 
   const cookies = req.cookies;
   const username = cookies.get("username")?.value;
@@ -89,5 +103,7 @@ export const config = {
     "/afleveringer/:path*",
     "/forside",
     "/opdater-adgang",
+    "/beskeder",
+    "/indstillinger",
   ],
 };

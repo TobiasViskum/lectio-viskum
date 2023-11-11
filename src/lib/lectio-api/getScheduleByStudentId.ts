@@ -6,11 +6,9 @@ import { validateResult } from "./validateResult";
 import { getTimeInMs } from "@/util/getTimeInMs";
 
 type MainType = Prettify<Week[]>;
-type FunctionProps = Prettify<
-  APIProps<StandardProps & { week: string; year: string }>
->;
+type FunctionProps = { week: string; year: string; userId: string };
 
-export const getScheduleByCredentials = async (props: FunctionProps) => {
+export const getScheduleByStudentId = async (props: FunctionProps) => {
   const userId = props.userId;
   const tag = `${userId}-schedule-${props.week + props.year}`;
   const foundCache = global.cache.get(tag);
@@ -22,9 +20,7 @@ export const getScheduleByCredentials = async (props: FunctionProps) => {
   const result = await getSchedule({
     week: props.week,
     year: props.year,
-    schoolCode: props.schoolCode,
-    lectioCookies: props.lectioCookies,
-    userId: userId,
+    studentId: userId,
   });
   const processedResult = processResult<MainType>(result);
   validateResult(processedResult);

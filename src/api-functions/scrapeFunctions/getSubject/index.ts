@@ -4,10 +4,7 @@ import { getAuthenticatedPage } from "@/api-functions/getPage";
 import { getAllSubjects } from "./getAllSubjects";
 
 export async function getSubject(providedClassStr: string) {
-  const { lectioCookies, schoolCode } = getLectioProps();
   const res = await getAuthenticatedPage({
-    lectioCookies: lectioCookies,
-    schoolCode: schoolCode,
     specificPage: "FindSkema.aspx?type=hold",
   });
 

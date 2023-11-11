@@ -92,7 +92,7 @@ export async function getIsAuthenticated({
         if (lectiogsc && ASP_NET_SessionId && autologinkey) {
           const date = new Date()
             .toString()
-            .replace(/\(.*\)/, "(Central European Summer Time)");
+            .replace(/\(.*\)/, "(Central European Standard Time)");
           // const encodedDate = encodeURI(date);
 
           let lectioCookies = "";

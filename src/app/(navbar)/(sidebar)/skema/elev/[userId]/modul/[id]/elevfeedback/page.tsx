@@ -1,5 +1,3 @@
-import { Input } from "@/components/ui/input";
-import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { lectioAPI } from "@/lib/lectio-api";
 import { StudentFeedback } from "./_components/StudentFeedback";
 import { getStudentFeedback } from "@/api-functions/scrapeFunctions/getStudentFeedback";
@@ -12,18 +10,12 @@ type Props = {
 };
 
 export default async function StudentFeedbackPage({ params }: Props) {
-  const lectioProps = getLectioProps();
   const lessonPromise = lectioAPI.getLessonById({
     lessonId: params.id,
-    lectioCookies: lectioProps.lectioCookies,
-    schoolCode: lectioProps.schoolCode,
     userId: params.userId,
     year: "2023",
   });
   const studentFeedbackPromise = getStudentFeedback({
-    lectioCookies: lectioProps.lectioCookies,
-    userId: params.userId,
-    schoolCode: lectioProps.userId,
     lessonId: params.id,
   });
 

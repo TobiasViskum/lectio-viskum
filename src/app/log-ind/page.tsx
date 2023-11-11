@@ -18,7 +18,7 @@ export default function LoginPage() {
       <div className="animate-schools-fade-in flex w-full  flex-col items-center gap-y-4">
         <Label className="text-muted-foreground">Vælg din skole:</Label>
         <SchoolSearch />
-        <ScrollArea className="relative flex h-[512px] max-h-[55svh] w-full max-w-lg flex-col items-center justify-center bg-black bg-opacity-60 pt-4 text-center">
+        <ScrollArea className="relative flex h-[512px] max-h-[55svh] min-h-[256px] w-full max-w-lg flex-col items-center justify-center bg-black bg-opacity-60 pt-4 text-center">
           <Suspense
             fallback={
               <LoadingSpinner className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2" />

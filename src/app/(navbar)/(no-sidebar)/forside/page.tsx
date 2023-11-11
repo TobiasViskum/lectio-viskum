@@ -4,10 +4,8 @@ import { lectioAPI } from "@/lib/lectio-api";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 
 export default async function Homepage() {
-  const { lectioCookies, schoolCode, userId } = getLectioProps();
+  const { userId } = getLectioProps();
   const studentPromise = lectioAPI.getStudent.byId({
-    lectioCookies: lectioCookies,
-    schoolCode: schoolCode,
     userId: userId,
   });
 

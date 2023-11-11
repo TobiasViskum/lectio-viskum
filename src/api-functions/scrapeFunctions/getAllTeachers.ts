@@ -1,12 +1,11 @@
 import "server-only";
 import { getTimeInMs } from "@/util/getTimeInMs";
 import { getAuthenticatedPage } from "../getPage/getAuthenticatedPage";
+import { getLectioProps } from "@/lib/auth/getLectioProps";
 
-export async function getAllTeachers({
-  lectioCookies,
-  schoolCode,
-}: StandardProps) {
-  const tag = `teachers`;
+export async function getAllTeachers() {
+  const schoolCode = getLectioProps().schoolCode;
+  const tag = `${schoolCode}-teachers`;
   const foundCache = global.cache.get(tag);
 
   if (foundCache && new Date().getTime() < foundCache.expires) {
@@ -15,8 +14,6 @@ export async function getAllTeachers({
 
   const res = await getAuthenticatedPage({
     page: "teachers",
-    lectioCookies: lectioCookies,
-    schoolCode: schoolCode,
   });
 
   if (res === "Not authenticated") return res;

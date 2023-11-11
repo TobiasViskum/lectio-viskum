@@ -4,16 +4,10 @@ import { getAuthenticatedPage } from ".";
 import { getAssignmentsForm } from "./getForm/assignment-form";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { standardFetchOptions } from "../standardFetchOptions";
+import { getLastAuthenticatedCookie } from "../getLastAuthenticatedCookie";
 
-type Props = {
-  lectioCookies: string;
-  schoolCode: string;
-};
-
-export async function getAssignmentsPage({ lectioCookies, schoolCode }: Props) {
+export async function getAssignmentsPage() {
   const res = await getAuthenticatedPage({
-    lectioCookies: lectioCookies,
-    schoolCode: schoolCode,
     page: "assignments",
   });
 
@@ -41,7 +35,7 @@ export async function getAssignmentsPage({ lectioCookies, schoolCode }: Props) {
       {
         method: "POST",
         body: form,
-        headers: { Cookie: cookies.lectioCookies },
+        headers: { Cookie: getLastAuthenticatedCookie() },
         ...standardFetchOptions,
       },
     ).then(async (res) => {

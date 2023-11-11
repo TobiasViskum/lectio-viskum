@@ -20,7 +20,7 @@ export default async function SchoolCodePage({ params, searchParams }: Props) {
 
   return (
     <div className="relative flex w-full max-w-6xl justify-center">
-      <div className="grid w-full place-items-center gap-y-8 pt-20 sm:gap-y-12">
+      <div className="grid w-full place-items-center gap-y-8 pt-8 sm:gap-y-12">
         <Link
           href={"/log-ind"}
           className="absolute -top-8 left-0 flex items-center gap-x-2 rounded-md p-2 hover:bg-accent"

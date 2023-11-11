@@ -1,11 +1,9 @@
-import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { lectioAPI } from "@/lib/lectio-api";
 import { RenderHomework } from "./_components/RenderHomework";
 import { Teacher } from "@/components/global/Teacher";
 import { LessonTime } from "./_components/LessonTime";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Separator } from "@/components/ui/separator";
 import { Fragment } from "react";
 
@@ -17,11 +15,8 @@ type Props = {
 };
 
 export default async function LessonPage({ params }: Props) {
-  const lectioProps = getLectioProps();
   const lesson = await lectioAPI.getLessonById({
     lessonId: params.id,
-    lectioCookies: lectioProps.lectioCookies,
-    schoolCode: lectioProps.schoolCode,
     userId: params.userId,
     year: "2023",
   });
