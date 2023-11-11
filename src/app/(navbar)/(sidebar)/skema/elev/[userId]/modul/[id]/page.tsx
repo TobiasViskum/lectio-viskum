@@ -47,7 +47,7 @@ export default async function LessonPage({ params }: Props) {
       })}
 
       <div className="mt-8 flex flex-col gap-y-2">
-        <Badge className="-ml-1 w-max bg-accent px-1.5 py-1 text-left text-xs text-muted-foreground transition-opacity hover:bg-accent hover:opacity-75">
+        <Badge className="-ml-1 w-max bg-accent px-1.5 py-1 text-left text-xs font-extrabold text-foreground transition-opacity hover:bg-accent hover:opacity-75 ">
           INFORMATION
         </Badge>
         {/* <InfoCircledIcon className="h-6 w-6 text-blue-400" /> */}
@@ -73,7 +73,7 @@ export default async function LessonPage({ params }: Props) {
 
       {lesson.note.length !== 0 && (
         <div className="flex flex-col gap-y-2">
-          <Badge className="-ml-1 mt-8 w-max bg-accent px-1.5 py-1 text-left text-xs text-muted-foreground transition-opacity hover:bg-accent hover:opacity-75">
+          <Badge className="-ml-1 mt-8 w-max bg-accent px-1.5 py-1 text-left text-xs font-extrabold text-foreground transition-opacity hover:bg-accent hover:opacity-75">
             NOTE
           </Badge>
           <div className="flex flex-col text-muted-foreground">
@@ -92,7 +92,7 @@ export default async function LessonPage({ params }: Props) {
 
       {lesson.homework.length !== 0 && (
         <div className="flex flex-col gap-y-2">
-          <Badge className="-ml-1 mt-8 w-max bg-accent px-1.5 py-1 text-left text-xs text-muted-foreground transition-opacity hover:bg-accent hover:opacity-75">
+          <Badge className="-ml-1 mt-8 w-max bg-accent px-1.5 py-1 text-left text-xs font-extrabold text-foreground transition-opacity hover:bg-accent hover:opacity-75">
             LEKTIER
           </Badge>
           <div className="flex flex-col">

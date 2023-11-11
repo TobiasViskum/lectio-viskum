@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { lectioAPI } from "@/lib/lectio-api";
-import { StudentFeedback } from "./StudentFeedback";
+import { StudentFeedback } from "./_components/StudentFeedback";
 import { getStudentFeedback } from "@/api-functions/scrapeFunctions/getStudentFeedback";
 
 type Props = {
@@ -13,24 +13,28 @@ type Props = {
 
 export default async function StudentFeedbackPage({ params }: Props) {
   const lectioProps = getLectioProps();
-  const lesson = await lectioAPI.getLessonById({
+  const lessonPromise = lectioAPI.getLessonById({
     lessonId: params.id,
     lectioCookies: lectioProps.lectioCookies,
     schoolCode: lectioProps.schoolCode,
     userId: params.userId,
     year: "2023",
   });
-
-  if (lesson === null) {
-    return <p>An error happened</p>;
-  }
-
-  getStudentFeedback({
+  const studentFeedbackPromise = getStudentFeedback({
     lectioCookies: lectioProps.lectioCookies,
     userId: params.userId,
     schoolCode: lectioProps.userId,
     lessonId: params.id,
   });
+
+  const [lesson, studentFeedback] = await Promise.all([
+    lessonPromise,
+    studentFeedbackPromise,
+  ]);
+
+  if (lesson === null || studentFeedback === null) {
+    return <p>An error happened</p>;
+  }
 
   return (
     <div>
@@ -46,7 +50,7 @@ export default async function StudentFeedbackPage({ params }: Props) {
 
       <div className="flex flex-col py-4">
         <div>
-          <StudentFeedback />
+          <StudentFeedback studentFeedback={studentFeedback} />
         </div>
       </div>
     </div>

@@ -1,11 +1,14 @@
 "use client";
 
 import { execCommand } from "@/util/execCommand";
-import { Toggle } from "../ui/toggle";
+import { Toggle } from "../../../../../../../../../../components/ui/toggle";
 import { useState } from "react";
 import { SubscriptIcon, SuperscriptIcon } from "lucide-react";
+import { Button } from "../../../../../../../../../../components/ui/button";
 
-export function EditableTextArea() {
+type Props = { content: string[] };
+
+export function EditableTextArea({ content }: Props) {
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
@@ -43,6 +46,9 @@ export function EditableTextArea() {
         </Toggle>
       </div>
       <div
+        dangerouslySetInnerHTML={{
+          __html: content.join("<br>"),
+        }}
         lang="da-dk"
         onInput={(e) => {
           setIsBold(document.queryCommandState("bold"));
@@ -56,7 +62,8 @@ export function EditableTextArea() {
         id="myDiv"
         contentEditable={true}
         className="min-h-[150px] rounded-md border border-input p-1 placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-      />
+      ></div>
+      <Button>Gem</Button>
     </div>
   );
 }

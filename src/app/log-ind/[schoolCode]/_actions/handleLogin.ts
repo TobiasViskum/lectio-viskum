@@ -18,9 +18,21 @@ export async function handleLogin(props: Props) {
       })
       .parse(props);
 
-    const isAuthenticated = await lectioAPI.getIsAuthenticated(data);
+    const res = await lectioAPI.getIsAuthenticated(data);
+    const expireDate = new Date();
+    expireDate.setFullYear(expireDate.getFullYear() + 3);
 
-    return isAuthenticated;
+    if (res) {
+      global.userSessions.set(res.studentId, {
+        data: {
+          lectioCookies: res.lectioCookies,
+          schoolCode: props.schoolCode,
+        },
+        expires: expireDate.getTime(),
+      });
+    }
+
+    return res;
   } catch {
     return null;
   }

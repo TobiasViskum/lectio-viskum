@@ -19,22 +19,24 @@ export default async function SchoolCodePage({ params, searchParams }: Props) {
   const promise = lectioAPI.getSchool({ schoolCode: params.schoolCode });
 
   return (
-    <div className="grid w-full place-items-center gap-y-8 pt-8 sm:gap-y-12">
-      <Link
-        href={"/log-ind"}
-        className="absolute -top-8 left-0 flex items-center gap-x-2 rounded-md p-2 hover:bg-accent"
-      >
-        <Undo2 />
-        <p>Gå tilbage</p>
-      </Link>
-      <Title schoolPromise={promise} name={searchParams.name} />
+    <div className="relative flex w-full max-w-6xl justify-center">
+      <div className="grid w-full place-items-center gap-y-8 pt-20 sm:gap-y-12">
+        <Link
+          href={"/log-ind"}
+          className="absolute -top-8 left-0 flex items-center gap-x-2 rounded-md p-2 hover:bg-accent"
+        >
+          <Undo2 />
+          <p>Gå tilbage</p>
+        </Link>
+        <Title schoolPromise={promise} name={searchParams.name} />
 
-      <div className="flex w-full max-w-sm flex-col items-center gap-y-8">
-        <Label className="text-muted-foreground">
-          Log ind for at tilgå Lectio
-        </Label>
+        <div className="flex w-full max-w-sm flex-col items-center gap-y-8">
+          <Label className="text-muted-foreground">
+            Log ind for at tilgå Lectio
+          </Label>
 
-        <LoginForm />
+          <LoginForm />
+        </div>
       </div>
     </div>
   );
