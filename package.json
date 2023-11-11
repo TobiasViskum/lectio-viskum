@@ -36,7 +36,7 @@
     "fetch-cookie": "^2.1.0",
     "html-react-parser": "^5.0.6",
     "lucide-react": "^0.284.0",
-    "next": "14.0.2",
+    "next": "14.0.0",
     "next-themes": "^0.2.1",
     "react": "^18",
     "react-day-picker": "^8.9.1",
