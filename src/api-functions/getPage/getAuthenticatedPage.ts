@@ -1,6 +1,6 @@
 import "server-only";
 import { load } from "cheerio";
-import { getFetchCookie } from "../getFetchCookie";
+import { getFetchCookie } from "@/lib/getFetchCookie";
 import { getPageFromMap } from "./page-map";
 import { getSchoolBySchoolCode } from "../scrapeFunctions/getSchoolBySchoolCode";
 import { standardFetchOptions } from "../standardFetchOptions";

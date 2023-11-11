@@ -16,6 +16,11 @@ const tailwindConfig: Config = {
       },
     },
     extend: {
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
       screens: {
         xxs: "320px",
         xs: "480px",
@@ -134,6 +139,30 @@ const tailwindConfig: Config = {
             opacity: "0",
           },
         },
+        "expand-in": {
+          "0%": {
+            transform: "translateY(-150%)",
+            opacity: "0",
+          },
+          "90%": {
+            opacity: "10",
+          },
+          "100%": {
+            transform: "translateY(0%)",
+            opacity: "100",
+          },
+        },
+        "schools-fade-in": {
+          "0%": {
+            opacity: "0",
+          },
+          "40%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "100",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -143,6 +172,8 @@ const tailwindConfig: Config = {
         "small-implosion": "small-implosion 0.15s ease-out",
         "fade-in": "fade-in 0.10s ease-in",
         "fade-out": "fade-out 0.10s ease-out",
+        "expand-in": "expand-in 1.75s ease-out",
+        "schools-fade-in": "schools-fade-in 1.75s ease-in",
       },
     },
   },

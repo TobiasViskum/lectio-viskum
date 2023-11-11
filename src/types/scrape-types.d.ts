@@ -156,3 +156,8 @@ type FullLesson = Prettify<
     presentation: LessonHomework[][];
   }
 >;
+
+type StudentFeedback = Prettify<{
+  title: string;
+  content: string[];
+}>;

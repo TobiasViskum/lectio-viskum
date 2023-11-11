@@ -60,4 +60,4 @@ type GetPageReturn =
 
 type MessagesTypes = "all" | "unread" | "personal" | "newest" | "deleted";
 
-type CacheMap = Map<string, { data: any; expires: number }>;
+type CacheMap<T = any> = Map<string, { data: T; expires: number }>;

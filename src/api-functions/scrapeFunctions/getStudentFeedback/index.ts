@@ -19,9 +19,9 @@ export async function getStudentFeedback({ lessonId }: StandardProps & Props) {
     specificPage: href,
   });
 
-  if (res === "Not authenticated") return res;
-  if (res === "Forbidden access") return res;
-  if (res === "Invalid school") return res;
+  if (res === "Not authenticated") return null;
+  if (res === "Forbidden access") return null;
+  if (res === "Invalid school") return null;
   if (res === null) return res;
 
   const $ = res.$;
@@ -29,11 +29,6 @@ export async function getStudentFeedback({ lessonId }: StandardProps & Props) {
   let studentFeedback: StudentFeedback = {
     title: "",
     content: [],
-  };
-
-  type StudentFeedback = {
-    title: string;
-    content: string[];
   };
 
   const container =
@@ -59,7 +54,7 @@ export async function getStudentFeedback({ lessonId }: StandardProps & Props) {
           if ($child.find("span").length === 0) {
             const html = $child.html();
             if (html) {
-              studentFeedback.content.push(html.replaceAll("\n", "").trim());
+              studentFeedback.content.push(html.trim());
             }
           }
         }

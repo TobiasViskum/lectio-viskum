@@ -1,6 +1,6 @@
 import { standardFetchOptions } from "@/api-functions/standardFetchOptions";
 import { getCookies } from "./auth/getLectioCookies";
-import { getFetchCookie } from "./getFetchCookie";
+import { getFetchCookie } from "@/lib/getFetchCookie";
 import { getLoginForm } from "./login-form";
 import { load } from "cheerio";
 

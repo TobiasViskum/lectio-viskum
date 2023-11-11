@@ -1,11 +1,15 @@
 import { getTimeInMs } from "./util/getTimeInMs";
 
-export function register() {
+export async function register() {
   const cache: CacheMap = new Map();
   global.cache = cache;
 
   const longTermCache: CacheMap = new Map();
   global.longTermCache = longTermCache;
+
+  const userSessions: CacheMap<{ lectioCookies: string; schoolCode: string }> =
+    new Map();
+  global.userSessions = userSessions;
 
   setInterval(
     () => {
@@ -27,5 +31,20 @@ export function register() {
       }
     },
     getTimeInMs({ hours: 6 }),
+  );
+
+  setInterval(
+    () => {
+      for (const [key, value] of global.userSessions) {
+        console.log(`Refreshed session for user ${key}`);
+        const lectioCookies = value.data.lectioCookies;
+        const schoolCode = value.data.schoolCode;
+        fetch(`https://www.lectio.dk/lectio/${schoolCode}/forside.aspx`, {
+          method: "GET",
+          headers: { Cookie: lectioCookies },
+        });
+      }
+    },
+    getTimeInMs({ minutes: 5 }),
   );
 }

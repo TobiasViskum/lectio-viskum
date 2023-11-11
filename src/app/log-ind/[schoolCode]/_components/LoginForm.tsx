@@ -79,7 +79,7 @@ export function LoginForm() {
             ref={usernameRef}
             spellCheck={false}
             className="rounded-none border-0 placeholder:opacity-50 focus-visible:ring-0"
-            placeholder="Brugernavn"
+            placeholder="Brugernavn..."
             name="username"
             onKeyDown={(e) => {
               if (e.key === "Enter" && passwordRef.current) {
@@ -93,7 +93,7 @@ export function LoginForm() {
             ref={passwordRef}
             spellCheck={false}
             className="rounded-none border-0 placeholder:opacity-50 focus-visible:ring-0"
-            placeholder="Adgangskode"
+            placeholder="Adgangskode..."
             type={isShowingPassword ? "text" : "password"}
             name="password"
             onKeyDown={(e) => {

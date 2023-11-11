@@ -1,7 +1,9 @@
 "use client";
 
+import { LogOutUser } from "@/app/_actions/log-out";
 import { LoadingSpinner } from "@/components/loading-components/LoadingSpinner";
 import { MenubarItem } from "@/components/ui/menubar";
+import { getCookies } from "@/lib/auth/getLectioCookies";
 import { setAuthCookies } from "@/lib/auth/setAuthCookies";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -11,7 +13,9 @@ export function LogOutButton() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const router = useRouter();
 
-  function handleLogout() {
+  async function handleLogout() {
+    const cookies = getCookies();
+    await LogOutUser(cookies.userId);
     router.refresh();
     setAuthCookies({
       username: "",
