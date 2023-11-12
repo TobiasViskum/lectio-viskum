@@ -16,7 +16,7 @@ export default async function Homepage() {
   return (
     <div className="w-full">
       <div>
-        <Student student={student} size="large" />
+        <Student student={student} size="large" disableHover />
       </div>
       <CacheRefresher />
     </div>

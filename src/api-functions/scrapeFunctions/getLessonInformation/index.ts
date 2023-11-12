@@ -26,7 +26,7 @@ export async function getLessonInformation({ lessonId, userId, year }: Props) {
   const foundCache = global.shortTermCache.get(tag);
 
   if (foundCache && new Date().getTime() < foundCache.expires) {
-    // return foundCache.data;
+    return foundCache.data;
   }
 
   const res = await getAuthenticatedPage({

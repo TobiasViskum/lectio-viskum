@@ -8,7 +8,7 @@ export async function getClassInformation(classId: string) {
   const foundCache = global.longTermCache.get(tag);
 
   if (foundCache && new Date().getTime() < foundCache.expires) {
-    // return foundCache.data;
+    return foundCache.data;
   }
 
   const href = `subnav/members.aspx?holdelementid=${classId}&showteachers=1&showstudents=1&reporttype=withpics`;

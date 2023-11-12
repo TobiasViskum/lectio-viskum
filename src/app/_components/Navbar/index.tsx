@@ -1,79 +1,33 @@
 import { Logo, profileLoading } from "@/assets";
 import { Separator } from "@/components/ui/separator";
-import {
-  CalendarIcon,
-  EnvelopeClosedIcon,
-  PaperPlaneIcon,
-} from "@radix-ui/react-icons";
 import Image from "next/image";
-import Link from "next/link";
-import { HomeIcon2 } from "@/components/icons/HomeIcon";
 import { AccountWrapper } from "./AccountWrapper";
 import { Suspense } from "react";
-import { getWeekAndYear } from "@/util/getWeekAndYear";
-import { getLectioProps } from "@/lib/auth/getLectioProps";
+import { NavbarSheet } from "./NavbarSheet";
+import { BigScreenContent } from "./BigScreenContent";
+import Link from "next/link";
 
-export async function Navbar() {
-  const lectioProps = getLectioProps();
-
-  const { week, year } = getWeekAndYear(new Date());
-
+export function Navbar() {
   return (
     <div className="fixed top-0 z-50 h-16 w-full bg-black bg-opacity-50 backdrop-blur-sm">
-      <nav className="flex h-full items-center gap-x-4 px-2 sm:px-4">
+      <nav className="flex h-full items-center px-2 sm:px-4">
+        <NavbarSheet />
+        <BigScreenContent />
+
         <Link
           href={"/forside"}
-          className="hidden aspect-[3.375_/_1] h-8 sm:block"
+          className="ml-auto mr-auto aspect-[3.375_/_1] h-8 2xl:hidden"
         >
           <Image
             src={Logo}
-            alt="LectioV"
+            alt="logo"
             height={32}
             width={108}
             className="aspect-[3.375_/_1]"
           />
         </Link>
-        <Link href={"/"} className="block aspect-[1_/_1] h-9 p-1 sm:hidden">
-          <HomeIcon2 className="h-7 w-7"></HomeIcon2>
-        </Link>
-        <div>
-          <Link
-            href={`/skema/elev/${lectioProps.userId}/${week}-${year}`}
-            className="hidden items-center gap-x-2 rounded-md px-4 py-2 text-sm font-semibold hover:bg-accent sm:flex"
-          >
-            Skema
-            <CalendarIcon />
-          </Link>
-          <Link href={`/skema/elev/${lectioProps.userId}/${week}-${year}`}>
-            <CalendarIcon className="mx-3 block h-6 w-6 sm:hidden" />
-          </Link>
-        </div>
-        <div>
-          <Link
-            href={"/afleveringer"}
-            className="hidden items-center gap-x-2 rounded-md px-4 py-2 text-sm font-semibold hover:bg-accent sm:flex"
-          >
-            Afleveringer
-            <PaperPlaneIcon className="-rotate-45" />
-          </Link>
-          <Link href={"/afleveringer"}>
-            <PaperPlaneIcon className="mx-3 block h-6 w-6 -rotate-45 sm:hidden" />
-          </Link>
-        </div>
-        <div>
-          <Link
-            href={"/beskeder"}
-            className="hidden items-center gap-x-2 rounded-md px-4 py-2 text-sm font-semibold hover:bg-accent sm:flex"
-          >
-            Beskeder
-            <EnvelopeClosedIcon />
-          </Link>
-          <Link href={"/beskeder"}>
-            <EnvelopeClosedIcon className="mx-3 block h-6 w-6 sm:hidden" />
-          </Link>
-        </div>
 
-        <div className="ml-auto grid place-items-center rounded-full">
+        <div className="grid place-items-center rounded-full 2xl:ml-auto">
           <Suspense
             fallback={
               <Image

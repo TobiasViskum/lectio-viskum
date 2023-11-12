@@ -37,11 +37,13 @@ export default async function LessonPage({ params }: Props) {
       </h1>
       <LessonTime lessonNumber={lesson.lessonNumber} time={lesson.time} />
 
-      {lesson.teachers.map((teacher) => {
-        return <Teacher key={teacher.name} teacher={teacher} />;
-      })}
+      <div className="block md:hidden">
+        {lesson.teachers.map((teacher) => {
+          return <Teacher key={teacher.name} teacher={teacher} />;
+        })}
+      </div>
 
-      <div className="mt-8 flex flex-col gap-y-2">
+      <div className="mt-4 flex flex-col gap-y-2">
         <Badge className="-ml-1 w-max bg-accent px-1.5 py-0.5 text-left text-2xs text-muted-foreground transition-opacity hover:bg-accent hover:opacity-75 ">
           INFORMATION
         </Badge>
@@ -109,10 +111,10 @@ export default async function LessonPage({ params }: Props) {
       )}
 
       {lesson.other.length !== 0 && (
-        <div>
-          <p className="pb-1 pt-4 text-sm text-muted-foreground">
-            ØVRIGT INDHOLD:
-          </p>
+        <div className="flex flex-col gap-y-2">
+          <Badge className="-ml-1 mt-8 w-max bg-accent px-1.5 py-0.5 text-left text-2xs text-muted-foreground transition-opacity hover:bg-accent hover:opacity-75">
+            ØVRIGT INDHOLD
+          </Badge>
           <div className="flex flex-col gap-y-4">
             {lesson.other.map((homework, _index) => {
               return (
