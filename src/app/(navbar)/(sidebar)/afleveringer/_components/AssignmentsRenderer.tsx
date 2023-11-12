@@ -1,12 +1,9 @@
 import { LoadingDots } from "@/components/loading-components/LoadingDots";
 import { AssignmentsWrapper } from "./AssignmentsWrapper";
+import { lectioAPI } from "@/lib/lectio-api";
 
-type Props = {
-  assignmentsPromise: Promise<Assignment[] | null>;
-};
-
-export async function AssignmentsRenderer({ assignmentsPromise }: Props) {
-  const assignments = await assignmentsPromise;
+export async function AssignmentsRenderer() {
+  const assignments = await lectioAPI.getAssignment.all();
 
   if (assignments === null) {
     return <LoadingDots className="mt-8" />;

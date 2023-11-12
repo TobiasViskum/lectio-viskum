@@ -9,8 +9,8 @@ type Props = {
 };
 
 export function SidebarWrapper({ children }: Props) {
-  const xSidebar = headers().get("x-sidebar") as XSidebar;
-
+  // const xSidebar = headers().get("x-sidebar") as XSidebar;
+  const xSidebar: string = "sdf";
   return (
     <div className="container w-full items-start px-0 md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10 xl:grid ">
       <div className="hidden w-full shrink-0 md:block lg:sticky">
