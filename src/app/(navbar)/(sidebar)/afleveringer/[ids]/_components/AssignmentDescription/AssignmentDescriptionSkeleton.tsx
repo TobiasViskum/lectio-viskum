@@ -1,23 +1,36 @@
-export function AssignmentDescriptionSkeleton() {
+import { getLectioProps } from "@/lib/auth/getLectioProps";
+import { NoDataSkeleton } from "./NoDataSkeleton";
+import { getRedisClient } from "@/lib/get-redis-client";
+import { getAssignmentTag } from "@/lib/lectio-api/getTags";
+import { urlify } from "@/util/urlify";
+
+type Props = {
+  assignmentId: string;
+};
+
+export async function AssignmentDescriptionSkeleton({ assignmentId }: Props) {
+  let assignment: FullAssignment | null = null;
+
+  const userId = getLectioProps().userId;
+  const client = await getRedisClient();
+  const tag = getAssignmentTag(userId, assignmentId);
+  const foundCache = (await client.json.get(tag)) as RedisCache<FullAssignment>;
+  if (foundCache) {
+    assignment = foundCache.data;
+  }
+  await client.quit();
+
+  if (assignment === null) return <NoDataSkeleton />;
+
   return (
-    <div className="flex max-w-[min(85%,768px)] animate-pulse flex-col gap-y-1">
-      <div className="flex h-6 w-40 items-center">
-        <div className="h-4 w-full rounded-md bg-accent" />
-      </div>
-      <div className="flex flex-col gap-y-0.5 text-sm text-muted-foreground">
-        <div className="flex h-5 w-full items-center">
-          <div className="h-3 w-full rounded-md bg-accent" />
-        </div>
-        <div className="flex h-5 w-full items-center">
-          <div className="h-3 w-full rounded-md bg-accent" />
-        </div>
-        <div className="flex h-5 w-full items-center">
-          <div className="h-3 w-full rounded-md bg-accent" />
-        </div>
-        <div className="flex h-5 w-1/2 items-center">
-          <div className="h-3 w-full rounded-md bg-accent" />
-        </div>
-      </div>
+    <div className="flex max-w-3xl flex-col gap-y-1">
+      <p className="font-medium">Opgavebeskrivelse:</p>
+      <p
+        className="text-sm text-muted-foreground"
+        dangerouslySetInnerHTML={{
+          __html: urlify(assignment.description.join("<br/>")),
+        }}
+      ></p>
     </div>
   );
 }

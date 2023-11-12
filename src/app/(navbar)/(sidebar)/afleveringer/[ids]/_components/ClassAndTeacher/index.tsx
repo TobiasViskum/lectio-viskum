@@ -1,10 +1,12 @@
 import { Teacher } from "@/components/global/Teacher";
-import Image from "next/image";
+import { lectioAPI } from "@/lib/lectio-api";
 
-type Props = { assignmentPromise: Promise<FullAssignment | null> };
+type Props = { assignmentId: string };
 
-export async function ClassAndTeacher({ assignmentPromise }: Props) {
-  const assignment = await assignmentPromise;
+export async function ClassAndTeacher({ assignmentId }: Props) {
+  const assignment = await lectioAPI.getAssignment.byId({
+    assignmentId: assignmentId,
+  });
 
   if (assignment === null) {
     return <p>Error</p>;
@@ -18,7 +20,9 @@ export async function ClassAndTeacher({ assignmentPromise }: Props) {
           {[assignment.subject, assignment.class].join(", ")}
         </p>
       </div>
-      <Teacher teacher={assignment.teacher} />
+      <div className="w-max">
+        <Teacher teacher={assignment.teacher} />
+      </div>
     </div>
   );
 }

@@ -90,17 +90,11 @@ export async function getIsAuthenticated({
         } catch {}
 
         if (lectiogsc && ASP_NET_SessionId && autologinkey) {
-          const date = new Date()
-            .toString()
-            .replace(/\(.*\)/, "(Central European Standard Time)");
-          // const encodedDate = encodeURI(date);
-
           let lectioCookies = "";
           lectioCookies += `ASP.NET_SessionId=${ASP_NET_SessionId.value};`;
           lectioCookies += `lectiogsc=${lectiogsc.value};`;
           lectioCookies += `autologinkey=${autologinkey.value};`;
           lectioCookies += "isloggedin3=Y;";
-          // lectioCookies += `LastAuthenticatedPageLoad=${encodedDate};`;
 
           return {
             isAuthenticated: true,

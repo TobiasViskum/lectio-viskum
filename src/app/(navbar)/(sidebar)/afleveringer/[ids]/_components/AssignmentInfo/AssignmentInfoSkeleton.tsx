@@ -1,12 +1,26 @@
-import { Separator } from "@/components/ui/separator";
+import { getLectioProps } from "@/lib/auth/getLectioProps";
+import { NoDataSkeleton } from "./NoDataSkeleton";
+import { getRedisClient } from "@/lib/get-redis-client";
+import { getAssignmentTag } from "@/lib/lectio-api/getTags";
 import { getDate } from "../../../_util/getDate";
+import { Separator } from "@/components/ui/separator";
 
-type Props = { assignmentPromise: Promise<FullAssignment | null> };
+type Props = {
+  assignmentId: string;
+};
+export async function AssignmentInfoSkeleton({ assignmentId }: Props) {
+  let assignment: FullAssignment | null = null;
 
-export async function AssignmentInfo({ assignmentPromise }: Props) {
-  const assignment = await assignmentPromise;
+  const userId = getLectioProps().userId;
+  const client = await getRedisClient();
+  const tag = getAssignmentTag(userId, assignmentId);
+  const foundCache = (await client.json.get(tag)) as RedisCache<FullAssignment>;
+  if (foundCache) {
+    assignment = foundCache.data;
+  }
+  await client.quit();
 
-  if (assignment === null) return <p>Error</p>;
+  if (assignment === null) return <NoDataSkeleton />;
 
   const date = getDate(assignment.dueTo);
   const formattedDate = new Intl.DateTimeFormat("da-dk", {

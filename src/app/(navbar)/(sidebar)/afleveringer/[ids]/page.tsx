@@ -9,6 +9,9 @@ import { AssignmentTitle } from "./_components/AssignmentTitle";
 import { AssignmentTitleSkeleton } from "./_components/AssignmentTitle/AssignmentTitleSkeleton";
 import { AssignmentDescriptionSkeleton } from "./_components/AssignmentDescription/AssignmentDescriptionSkeleton";
 import { AssignmentInfo } from "./_components/AssignmentInfo";
+import { AssignmentInfoSkeleton } from "./_components/AssignmentInfo/AssignmentInfoSkeleton";
+import { AssignmentFilesSkeleton } from "./_components/AssignmentFiles/AssignmentFilesSkeleton";
+import { AssignmentSubmitsSkeleton } from "./_components/AssignmentSubmits/AssignmentSubmitsSkeleton";
 
 type Props = {
   params: { ids: string };
@@ -23,7 +26,7 @@ type Props = {
 export default function AssignmentPage({ params, searchParams }: Props) {
   const assignmentId = params.ids;
 
-  const assignmentPromise = lectioAPI.getAssignment.byHref({
+  const assignmentPromise = lectioAPI.getAssignment.byId({
     assignmentId: assignmentId,
   });
 
@@ -41,21 +44,32 @@ export default function AssignmentPage({ params, searchParams }: Props) {
               <ClassAndTeacherSkeleton
                 schoolClass={searchParams.class}
                 subject={searchParams.subject}
+                assignmentId={assignmentId}
               />
             }
           >
-            <ClassAndTeacher assignmentPromise={assignmentPromise} />
+            <ClassAndTeacher assignmentId={assignmentId} />
           </Suspense>
-          <Suspense>
+          <Suspense
+            fallback={<AssignmentInfoSkeleton assignmentId={assignmentId} />}
+          >
             <AssignmentInfo assignmentPromise={assignmentPromise} />
           </Suspense>
-          <Suspense fallback={<AssignmentDescriptionSkeleton />}>
+          <Suspense
+            fallback={
+              <AssignmentDescriptionSkeleton assignmentId={assignmentId} />
+            }
+          >
             <AssignmentDescription assignmentPromise={assignmentPromise} />
           </Suspense>
-          <Suspense>
+          <Suspense
+            fallback={<AssignmentFilesSkeleton assignmentId={assignmentId} />}
+          >
             <AssignmentFiles assignmentPromise={assignmentPromise} />
           </Suspense>
-          <Suspense>
+          <Suspense
+            fallback={<AssignmentSubmitsSkeleton assignmentId={assignmentId} />}
+          >
             <AssignmentSubmits assignmentPromise={assignmentPromise} />
           </Suspense>
         </div>

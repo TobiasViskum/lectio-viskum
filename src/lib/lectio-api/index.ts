@@ -20,7 +20,7 @@ const lectioAPI = {
   },
   getAssignment: {
     all: getAllAssignments,
-    byHref: getAssignmentByHref,
+    byId: getAssignmentByHref,
   },
   getLessonById: getLessonById,
 };

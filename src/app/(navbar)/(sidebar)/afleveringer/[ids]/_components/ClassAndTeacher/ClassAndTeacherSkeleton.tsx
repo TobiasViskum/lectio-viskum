@@ -1,36 +1,46 @@
-import { profileLoading } from "@/assets";
-import Image from "next/image";
+import { getRedisClient } from "@/lib/get-redis-client";
+import { NoDataSkeleton } from "./NoDataSkeleton";
+import { getAssignmentTag } from "@/lib/lectio-api/getTags";
+import { getLectioProps } from "@/lib/auth/getLectioProps";
+import { ClassAndTeacher } from ".";
+import { Teacher } from "@/components/global/Teacher";
 
 type Props = {
   schoolClass: string | undefined;
   subject: string | undefined;
+  assignmentId: string;
 };
 
-export function ClassAndTeacherSkeleton({ schoolClass, subject }: Props) {
+export async function ClassAndTeacherSkeleton({
+  schoolClass,
+  subject,
+  assignmentId,
+}: Props) {
+  let assignment: FullAssignment | null = null;
+
+  const userId = getLectioProps().userId;
+  const client = await getRedisClient();
+  const tag = getAssignmentTag(userId, assignmentId);
+  const foundCache = (await client.json.get(tag)) as RedisCache<FullAssignment>;
+  if (foundCache) {
+    assignment = foundCache.data;
+  }
+  await client.quit();
+
+  if (assignment === null) {
+    return <NoDataSkeleton schoolClass={schoolClass} subject={subject} />;
+  }
+
   return (
     <div className="flex flex-col gap-y-1">
-      <div className="flex h-6 w-56 items-center gap-x-1">
+      <div className="flex gap-x-1">
         <p className="font-bold">Klasse:</p>
-        {schoolClass && subject ? (
-          <p className="text-muted-foreground">
-            {[
-              decodeURIComponent(subject),
-              decodeURIComponent(schoolClass),
-            ].join(", ")}
-          </p>
-        ) : (
-          <div className="ml-2 h-3 w-full animate-pulse rounded-md bg-accent" />
-        )}
+        <p className="text-muted-foreground">
+          {[assignment.subject, assignment.class].join(", ")}
+        </p>
       </div>
-      <div className="flex w-max animate-pulse items-center gap-x-2 rounded-lg py-2 pl-1 pr-3 transition-colors">
-        <Image
-          src={profileLoading}
-          width={48}
-          height={48}
-          alt="img"
-          className="obj aspect-square rounded-full object-cover opacity-40"
-        />
-        <div className="h-4 w-40 rounded-md bg-accent font-medium text-accent" />
+      <div className="w-max">
+        <Teacher teacher={assignment.teacher} />
       </div>
     </div>
   );
