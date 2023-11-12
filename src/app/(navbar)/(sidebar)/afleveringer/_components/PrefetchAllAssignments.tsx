@@ -11,7 +11,7 @@ export async function PrefetchAllAssignments({ assignments }: Props) {
   assignments = assignments.reverse();
 
   for (let i = 0; i < assignments.length; i++) {
-    if (i > 15) {
+    if (i > 10) {
       continue;
     }
 
