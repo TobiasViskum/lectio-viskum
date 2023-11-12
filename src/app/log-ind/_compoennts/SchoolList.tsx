@@ -76,39 +76,41 @@ export function SchoolList({ allSchoolsPromise }: Props) {
   return (
     <>
       <h2 className="w-full pb-4 text-left font-medium">Skoler</h2>
-      {items.map((school, index) => {
-        return (
-          <Link
-            href={{
-              pathname: `/log-ind/${school.schoolCode}`,
-              query: { name: school.name },
-            }}
-            key={school.name}
-            className={cn(
-              "flex w-full flex-col items-center rounded-md",
-              index === items.length - 1 ? "mb-4" : "",
-              school.name.length >= 35 ? "max-sm:pt-1" : "",
-            )}
-          >
-            <div
+      <div className="school-list group">
+        {items.map((school, index) => {
+          return (
+            <Link
+              href={{
+                pathname: `/log-ind/${school.schoolCode}`,
+                query: { name: school.name },
+              }}
+              key={school.name}
               className={cn(
-                "w-full whitespace-nowrap rounded-md pl-2 pt-2 text-left text-sm font-semibold hover:bg-accent",
-                school.name.length >= 35 ? "max-sm:text-xs" : "",
+                "school-list__item flex w-full flex-col items-center rounded-md transition-all duration-75 hover:scale-[1.015] hover:opacity-100",
+                index === items.length - 1 ? "mb-4" : "",
+                school.name.length >= 35 ? "max-sm:pt-1" : "",
               )}
             >
-              {school.name}
-              {index !== items.length ? (
-                <Separator
-                  className={cn(
-                    "mt-2 w-[calc(100%-16px)]",
-                    school.name.length >= 35 ? "max-sm:mt-3" : "",
-                  )}
-                />
-              ) : null}
-            </div>
-          </Link>
-        );
-      })}
+              <div
+                className={cn(
+                  "w-full whitespace-nowrap rounded-md pl-2 pt-2 text-left text-sm font-semibold hover:bg-accent",
+                  school.name.length >= 35 ? "max-sm:text-xs" : "",
+                )}
+              >
+                {school.name}
+                {index !== items.length ? (
+                  <Separator
+                    className={cn(
+                      "mt-2 w-[calc(100%-16px)]",
+                      school.name.length >= 35 ? "max-sm:mt-3" : "",
+                    )}
+                  />
+                ) : null}
+              </div>
+            </Link>
+          );
+        })}
+      </div>
     </>
   );
 }

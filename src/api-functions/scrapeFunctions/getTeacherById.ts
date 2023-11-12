@@ -100,12 +100,14 @@ export async function getTeacherById({ teacherId }: Props) {
       return null;
     });
 
-  if (imageBase64 && client) {
+  if (imageBase64) {
     foundTeacher.imgSrc = imageBase64;
-    await client.json.set(tag, "$", {
-      data: foundTeacher,
-      expires: new Date().getTime() + getTimeInMs({ days: 1 }),
-    });
+    if (client) {
+      await client.json.set(tag, "$", {
+        data: foundTeacher,
+        expires: new Date().getTime() + getTimeInMs({ days: 1 }),
+      });
+    }
   }
 
   if (client) await client.quit();
