@@ -20,8 +20,8 @@ export async function PrefetchAllAssignments({ assignments }: Props) {
     }
   }
   for (
-    let i = currentAssignmentIndex;
-    i >= Math.max(0, currentAssignmentIndex - 5);
+    let i = currentAssignmentIndex - 1;
+    i >= Math.max(0, currentAssignmentIndex - 4);
     i--
   ) {
     const assignmentId = assignments[i].id;
@@ -41,7 +41,7 @@ export async function PrefetchAllAssignments({ assignments }: Props) {
 
   for (
     let i = currentAssignmentIndex;
-    i >= Math.min(assignments.length - 1, currentAssignmentIndex + 5);
+    i <= Math.min(assignments.length - 1, currentAssignmentIndex + 4);
     i++
   ) {
     const assignmentId = assignments[i].id;
