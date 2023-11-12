@@ -38,11 +38,15 @@ export async function getAssignment({ assignmentId }: Props) {
   const userId = getLectioProps().userId;
   const client = await getRedisClient();
   const tag = getAssignmentTag(userId, assignmentId);
-  const foundCache = (await client.json.get(tag)) as RedisCache<FullAssignment>;
+  if (client) {
+    const foundCache = (await client.json.get(
+      tag,
+    )) as RedisCache<FullAssignment>;
 
-  if (foundCache && new Date().getTime() < foundCache.expires) {
-    await client.quit();
-    return foundCache.data;
+    if (foundCache && new Date().getTime() < foundCache.expires) {
+      await client.quit();
+      return foundCache.data;
+    }
   }
 
   const href = `ElevAflevering.aspx?elevid=${userId}&exerciseid=${assignmentId}`;
@@ -50,10 +54,17 @@ export async function getAssignment({ assignmentId }: Props) {
     specificPage: href,
   });
 
-  if (res === "Not authenticated") return res;
-  if (res === "Forbidden access") return res;
-  if (res === "Invalid school") return res;
-  if (res === null) return res;
+  if (
+    res === null ||
+    res === "Not authenticated" ||
+    res === "Forbidden access" ||
+    res === "Invalid school"
+  ) {
+    if (client) {
+      await client.quit();
+    }
+    return res;
+  }
 
   const $ = res.$;
 
@@ -101,11 +112,13 @@ export async function getAssignment({ assignmentId }: Props) {
     assignment.teacher = teacher;
   }
 
-  await client.json.set(tag, "$", {
-    data: assignment,
-    expires: new Date().getTime() + getTimeInMs({ minutes: 1 }),
-  });
-  await client.quit();
+  if (client) {
+    await client.json.set(tag, "$", {
+      data: assignment,
+      expires: new Date().getTime() + getTimeInMs({ minutes: 1 }),
+    });
+    await client.quit();
+  }
 
   return assignment;
 }

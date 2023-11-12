@@ -13,21 +13,28 @@ type Props = {
 export async function getStudentById({ userId }: Props) {
   const client = await getRedisClient();
   const tag = getUserTag(userId);
-  const foundCache = (await client.json.get(tag)) as RedisCache<Student>;
+  if (client) {
+    const foundCache = (await client.json.get(tag)) as RedisCache<Student>;
 
-  if (foundCache && new Date().getTime() < foundCache.expires) {
-    await client.quit();
-    return foundCache.data;
+    if (foundCache && new Date().getTime() < foundCache.expires) {
+      await client.quit();
+      return foundCache.data;
+    }
   }
 
   const res = await getAuthenticatedPage({
     specificPage: `DokumentOversigt.aspx?folderid=S60631246942__&elevid=${userId}`,
   });
 
-  if (res === null) return res;
-  if (res === "Not authenticated") return res;
-  if (res === "Forbidden access") return res;
-  if (res === "Invalid school") return res;
+  if (
+    res === null ||
+    res === "Not authenticated" ||
+    res === "Forbidden access" ||
+    res === "Invalid school"
+  ) {
+    if (client) await client.quit();
+    return res;
+  }
 
   const $ = res.$;
   const fetchCookie = res.fetchCookie;
@@ -89,13 +96,14 @@ export async function getStudentById({ userId }: Props) {
     imgSrc: imageBase64,
   } as Student;
 
-  if (studentId && imageBase64) {
+  if (studentId && imageBase64 && client) {
     await client.json.set(tag, "$", {
       data: data,
       expires: new Date().getTime() + getTimeInMs({ days: 1 }),
     });
   }
-  await client.quit();
+
+  if (client) await client.quit();
 
   return data;
 }

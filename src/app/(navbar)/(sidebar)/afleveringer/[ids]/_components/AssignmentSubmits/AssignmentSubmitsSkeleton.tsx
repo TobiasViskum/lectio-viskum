@@ -12,11 +12,15 @@ export async function AssignmentSubmitsSkeleton({ assignmentId }: Props) {
   const userId = getLectioProps().userId;
   const client = await getRedisClient();
   const tag = getAssignmentTag(userId, assignmentId);
-  const foundCache = (await client.json.get(tag)) as RedisCache<FullAssignment>;
-  if (foundCache) {
-    assignment = foundCache.data;
+  if (client) {
+    const foundCache = (await client.json.get(
+      tag,
+    )) as RedisCache<FullAssignment>;
+    if (foundCache) {
+      assignment = foundCache.data;
+    }
+    await client.quit();
   }
-  await client.quit();
 
   if (assignment === null) return null;
 

@@ -12,21 +12,28 @@ type Props = {
 export async function getTeacherById({ teacherId }: Props) {
   const client = await getRedisClient();
   const tag = getUserTag(teacherId);
-  const foundCache = (await client.json.get(tag)) as RedisCache<Teacher>;
+  if (client) {
+    const foundCache = (await client.json.get(tag)) as RedisCache<Teacher>;
 
-  if (foundCache && new Date().getTime() < foundCache.expires) {
-    await client.quit();
-    return foundCache.data;
+    if (foundCache && new Date().getTime() < foundCache.expires) {
+      await client.quit();
+      return foundCache.data;
+    }
   }
 
   const res = await getAuthenticatedPage({
     page: "teachers",
   });
 
-  if (res === "Not authenticated") return res;
-  if (res === "Forbidden access") return res;
-  if (res === "Invalid school") return res;
-  if (res === null) return res;
+  if (
+    res === null ||
+    res === "Not authenticated" ||
+    res === "Forbidden access" ||
+    res === "Invalid school"
+  ) {
+    if (client) await client.quit();
+    return res;
+  }
 
   const $ = res.$;
   const fetchCookie = res.fetchCookie;
@@ -60,6 +67,7 @@ export async function getTeacherById({ teacherId }: Props) {
     .get();
 
   if (teachers.length === 0) {
+    if (client) await client.quit();
     return "No data";
   }
 
@@ -68,6 +76,7 @@ export async function getTeacherById({ teacherId }: Props) {
   });
 
   if (foundTeacher === undefined) {
+    if (client) await client.quit();
     return "No data";
   }
 
@@ -91,7 +100,7 @@ export async function getTeacherById({ teacherId }: Props) {
       return null;
     });
 
-  if (imageBase64) {
+  if (imageBase64 && client) {
     foundTeacher.imgSrc = imageBase64;
     await client.json.set(tag, "$", {
       data: foundTeacher,
@@ -99,7 +108,7 @@ export async function getTeacherById({ teacherId }: Props) {
     });
   }
 
-  await client.quit();
+  if (client) await client.quit();
 
   return foundTeacher;
 }

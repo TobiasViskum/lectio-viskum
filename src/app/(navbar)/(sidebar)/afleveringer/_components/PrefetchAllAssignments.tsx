@@ -8,18 +8,25 @@ type Props = { assignments: Assignment[] };
 export async function PrefetchAllAssignments({ assignments }: Props) {
   const userId = getLectioProps().userId;
 
-  assignments = assignments.reverse();
+  assignments = assignments;
+  const client = await getRedisClient();
 
+  let currentAssignmentIndex = -1;
   for (let i = 0; i < assignments.length; i++) {
-    if (i > 10) {
-      continue;
+    const assignment = assignments[i];
+    if (assignment.status === "Venter") {
+      currentAssignmentIndex = i;
+      break;
     }
-
-    if (assignments[i].status === "Venter") {
-      const assignmentId = assignments[i].id;
-
-      async function fetchIfNoCache() {
-        const client = await getRedisClient();
+  }
+  for (
+    let i = currentAssignmentIndex;
+    i >= Math.max(0, currentAssignmentIndex - 5);
+    i--
+  ) {
+    const assignmentId = assignments[i].id;
+    async function fetchIfNoCache() {
+      if (client) {
         const tag = getAssignmentTag(userId, assignmentId);
         const foundCache = await client.json.get(tag);
         if (foundCache === null) {
@@ -27,11 +34,32 @@ export async function PrefetchAllAssignments({ assignments }: Props) {
             assignmentId: assignmentId,
           });
         }
-        await client.quit();
       }
-      fetchIfNoCache();
     }
+    fetchIfNoCache();
   }
+
+  for (
+    let i = currentAssignmentIndex;
+    i >= Math.min(assignments.length - 1, currentAssignmentIndex + 5);
+    i++
+  ) {
+    const assignmentId = assignments[i].id;
+    async function fetchIfNoCache() {
+      if (client) {
+        const tag = getAssignmentTag(userId, assignmentId);
+        const foundCache = await client.json.get(tag);
+        if (foundCache === null) {
+          lectioAPI.getAssignment.byId({
+            assignmentId: assignmentId,
+          });
+        }
+      }
+    }
+    fetchIfNoCache();
+  }
+
+  if (client) await client.quit();
 
   return null;
 }

@@ -1,13 +1,17 @@
 import { createClient } from "redis";
 
 export async function getRedisClient() {
-  const client = createClient({
-    url: "redis://192.168.2.20:6379",
-  });
+  try {
+    const client = createClient({
+      url: "redis://192.168.2.20:6379",
+    });
 
-  client.on("error", (err) => console.log("Redis Client Error", err));
+    client.on("error", (err) => console.log("Redis Client Error", err));
 
-  await client.connect();
+    await client.connect();
 
-  return client;
+    return client;
+  } catch {
+    return undefined;
+  }
 }

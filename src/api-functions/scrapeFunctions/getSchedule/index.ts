@@ -22,10 +22,12 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
   const userId = studentId || teacherId || personalUserId;
   const client = await getRedisClient();
   const tag = getScheduleTag(userId, week, year);
-  const foundCache = (await client.json.get(tag)) as RedisCache<Week[]>;
-  if (foundCache && new Date().getTime() < foundCache.expires) {
-    await client.quit();
-    return foundCache.data;
+  if (client) {
+    const foundCache = (await client.json.get(tag)) as RedisCache<Week[]>;
+    if (foundCache && new Date().getTime() < foundCache.expires) {
+      await client.quit();
+      return foundCache.data;
+    }
   }
 
   let targetPage = `SkemaNy.aspx?week=${week + year}&elevid=${userId}`;
@@ -37,10 +39,15 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
     specificPage: targetPage,
   });
 
-  if (res === null) return res;
-  if (res === "Not authenticated") return res;
-  if (res === "Forbidden access") return res;
-  if (res === "Invalid school") return res;
+  if (
+    res === null ||
+    res === "Not authenticated" ||
+    res === "Forbidden access" ||
+    res === "Invalid school"
+  ) {
+    if (client) await client.quit();
+    return res;
+  }
 
   const $ = res.$;
 
@@ -158,7 +165,7 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
     .get();
 
   if (weekSchedule.length === 0) {
-    await client.quit();
+    if (client) await client.quit();
     return "No data";
   }
 
@@ -172,16 +179,18 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
   }
 
   if (isWeekEmpty) {
-    await client.quit();
+    if (client) await client.quit();
     return "No data";
   }
 
-  await client.json.set(tag, "$", {
-    data: weekSchedule,
-    expires: new Date().getTime() + getTimeInMs({ seconds: 30 }),
-  });
+  if (client) {
+    await client.json.set(tag, "$", {
+      data: weekSchedule,
+      expires: new Date().getTime() + getTimeInMs({ seconds: 30 }),
+    });
 
-  await client.quit();
+    await client.quit();
+  }
 
   return weekSchedule;
 }

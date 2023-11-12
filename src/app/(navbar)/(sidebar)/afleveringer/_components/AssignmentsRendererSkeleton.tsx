@@ -10,11 +10,13 @@ export async function AssignmentsRendererSkeleton() {
   const client = await getRedisClient();
   const userId = getLectioProps().userId;
   const tag = getAllAssignmentsTag(userId);
-  const foundCache = (await client.json.get(tag)) as RedisCache<Assignment[]>;
-  if (foundCache) {
-    assignments = foundCache.data;
+  if (client) {
+    const foundCache = (await client.json.get(tag)) as RedisCache<Assignment[]>;
+    if (foundCache) {
+      assignments = foundCache.data;
+    }
+    await client.quit();
   }
-  await client.quit();
 
   if (assignments === null) {
     return <LoadingDots className="mt-8" />;

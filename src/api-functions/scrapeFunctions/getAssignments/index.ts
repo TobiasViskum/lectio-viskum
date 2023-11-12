@@ -10,19 +10,26 @@ export async function getAssignments() {
   const client = await getRedisClient();
   const userId = getLectioProps().userId;
   const tag = getAllAssignmentsTag(userId);
-  const foundCache = (await client.json.get(tag)) as RedisCache<Assignment[]>;
+  if (client) {
+    const foundCache = (await client.json.get(tag)) as RedisCache<Assignment[]>;
 
-  if (foundCache && new Date().getTime() < foundCache.expires) {
-    await client.quit();
-    return foundCache.data;
+    if (foundCache && new Date().getTime() < foundCache.expires) {
+      await client.quit();
+      return foundCache.data;
+    }
   }
 
   const res = await getAssignmentsPage();
 
-  if (res === "Not authenticated") return res;
-  if (res === "Forbidden access") return res;
-  if (res === "Invalid school") return res;
-  if (res === null) return res;
+  if (
+    res === null ||
+    res === "Not authenticated" ||
+    res === "Forbidden access" ||
+    res === "Invalid school"
+  ) {
+    if (client) await client.quit();
+    return res;
+  }
 
   const $ = res.$;
 
@@ -38,14 +45,17 @@ export async function getAssignments() {
     .get();
 
   if (assignments.length === 0) {
+    if (client) await client.quit();
     return "No data";
   }
 
-  await client.json.set(tag, "$", {
-    data: assignments,
-    expires: new Date().getTime() + getTimeInMs({ minutes: 1 }),
-  });
-  await client.quit();
+  if (client) {
+    await client.json.set(tag, "$", {
+      data: assignments,
+      expires: new Date().getTime() + getTimeInMs({ minutes: 1 }),
+    });
+    await client.quit();
+  }
 
   return assignments;
 }
