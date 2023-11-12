@@ -1,7 +1,9 @@
 import { Student } from "@/components/global/Student";
-import { CacheRefresher } from "./_components/CacheRefresher";
 import { lectioAPI } from "@/lib/lectio-api";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
+import { PrefetchInitialPages } from "./_components/Prefetcher";
+import { Suspense } from "react";
+import { CacheRefresher } from "./_components/CacheRefresher";
 
 export default async function Homepage() {
   const { userId } = getLectioProps();
@@ -18,6 +20,9 @@ export default async function Homepage() {
       <div>
         <Student student={student} size="large" disableHover />
       </div>
+      <Suspense>
+        <PrefetchInitialPages />
+      </Suspense>
       <CacheRefresher />
     </div>
   );

@@ -11,24 +11,26 @@ export async function PrefetchAllAssignments({ assignments }: Props) {
   assignments = assignments.reverse();
 
   for (let i = 0; i < assignments.length; i++) {
-    if (i > 40) {
+    if (i > 15) {
       continue;
     }
 
-    const assignmentId = assignments[i].id;
+    if (assignments[i].status === "Venter") {
+      const assignmentId = assignments[i].id;
 
-    async function fetchIfNoCache() {
-      const client = await getRedisClient();
-      const tag = getAssignmentTag(userId, assignmentId);
-      const foundCache = await client.json.get(tag);
-      if (foundCache === null) {
-        lectioAPI.getAssignment.byId({
-          assignmentId: assignmentId,
-        });
+      async function fetchIfNoCache() {
+        const client = await getRedisClient();
+        const tag = getAssignmentTag(userId, assignmentId);
+        const foundCache = await client.json.get(tag);
+        if (foundCache === null) {
+          lectioAPI.getAssignment.byId({
+            assignmentId: assignmentId,
+          });
+        }
+        await client.quit();
       }
-      await client.quit();
+      fetchIfNoCache();
     }
-    fetchIfNoCache();
   }
 
   return null;
