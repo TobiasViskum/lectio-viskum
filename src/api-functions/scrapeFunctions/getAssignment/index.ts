@@ -35,7 +35,7 @@ export const titleMap: { [key: string]: Titles } = {
 export async function getAssignment({ assignmentId }: Props) {
   const userId = getLectioProps().userId;
   const tag = `${userId}-assignments-${assignmentId}`;
-  const foundCache = global.cache.get(tag);
+  const foundCache = global.shortTermCache.get(tag);
 
   if (foundCache && new Date().getTime() < foundCache.expires) {
     return foundCache.data as FullAssignment;
@@ -97,7 +97,7 @@ export async function getAssignment({ assignmentId }: Props) {
     assignment.teacher = teacher;
   }
 
-  global.cache.set(tag, {
+  global.shortTermCache.set(tag, {
     data: assignment,
     expires: new Date().getTime() + getTimeInMs({ minutes: 1 }),
   });

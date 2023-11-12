@@ -98,12 +98,9 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/",
     "/skema/:path*",
     "/afleveringer/:path*",
     "/forside",
     "/opdater-adgang",
-    "/beskeder",
-    "/indstillinger",
   ],
 };

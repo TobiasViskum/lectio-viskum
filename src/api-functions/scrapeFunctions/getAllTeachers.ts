@@ -6,7 +6,7 @@ import { getLectioProps } from "@/lib/auth/getLectioProps";
 export async function getAllTeachers() {
   const schoolCode = getLectioProps().schoolCode;
   const tag = `${schoolCode}-teachers`;
-  const foundCache = global.cache.get(tag);
+  const foundCache = global.shortTermCache.get(tag);
 
   if (foundCache && new Date().getTime() < foundCache.expires) {
     return foundCache.data as Teacher[];
@@ -55,7 +55,7 @@ export async function getAllTeachers() {
     return "No data";
   }
 
-  global.cache.set(tag, {
+  global.shortTermCache.set(tag, {
     data: teachers,
     expires: new Date().getTime() + getTimeInMs({ days: 1 }),
   });

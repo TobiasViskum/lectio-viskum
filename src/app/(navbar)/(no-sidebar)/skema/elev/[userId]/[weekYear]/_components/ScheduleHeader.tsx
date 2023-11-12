@@ -17,7 +17,9 @@ export async function ScheduleHeader({ userId, searchParamsObj }: Props) {
 
   return (
     <div className="flex flex-col gap-x-4 pb-4 ">
-      <Student student={student} />
+      <div className="py-2">
+        <Student student={student} disableHover />
+      </div>
       <div className="hidden 2xl:block">
         <DateNavigationPc searchParamsObj={searchParamsObj} />
       </div>

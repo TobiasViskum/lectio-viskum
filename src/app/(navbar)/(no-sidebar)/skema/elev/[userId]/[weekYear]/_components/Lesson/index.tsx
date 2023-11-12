@@ -100,7 +100,7 @@ export async function Lesson({
         query: { prevWeek: week, prevYear: year },
       }}
       className={cn(
-        `group absolute ml-1 flex w-full gap-x-1 overflow-hidden rounded-md bg-opacity-50 transition-[transform,_background-color] @container hover:scale-[1.015] hover:bg-opacity-90 sm:gap-x-1.5`,
+        `group absolute ml-1 flex w-full animate-small-explosion gap-x-1 overflow-hidden rounded-md bg-opacity-50 transition-[transform,_background-color] @container hover:scale-[1.015] hover:bg-opacity-90 sm:gap-x-1.5 2xl:animate-none`,
         backgroundColor,
       )}
       style={{

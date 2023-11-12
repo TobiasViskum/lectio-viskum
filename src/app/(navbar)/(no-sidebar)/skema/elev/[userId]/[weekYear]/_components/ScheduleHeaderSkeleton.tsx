@@ -1,18 +1,17 @@
 import { profileLoading } from "@/assets";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import Image from "next/image";
-import { DateNavigationPc } from "./DateNavigation/pc";
-import { DateNavigationTouch } from "./DateNavigation/touch";
 import { CalendarBack } from "@/components/icons/CalendarBack";
 import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { DatePicker } from "@/components/ui/datepicker";
 import { Button } from "@/components/ui/button";
 
-export function ScheduleHeaderSkeleton() {
-  const lectioProps = getLectioProps();
-  const foundStudentObj = global.longTermCache.get(
-    `${lectioProps.userId}-user`,
-  );
+type Props = {
+  userId: string;
+};
+
+export function ScheduleHeaderSkeleton({ userId }: Props) {
+  const foundStudentObj = global.longTermCache.get(`${userId}-user`);
   let name = "";
   let studentClass = "";
   let userSrc = null;
@@ -25,8 +24,8 @@ export function ScheduleHeaderSkeleton() {
 
   return (
     <>
-      <div className="flex flex-col gap-x-4 pb-4 ">
-        <div className="flex items-center gap-x-2 py-4">
+      <div className="pb-4ª flex flex-col gap-x-4">
+        <div className="flex items-center gap-x-2 py-4 pl-1">
           <Image
             src={userSrc || profileLoading}
             width={56}

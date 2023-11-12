@@ -1,15 +1,9 @@
 "use client";
 
-import { getCookies } from "@/lib/auth/getLectioCookies";
 import { vEvent } from "@/lib/viskum/vEvent";
 import { getWeekAndYear } from "@/util/getWeekAndYear";
 import { getWeekStartEnd } from "@/util/getWeekStartEnd";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { createContext, useEffect, useRef, useState } from "react";
 
 type ScheduleContext = {
@@ -44,6 +38,7 @@ export function ScheduleProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const path = usePathname();
   const params = useParams();
+  const userId = params.userId;
   const splitWeekYear = (params.weekYear as string).split("-");
   const numberWeek = Number(splitWeekYear[0]);
   const numberYear = Number(splitWeekYear[1]);
@@ -79,7 +74,6 @@ export function ScheduleProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   function pushPreviousWeek(noDelay: boolean = false) {
-    const { userId } = getCookies();
     const { start } = getWeekStartEnd(numberYear, numberWeek);
     start.setDate(start.getDate() - 7);
     const nextWeek = getWeekAndYear(start);
@@ -102,8 +96,6 @@ export function ScheduleProvider({ children }: { children: React.ReactNode }) {
     }
   }
   function pushNextWeek(noDelay: boolean = false) {
-    const { userId } = getCookies();
-
     const { start } = getWeekStartEnd(numberYear, numberWeek);
     start.setDate(start.getDate() + 7);
     const nextWeek = getWeekAndYear(start);

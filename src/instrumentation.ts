@@ -1,8 +1,8 @@
 import { getTimeInMs } from "./util/getTimeInMs";
 
 export async function register() {
-  const cache: CacheMap = new Map();
-  global.cache = cache;
+  const shortTermCache: CacheMap = new Map();
+  global.shortTermCache = shortTermCache;
 
   const longTermCache: CacheMap = new Map();
   global.longTermCache = longTermCache;
@@ -13,9 +13,9 @@ export async function register() {
 
   setInterval(
     () => {
-      for (const [key, value] of global.cache) {
+      for (const [key, value] of global.shortTermCache) {
         if (new Date().getTime() > value.expires) {
-          global.cache.delete(key);
+          global.shortTermCache.delete(key);
         }
       }
     },
@@ -26,7 +26,7 @@ export async function register() {
     () => {
       for (const [key, value] of global.longTermCache) {
         if (new Date().getTime() > value.expires) {
-          global.cache.delete(key);
+          global.shortTermCache.delete(key);
         }
       }
     },

@@ -55,7 +55,7 @@ export default function SchedulePage({ params }: Props) {
         <h1 className="pt-4 text-2xl font-bold">
           Uge {searchParamsObj.week}, {searchParamsObj.year}
         </h1>
-        <Suspense fallback={<ScheduleHeaderSkeleton />}>
+        <Suspense fallback={<ScheduleHeaderSkeleton userId={params.userId} />}>
           <ScheduleHeader
             schedulePromise={schedulePromise}
             searchParamsObj={searchParamsObj}

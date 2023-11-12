@@ -1,7 +1,6 @@
 import { getAuthenticatedPage } from "../../getPage";
 import { getClassroom } from "../getSchedule/getClassroom";
 import { getHomeworkAndOtherAndPresentation } from "./utils";
-import { setAllTeachersObject } from "./setAllTeacherObjects";
 import { getTitle } from "../getSchedule/getTitle";
 import { setClasses } from "./setClasses";
 import {
@@ -14,7 +13,6 @@ import { getNote } from "./getNote";
 import { getTimeInMs } from "@/util/getTimeInMs";
 import { standardFetchOptions } from "@/api-functions/standardFetchOptions";
 import { getTeachers } from "../getSchedule/getTeachers";
-import { getClass } from "../getSchedule/getClass";
 import { getClassInformation } from "../getClassInformation";
 import { getLastAuthenticatedCookie } from "@/api-functions/getLastAuthenticatedCookie";
 
@@ -23,6 +21,13 @@ type Props = { lessonId: string; year: string; userId: string };
 export async function getLessonInformation({ lessonId, userId, year }: Props) {
   const href = `aktivitet/aktivitetforside2.aspx?absid=${lessonId}&elevid=${userId}`;
   const numberYear = !isNaN(Number(year)) ? Number(year) : 1970;
+
+  const tag = `${userId}-lesson-${lessonId}`;
+  const foundCache = global.shortTermCache.get(tag);
+
+  if (foundCache && new Date().getTime() < foundCache.expires) {
+    // return foundCache.data;
+  }
 
   const res = await getAuthenticatedPage({
     specificPage: href,
@@ -115,7 +120,6 @@ export async function getLessonInformation({ lessonId, userId, year }: Props) {
     }
   }
 
-  await setAllTeachersObject($div, $, additionalInfo);
   setClasses($div, $, additionalInfo);
 
   let subjects: string[] = [];
@@ -181,7 +185,7 @@ export async function getLessonInformation({ lessonId, userId, year }: Props) {
     }
   }
 
-  return {
+  const resultObj = {
     ...additionalInfo,
     subjectTheme: subjectTheme,
     note: note,
@@ -189,4 +193,11 @@ export async function getLessonInformation({ lessonId, userId, year }: Props) {
     other: homeWorkAndOtherAndPresentation.other,
     presentation: homeWorkAndOtherAndPresentation.presentation,
   };
+
+  global.shortTermCache.set(tag, {
+    data: resultObj,
+    expires: new Date().getTime() + getTimeInMs({ minutes: 1 }),
+  });
+
+  return resultObj;
 }

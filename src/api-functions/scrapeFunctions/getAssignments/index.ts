@@ -7,7 +7,7 @@ import { getLectioProps } from "@/lib/auth/getLectioProps";
 export async function getAssignments() {
   const userId = getLectioProps().userId;
   const tag = `${userId}-assignments`;
-  const foundCache = global.cache.get(tag);
+  const foundCache = global.shortTermCache.get(tag);
 
   if (foundCache && new Date().getTime() < foundCache.expires) {
     return foundCache.data as Assignment[];
@@ -37,7 +37,7 @@ export async function getAssignments() {
     return "No data";
   }
 
-  global.cache.set(tag, {
+  global.shortTermCache.set(tag, {
     data: assignments,
     expires: new Date().getTime() + getTimeInMs({ minutes: 1 }),
   });

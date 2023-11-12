@@ -7,9 +7,9 @@ export async function getClassInformation(classId: string) {
   const tag = `${classId}-class`;
   const foundCache = global.longTermCache.get(tag);
 
-  // if (foundCache && new Date().getTime() < foundCache.expires) {
-  //   return foundCache.data;
-  // }
+  if (foundCache && new Date().getTime() < foundCache.expires) {
+    // return foundCache.data;
+  }
 
   const href = `subnav/members.aspx?holdelementid=${classId}&showteachers=1&showstudents=1&reporttype=withpics`;
   const res = await getAuthenticatedPage({
@@ -69,7 +69,6 @@ export async function getClassInformation(classId: string) {
       }
 
       const tag = `${foundId}-user`;
-
       const foundCache = global.longTermCache.get(tag);
 
       if (foundCache && new Date().getTime() < foundCache.expires) {
@@ -78,6 +77,7 @@ export async function getClassInformation(classId: string) {
         } else {
           classInformation.students.push(foundCache.data);
         }
+
         continue;
       }
 
@@ -115,11 +115,19 @@ export async function getClassInformation(classId: string) {
     }
   }
 
-  let teacherPromises: Promise<string | null>[] = [];
-  let studentPromises: Promise<string | null>[] = [];
+  let teacherPromises: (Promise<string | null> | string)[] = [];
+  let studentPromises: (Promise<string | null> | string)[] = [];
 
   for (let i = 0; i < classInformation.teachers.length; i++) {
     const teacher = classInformation.teachers[i];
+
+    const tag = `${teacher.teacherId}-user`;
+    const foundCache = global.longTermCache.get(tag);
+    if (foundCache && new Date().getTime() < foundCache.expires) {
+      teacherPromises.push(foundCache.data.imgSrc);
+
+      continue;
+    }
 
     const imgHref = ["https://lectio.dk", teacher.imgUrl, "&fullsize=1"].join(
       "",
@@ -151,9 +159,25 @@ export async function getClassInformation(classId: string) {
   for (let i = 0; i < classInformation.students.length; i++) {
     const student = classInformation.students[i];
 
-    const imgHref = ["https://lectio.dk", student.imgUrl, "&fullsize=1"].join(
-      "",
-    );
+    const tag = `${student.studentId}-user`;
+    const foundCache = global.longTermCache.get(tag);
+    if (foundCache && new Date().getTime() < foundCache.expires) {
+      studentPromises.push(foundCache.data.imgSrc);
+      continue;
+    }
+
+    let imgHref = student.imgUrl;
+    if (!imgHref.includes("https://lectio.dk")) {
+      imgHref = ["https://lectio.dk", imgHref].join("");
+    }
+    if (
+      !imgHref.includes("/img/defaultfoto_small") &&
+      !imgHref.includes("fullsize=1")
+    ) {
+      imgHref = [imgHref, "&fullsize=1"].join("");
+    } else {
+      imgHref = imgHref.replace("defaultfoto_small", "defaultfoto_large");
+    }
 
     const promise = fetchCookie(imgHref, {
       method: "GET",

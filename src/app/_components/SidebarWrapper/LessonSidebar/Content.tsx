@@ -47,14 +47,14 @@ export function Content({ lesson }: { lesson: FullLesson }) {
       <ScrollArea className="h-[calc(100%-88px)] w-full border-0">
         <div
           className={cn(
-            "h-full flex-col gap-y-2",
+            "h-full flex-col gap-y-2 pb-4",
             teachers.length === 0 ? "hidden" : "flex",
           )}
         >
           <Badge className="w-max text-muted-foreground" variant={"secondary"}>
             Lærere:
           </Badge>
-          <div>
+          <div className="flex flex-col gap-y-2 pr-3">
             {teachers.map((teacher) => {
               return (
                 <div key={teacher.teacherId}>
@@ -66,7 +66,7 @@ export function Content({ lesson }: { lesson: FullLesson }) {
         </div>
         <div
           className={cn(
-            "h-full flex-col gap-y-2 pt-4",
+            "h-full flex-col gap-y-2",
             students.length === 0 ? "hidden" : "flex",
           )}
         >
@@ -74,11 +74,11 @@ export function Content({ lesson }: { lesson: FullLesson }) {
             Elever:
           </Badge>
 
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-2 pr-3">
             {students.map((student) => {
               return (
                 <div key={student.studentId}>
-                  <Student student={student} size="small" />
+                  <Student linkToSchedule student={student} size="small" />
                 </div>
               );
             })}

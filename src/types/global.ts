@@ -1,5 +1,5 @@
-var cache: CacheMap = new Map();
-global.cache = cache;
+var shortTermCache: CacheMap = new Map();
+global.shortTermCache = shortTermCache;
 
 var longTermCache: CacheMap = new Map();
 global.longTermCache = longTermCache;

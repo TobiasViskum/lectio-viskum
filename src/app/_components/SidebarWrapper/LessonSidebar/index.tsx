@@ -1,33 +1,59 @@
-import { lectioAPI } from "@/lib/lectio-api";
-import { getServerUrl } from "@/lib/next/getServerUrl";
+"use client";
+
+import { Input } from "@/components/ui/input";
 import { Content } from "./Content";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { LoadingDots } from "@/components/loading-components/LoadingDots";
 
-export async function LessonSidebar() {
-  const url = getServerUrl();
+export function LessonSidebar() {
+  const [lesson, setLesson] = useState<FullLesson | null>(null);
+  const params = useParams();
+  const path = usePathname();
+  const searchParams = useSearchParams();
 
-  const idMatch = url.match(/elev\/([0-9]+)\/modul\/([0-9]+)/);
-  const yearMatch = url.match(/prevYear=([0-9]+)/);
+  useEffect(() => {
+    async function setNewLesson() {
+      const userId = params.userId;
+      const lessonId = params.id;
+      const year = searchParams.get("prevYear");
 
-  let lesson: FullLesson | null = null;
+      if (typeof userId === "string" && typeof lessonId === "string" && year) {
+        try {
+          const q = new URLSearchParams({
+            userId: userId,
+            lessonId: lessonId,
+            year: year,
+          }).toString();
+          const res = await fetch("/api/get-lesson-information?" + q);
+          const newLesson = await res.json();
 
-  if (idMatch && yearMatch) {
-    const userId = idMatch[1];
-    const lessonId = idMatch[2];
-    const year = yearMatch[1];
-    lesson = await lectioAPI.getLessonById({
-      lessonId: lessonId,
-      userId: userId,
-      year: year,
-    });
-  }
-
-  if (lesson === null) {
-    return <p>Error</p>;
-  }
+          if (newLesson !== undefined) {
+            setLesson(newLesson);
+          }
+        } catch {
+          setLesson(null);
+        }
+      }
+    }
+    setNewLesson();
+  }, [path, params, searchParams]);
 
   return (
     <div className="h-full">
-      <Content lesson={lesson} />
+      {lesson !== null ? (
+        <Content lesson={lesson} />
+      ) : (
+        <div className=" w-full animate-pulse opacity-75">
+          <div className="flex flex-col items-center gap-y-2 py-2 pb-4 pl-1 pr-3 text-left">
+            <p className="w-full text-sm text-muted-foreground">
+              Søg efter elever eller lærere:
+            </p>
+            <Input placeholder="Søg..." />
+            <LoadingDots className="mt-8" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
