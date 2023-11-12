@@ -14,20 +14,7 @@ export function Navbar() {
         <NavbarSheet />
         <BigScreenContent />
 
-        <Link
-          href={"/forside"}
-          className="ml-auto mr-auto aspect-[3.375_/_1] h-8 2xl:hidden"
-        >
-          <Image
-            src={Logo}
-            alt="logo"
-            height={32}
-            width={108}
-            className="aspect-[3.375_/_1]"
-          />
-        </Link>
-
-        <div className="grid place-items-center rounded-full 2xl:ml-auto">
+        <div className="ml-auto grid place-items-center rounded-full">
           <Suspense
             fallback={
               <Image

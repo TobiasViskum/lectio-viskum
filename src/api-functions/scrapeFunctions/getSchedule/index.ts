@@ -6,6 +6,9 @@ import { getSubject } from "./getSubject";
 import { getTeachers } from "./getTeachers";
 import { getTime } from "./getTime";
 import { getTitle } from "./getTitle";
+import { getRedisClient } from "@/lib/get-redis-client";
+import { getScheduleTag } from "@/lib/lectio-api/getTags";
+import { getTimeInMs } from "@/util/getTimeInMs";
 
 type Props = {
   week: string;
@@ -16,12 +19,17 @@ type Props = {
 
 export async function getSchedule({ week, year, teacherId, studentId }: Props) {
   const personalUserId = getLectioProps().userId;
-  let targetPage = `SkemaNy.aspx?week=${week + year}&elevid=${personalUserId}`; //In case none of the ids is provided
-  if (teacherId) {
-    targetPage = `SkemaNy.aspx?week=${week + year}&laererid=${teacherId}`;
-  } else if (studentId) {
-    targetPage = `SkemaNy.aspx?week=${week + year}&elevid=${studentId}`;
+  const userId = studentId || teacherId || personalUserId;
+  const client = await getRedisClient();
+  const tag = getScheduleTag(userId, week, year);
+  const foundCache = (await client.json.get(tag)) as RedisCache<Week[]>;
+  if (foundCache && new Date().getTime() < foundCache.expires) {
+    await client.quit();
+    return foundCache.data;
   }
+
+  let targetPage = `SkemaNy.aspx?week=${week + year}&elevid=${userId}`;
+
   let numberWeek = !isNaN(Number(week)) ? Number(week) : -1;
   let numberYear = !isNaN(Number(year)) ? Number(year) : -1;
 
@@ -150,6 +158,7 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
     .get();
 
   if (weekSchedule.length === 0) {
+    await client.quit();
     return "No data";
   }
 
@@ -162,7 +171,17 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
     }
   }
 
-  if (isWeekEmpty) return "No data";
+  if (isWeekEmpty) {
+    await client.quit();
+    return "No data";
+  }
+
+  await client.json.set(tag, "$", {
+    data: weekSchedule,
+    expires: new Date().getTime() + getTimeInMs({ seconds: 30 }),
+  });
+
+  await client.quit();
 
   return weekSchedule;
 }

@@ -40,8 +40,6 @@ export function Assignment({ assignment, addWeek }: Props) {
   const separatorTw =
     "w-[calc(100%-24px)] absolute right-0 md:right-4 md:w-[calc(100%-32px)]";
 
-  const studentId = assignment.href.split("elevid=")[1].split("&")[0];
-
   return (
     <TooltipHover html={<TooltipHoverContent assignment={assignment} />}>
       <Link

@@ -3,14 +3,18 @@ import { getTimeInMs } from "@/util/getTimeInMs";
 import { getAssignmentsPage } from "../../getPage/getAssignmentsPage";
 import { getAssignmentProps } from "./getAssignmentProps";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
+import { getAllAssignmentsTag } from "@/lib/lectio-api/getTags";
+import { getRedisClient } from "@/lib/get-redis-client";
 
 export async function getAssignments() {
+  const client = await getRedisClient();
   const userId = getLectioProps().userId;
-  const tag = `${userId}-assignments`;
-  const foundCache = global.shortTermCache.get(tag);
+  const tag = getAllAssignmentsTag(userId);
+  const foundCache = (await client.json.get(tag)) as RedisCache<Assignment[]>;
 
   if (foundCache && new Date().getTime() < foundCache.expires) {
-    return foundCache.data as Assignment[];
+    await client.quit();
+    return foundCache.data;
   }
 
   const res = await getAssignmentsPage();
@@ -37,10 +41,11 @@ export async function getAssignments() {
     return "No data";
   }
 
-  global.shortTermCache.set(tag, {
+  await client.json.set(tag, "$", {
     data: assignments,
     expires: new Date().getTime() + getTimeInMs({ minutes: 1 }),
   });
+  await client.quit();
 
   return assignments;
 }

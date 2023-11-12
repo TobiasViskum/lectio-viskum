@@ -3,17 +3,21 @@ import { getTimeInMs } from "@/util/getTimeInMs";
 import { getAuthenticatedPage } from "../getPage";
 import { standardFetchOptions } from "../standardFetchOptions";
 import { getLastAuthenticatedCookie } from "../getLastAuthenticatedCookie";
+import { getRedisClient } from "@/lib/get-redis-client";
+import { getUserTag } from "@/lib/lectio-api/getTags";
 
 type Props = {
   userId: string;
 };
 
 export async function getStudentById({ userId }: Props) {
-  const tag = `${userId}-user`;
-  const foundCache = global.longTermCache.get(tag);
+  const client = await getRedisClient();
+  const tag = getUserTag(userId);
+  const foundCache = (await client.json.get(tag)) as RedisCache<Student>;
 
   if (foundCache && new Date().getTime() < foundCache.expires) {
-    return foundCache.data as Student;
+    await client.quit();
+    return foundCache.data;
   }
 
   const res = await getAuthenticatedPage({
@@ -80,17 +84,18 @@ export async function getStudentById({ userId }: Props) {
   const data = {
     name: name,
     studentClass: studentClass,
-    studentId: studentId || "",
+    studentId: studentId,
     imgUrl: imgHref,
     imgSrc: imageBase64,
   } as Student;
 
-  if (name && studentClass) {
-    global.longTermCache.set(tag, {
+  if (studentId && imageBase64) {
+    await client.json.set(tag, "$", {
       data: data,
       expires: new Date().getTime() + getTimeInMs({ days: 1 }),
     });
   }
+  await client.quit();
 
   return data;
 }

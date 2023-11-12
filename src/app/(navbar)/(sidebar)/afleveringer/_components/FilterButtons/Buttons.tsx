@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { vEvent } from "@/lib/viskum/vEvent";
 import { useEffect, useState } from "react";
-import { FilterButtonsSkeleton } from "./FilterButtonsSkeleton";
+import { NoDataSkeleton } from "./NoDataSkeleton";
 
 type Props = { strAssignments: string };
 export function Buttons({ strAssignments }: Props) {
@@ -19,7 +19,7 @@ export function Buttons({ strAssignments }: Props) {
     "all" | "submitted" | "pending" | "missing"
   >("pending");
 
-  if (assignments === null) return <FilterButtonsSkeleton />;
+  if (assignments === null) return <NoDataSkeleton />;
 
   let multi = 2;
   if (filter === "all") {

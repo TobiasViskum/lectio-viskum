@@ -6,6 +6,8 @@ import { setAdditionalProps } from "./setAdditionalProps";
 import { setSubmitProps } from "./setSubmitProps";
 import { getTimeInMs } from "@/util/getTimeInMs";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
+import { getRedisClient } from "@/lib/get-redis-client";
+import { getAssignmentTag } from "@/lib/lectio-api/getTags";
 
 type Props = { assignmentId: string };
 
@@ -34,11 +36,13 @@ export const titleMap: { [key: string]: Titles } = {
 
 export async function getAssignment({ assignmentId }: Props) {
   const userId = getLectioProps().userId;
-  const tag = `${userId}-assignments-${assignmentId}`;
-  const foundCache = global.shortTermCache.get(tag);
+  const client = await getRedisClient();
+  const tag = getAssignmentTag(userId, assignmentId);
+  const foundCache = (await client.json.get(tag)) as RedisCache<FullAssignment>;
 
   if (foundCache && new Date().getTime() < foundCache.expires) {
-    return foundCache.data as FullAssignment;
+    await client.quit();
+    return foundCache.data;
   }
 
   const href = `ElevAflevering.aspx?elevid=${userId}&exerciseid=${assignmentId}`;
@@ -97,10 +101,11 @@ export async function getAssignment({ assignmentId }: Props) {
     assignment.teacher = teacher;
   }
 
-  global.shortTermCache.set(tag, {
+  await client.json.set(tag, "$", {
     data: assignment,
     expires: new Date().getTime() + getTimeInMs({ minutes: 1 }),
   });
+  await client.quit();
 
   return assignment;
 }

@@ -6,7 +6,7 @@ import { validateResult } from "./validateResult";
 type MainType = Student;
 type FunctionProps = { userId: string };
 
-export const getStudentById = async ({ userId }: FunctionProps) => {
+export async function getStudentById({ userId }: FunctionProps) {
   const result = await _getStudentById({
     userId: userId,
   });
@@ -17,4 +17,4 @@ export const getStudentById = async ({ userId }: FunctionProps) => {
     processedResult.status === "success" ? processedResult.data : null;
 
   return data;
-};
+}

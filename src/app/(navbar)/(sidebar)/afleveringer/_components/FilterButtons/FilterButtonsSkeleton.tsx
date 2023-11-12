@@ -1,29 +1,24 @@
-export function FilterButtonsSkeleton() {
-  const linkTw =
-    "transition-colors flex flex-col gap-y-1 items-center duration-300 text-muted-foreground";
-  const countTw = "text-xs h-6 w-6 p-1 rounded-full bg-zinc-500 bg-opacity-5";
+import { getLectioProps } from "@/lib/auth/getLectioProps";
+import { getRedisClient } from "@/lib/get-redis-client";
+import { getAllAssignmentsTag } from "@/lib/lectio-api/getTags";
+import { Buttons } from "./Buttons";
+import { NoDataSkeleton } from "./NoDataSkeleton";
 
-  return (
-    <>
-      <div className="relative grid w-full min-w-[256px] max-w-sm animate-pulse grid-cols-4 text-center text-sm">
-        <button className={linkTw}>
-          <p className={countTw}>0</p>
-          <p>Alle</p>
-        </button>
-        <button className={linkTw}>
-          <p className={countTw}>0</p>
-          <p>Afleveret</p>
-        </button>
-        <button className={linkTw}>
-          <p className={countTw}>0</p>
-          <p>Venter</p>
-        </button>
-        <button className={linkTw}>
-          <p className={countTw}>0</p>
-          <p>Mangler</p>
-        </button>
-        <div className="absolute -bottom-2 h-0.5 w-1/4 translate-x-[200%] rounded-md bg-muted-foreground transition-all duration-300" />
-      </div>
-    </>
-  );
+export async function FilterButtonsSkeleton() {
+  let assignments: null | Assignment[] = null;
+
+  const client = await getRedisClient();
+  const userId = getLectioProps().userId;
+  const tag = getAllAssignmentsTag(userId);
+  const foundCache = (await client.json.get(tag)) as RedisCache<Assignment[]>;
+  if (foundCache) {
+    assignments = foundCache.data;
+  }
+  await client.quit();
+
+  if (assignments === null) {
+    return <NoDataSkeleton />;
+  }
+
+  return <Buttons strAssignments={JSON.stringify(assignments)} />;
 }

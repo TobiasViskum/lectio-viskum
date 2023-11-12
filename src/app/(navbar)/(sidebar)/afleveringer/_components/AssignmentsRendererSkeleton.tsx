@@ -1,12 +1,10 @@
-import { lectioAPI } from "@/lib/lectio-api";
-import { Content } from "./Content";
-import { getRedisClient } from "@/lib/get-redis-client";
+import { LoadingDots } from "@/components/loading-components/LoadingDots";
+import { AssignmentsWrapper } from "./AssignmentsWrapper";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
+import { getRedisClient } from "@/lib/get-redis-client";
 import { getAllAssignmentsTag } from "@/lib/lectio-api/getTags";
 
-import { NoDataSkeleton } from "./NoDataSkeleton";
-
-export async function AssignmentsSidebarSkeleton() {
+export async function AssignmentsRendererSkeleton() {
   let assignments: null | Assignment[] = null;
 
   const client = await getRedisClient();
@@ -18,7 +16,9 @@ export async function AssignmentsSidebarSkeleton() {
   }
   await client.quit();
 
-  if (assignments === null) return <NoDataSkeleton />;
+  if (assignments === null) {
+    return <LoadingDots className="mt-8" />;
+  }
 
-  return <Content strAssignments={JSON.stringify(assignments)} />;
+  return <AssignmentsWrapper strAssignments={JSON.stringify(assignments)} />;
 }

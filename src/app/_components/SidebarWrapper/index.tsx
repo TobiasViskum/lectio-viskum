@@ -1,4 +1,3 @@
-import { headers } from "next/headers";
 import { Suspense } from "react";
 import { AssignmentsSidebarSkeleton } from "./AssignmentsSidebar/AssignmentsSidebarSkeleton";
 import { AssignmentsSidebar } from "./AssignmentsSidebar";

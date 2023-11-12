@@ -1,7 +1,7 @@
 import { AssignmentsRenderer } from "./_components/AssignmentsRenderer";
 import { Suspense } from "react";
-import { LoadingDots } from "@/components/loading-components/LoadingDots";
 import { FilterButtons } from "./_components/FilterButtons/FilterButtons";
+import { AssignmentsRendererSkeleton } from "./_components/AssignmentsRendererSkeleton";
 import { FilterButtonsSkeleton } from "./_components/FilterButtons/FilterButtonsSkeleton";
 
 export default function AssignmentsPage() {
@@ -14,7 +14,7 @@ export default function AssignmentsPage() {
         </Suspense>
       </div>
       <div className="flex flex-col items-center md:pt-0">
-        <Suspense fallback={<LoadingDots className="mt-8" />}>
+        <Suspense fallback={<AssignmentsRendererSkeleton />}>
           <AssignmentsRenderer />
         </Suspense>
       </div>
