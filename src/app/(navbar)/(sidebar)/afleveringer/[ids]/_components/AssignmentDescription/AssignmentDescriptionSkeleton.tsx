@@ -24,7 +24,7 @@ export async function AssignmentDescriptionSkeleton({ assignmentId }: Props) {
     await client.quit();
   }
 
-  if (assignment === null) return <NoDataSkeleton />;
+  if (assignment === null) return null;
 
   return (
     <div className="flex max-w-3xl flex-col gap-y-1">

@@ -17,13 +17,20 @@ type Props = {
   studentId?: string;
 };
 
-export async function getSchedule({ week, year, teacherId, studentId }: Props) {
+export async function getSchedule(
+  { week, year, teacherId, studentId }: Props,
+  prioritizeCache?: boolean,
+) {
   const personalUserId = getLectioProps().userId;
   const userId = studentId || teacherId || personalUserId;
   const client = await getRedisClient();
   const tag = getScheduleTag(userId, week, year);
   if (client) {
     const foundCache = (await client.json.get(tag)) as RedisCache<Week[]>;
+    if (foundCache && prioritizeCache) {
+      await client.quit();
+      return foundCache.data;
+    }
     if (foundCache && new Date().getTime() < foundCache.expires) {
       await client.quit();
       return foundCache.data;

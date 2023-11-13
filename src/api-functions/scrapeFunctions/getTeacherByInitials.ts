@@ -7,7 +7,7 @@ type Props = {
   teacherId: string;
 };
 
-export async function getTeacherById({ teacherId }: Props) {
+export async function getTeacherByInitials({ teacherId }: Props) {
   const tag = `${teacherId}-user`;
   const foundCache = global.longTermCache.get(tag);
 

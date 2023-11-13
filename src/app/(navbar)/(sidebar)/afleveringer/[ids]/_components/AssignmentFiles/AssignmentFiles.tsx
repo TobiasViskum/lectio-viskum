@@ -5,7 +5,7 @@ type Props = { assignmentPromise: Promise<FullAssignment | null> };
 export async function AssignmentFiles({ assignmentPromise }: Props) {
   const assignment = await assignmentPromise;
 
-  if (assignment === null) return <p>Error</p>;
+  if (assignment === null) return null;
   if (assignment.documents.length === 0) return null;
 
   return (

@@ -1,6 +1,5 @@
 import "server-only";
 import { getAuthenticatedPage } from "@/api-functions/getPage";
-import { getTeacherById } from "..";
 import { setInformationProps } from "./setInformationProps";
 import { setAdditionalProps } from "./setAdditionalProps";
 import { setSubmitProps } from "./setSubmitProps";
@@ -8,6 +7,7 @@ import { getTimeInMs } from "@/util/getTimeInMs";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { getRedisClient } from "@/lib/get-redis-client";
 import { getAssignmentTag } from "@/lib/lectio-api/getTags";
+import { setGroupInformation } from "./setGroupInformation";
 
 type Props = { assignmentId: string };
 
@@ -34,7 +34,10 @@ export const titleMap: { [key: string]: Titles } = {
   "I undervisningsbeskrivelse:": "inTeachingDescription",
 };
 
-export async function getAssignment({ assignmentId }: Props) {
+export async function getAssignment(
+  { assignmentId }: Props,
+  prioritizeCache?: boolean,
+) {
   const userId = getLectioProps().userId;
   const client = await getRedisClient();
   const tag = getAssignmentTag(userId, assignmentId);
@@ -42,6 +45,11 @@ export async function getAssignment({ assignmentId }: Props) {
     const foundCache = (await client.json.get(
       tag,
     )) as RedisCache<FullAssignment>;
+
+    if (foundCache && prioritizeCache) {
+      await client.quit();
+      return foundCache.data;
+    }
 
     if (foundCache && new Date().getTime() < foundCache.expires) {
       await client.quit();
@@ -69,7 +77,6 @@ export async function getAssignment({ assignmentId }: Props) {
   const $ = res.$;
 
   let assignment: FullAssignment = {
-    studentName: "",
     title: "",
     documents: [],
     description: [],
@@ -77,7 +84,9 @@ export async function getAssignment({ assignmentId }: Props) {
     class: "",
     gradeSystem: "",
     teacher: { name: "", initials: "", teacherId: "", imgSrc: "", imgUrl: "" },
+    students: [],
     studentTime: 0,
+    groupMembersToAdd: [],
     dueTo: "",
     inTeachingDescription: false,
     awaiter: "",
@@ -90,27 +99,12 @@ export async function getAssignment({ assignmentId }: Props) {
     submits: [],
   };
 
-  const studentNameMatch = $("#MainTitle")
-    .text()
-    .match(/Eleven ([a-zæøå ]+)\(/i);
-
-  if (studentNameMatch) {
-    assignment.studentName = studentNameMatch[1].trim();
-  }
-
   await setInformationProps($, assignment);
-  setAdditionalProps($, assignment);
-  setSubmitProps($, assignment);
+  await setAdditionalProps($, assignment);
+  await setSubmitProps($, assignment);
+  await setGroupInformation($, assignment);
 
   assignment.submits = assignment.submits.reverse();
-
-  const teacher = await getTeacherById({
-    teacherId: assignment.teacher.teacherId,
-  });
-
-  if (typeof teacher === "object" && teacher !== null) {
-    assignment.teacher = teacher;
-  }
 
   if (client) {
     await client.json.set(tag, "$", {

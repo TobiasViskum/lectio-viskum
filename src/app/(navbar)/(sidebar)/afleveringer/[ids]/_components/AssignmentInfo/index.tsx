@@ -6,7 +6,7 @@ type Props = { assignmentPromise: Promise<FullAssignment | null> };
 export async function AssignmentInfo({ assignmentPromise }: Props) {
   const assignment = await assignmentPromise;
 
-  if (assignment === null) return <p>Error</p>;
+  if (assignment === null) return null;
 
   const date = getDate(assignment.dueTo);
   const formattedDate = new Intl.DateTimeFormat("da-dk", {

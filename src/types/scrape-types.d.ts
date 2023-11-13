@@ -79,12 +79,11 @@ type Assignment = Prettify<{
 
 type Submit = Prettify<{
   time: string;
-  submitter: string;
+  submitter: Teacher | Student;
   comment: string;
   document: LectioDocument;
 }>;
 type FullAssignment = Prettify<{
-  studentName: string;
   title: string;
   documents: LectioDocument[];
   description: string[];
@@ -92,6 +91,8 @@ type FullAssignment = Prettify<{
   class: string;
   gradeSystem: string;
   teacher: Teacher;
+  students: Student[];
+  groupMembersToAdd: Student[];
   studentTime: number;
   dueTo: string;
   inTeachingDescription: boolean;

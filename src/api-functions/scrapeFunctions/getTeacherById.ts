@@ -9,11 +9,19 @@ type Props = {
   teacherId: string;
 };
 
-export async function getTeacherById({ teacherId }: Props) {
+export async function getTeacherById(
+  { teacherId }: Props,
+  prioritizeCache?: boolean,
+) {
   const client = await getRedisClient();
   const tag = getUserTag(teacherId);
   if (client) {
     const foundCache = (await client.json.get(tag)) as RedisCache<Teacher>;
+
+    if (foundCache && prioritizeCache) {
+      await client.quit();
+      return foundCache.data;
+    }
 
     if (foundCache && new Date().getTime() < foundCache.expires) {
       await client.quit();

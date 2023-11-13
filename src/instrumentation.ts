@@ -1,3 +1,4 @@
+import { standardFetchOptions } from "./api-functions/standardFetchOptions";
 import { getTimeInMs } from "./util/getTimeInMs";
 
 export async function register() {
@@ -39,9 +40,11 @@ export async function register() {
         console.log(`Refreshed session for user ${key}`);
         const lectioCookies = value.data.lectioCookies;
         const schoolCode = value.data.schoolCode;
+
         fetch(`https://www.lectio.dk/lectio/${schoolCode}/forside.aspx`, {
           method: "GET",
           headers: { Cookie: lectioCookies },
+          ...standardFetchOptions,
         });
       }
     },

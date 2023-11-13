@@ -1,6 +1,6 @@
-import { getSubjectName } from "@/api-functions/util/getSubjectFromClass";
 import { titleMap } from ".";
 import { getSubject } from "../getSubject";
+import { getTeacherById } from "../getTeacherById";
 
 export async function setInformationProps(
   $: cheerio.Root,
@@ -62,11 +62,17 @@ export async function setInformationProps(
       const splitName = $teacherSpan.text().split(" (");
       const name = splitName[0];
       const initials = splitName[1].replace(")", "");
-      const teacherId = $teacherSpan.attr("data-lectiocontextcard");
+      const teacherId = (
+        $teacherSpan.attr("data-lectiocontextcard") || ""
+      ).replace("T", "");
       assignment.teacher.name = name;
       assignment.teacher.initials = initials;
-      if (teacherId) {
-        assignment.teacher.teacherId = teacherId.replace("T", "");
+      assignment.teacher.teacherId = teacherId;
+      if (teacherId !== "") {
+        const foundTeacher = await getTeacherById({ teacherId });
+        if (foundTeacher !== null && typeof foundTeacher !== "string") {
+          assignment.teacher = foundTeacher;
+        }
       }
     } else if (foundTitle === "studentTime") {
       const studentTime = $td.find("span").text().split(" ")[0];

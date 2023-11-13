@@ -13,7 +13,7 @@ type Message = {
 
 type Props = { type: MessagesTypes };
 
-export async function getMessages({ type }: Props) {
+export async function getMessages({ type }: Props, prioritizeCache?: boolean) {
   const typeMap = {
     personal: "messages-personal",
     all: "messages-all",

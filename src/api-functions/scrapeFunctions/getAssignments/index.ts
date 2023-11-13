@@ -6,12 +6,17 @@ import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { getAllAssignmentsTag } from "@/lib/lectio-api/getTags";
 import { getRedisClient } from "@/lib/get-redis-client";
 
-export async function getAssignments() {
+export async function getAssignments(prioritizeCache?: boolean) {
   const client = await getRedisClient();
   const userId = getLectioProps().userId;
   const tag = getAllAssignmentsTag(userId);
   if (client) {
     const foundCache = (await client.json.get(tag)) as RedisCache<Assignment[]>;
+
+    if (foundCache && prioritizeCache) {
+      await client.quit();
+      return foundCache.data;
+    }
 
     if (foundCache && new Date().getTime() < foundCache.expires) {
       await client.quit();

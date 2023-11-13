@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { ReturnType } from "../types/types";
 
 export function validateResult(result: ReturnType<any>) {
+  return;
+
   if (result.status === "error") {
     if (result.message.includes("too many requests")) {
       try {

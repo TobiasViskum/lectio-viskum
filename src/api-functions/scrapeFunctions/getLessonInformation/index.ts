@@ -18,7 +18,10 @@ import { getLastAuthenticatedCookie } from "@/api-functions/getLastAuthenticated
 
 type Props = { lessonId: string; year: string; userId: string };
 
-export async function getLessonInformation({ lessonId, userId, year }: Props) {
+export async function getLessonInformation(
+  { lessonId, userId, year }: Props,
+  prioritizeCache?: boolean,
+) {
   const href = `aktivitet/aktivitetforside2.aspx?absid=${lessonId}&elevid=${userId}`;
   const numberYear = !isNaN(Number(year)) ? Number(year) : 1970;
 
