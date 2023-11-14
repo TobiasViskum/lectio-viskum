@@ -3,25 +3,17 @@ import { getAuthenticatedPage } from "../getPage";
 import { standardFetchOptions } from "../standardFetchOptions";
 import { getLastAuthenticatedCookie } from "../getLastAuthenticatedCookie";
 import { getRedisClient } from "@/lib/get-redis-client";
-import { getUserTag } from "@/lib/lectio-api/getTags";
+import { getUserTag } from "@/api-functions/getTags";
 
 type Props = {
   teacherId: string;
 };
 
-export async function getTeacherById(
-  { teacherId }: Props,
-  prioritizeCache?: boolean,
-) {
+export async function getTeacherById({ teacherId }: Props) {
   const client = await getRedisClient();
   const tag = getUserTag(teacherId);
   if (client) {
     const foundCache = (await client.json.get(tag)) as RedisCache<Teacher>;
-
-    if (foundCache && prioritizeCache) {
-      await client.quit();
-      return foundCache.data;
-    }
 
     if (foundCache && new Date().getTime() < foundCache.expires) {
       await client.quit();

@@ -29,7 +29,7 @@ export async function setGroupInformation(
     const option = $select[i];
     const $option = $(option);
     const id = $option.val();
-    const foundStudent = await getStudentById({ userId: id }, true);
+    const foundStudent = await getStudentById({ userId: id });
     if (foundStudent !== null && typeof foundStudent !== "string") {
       assignment.groupMembersToAdd.push(foundStudent);
     }

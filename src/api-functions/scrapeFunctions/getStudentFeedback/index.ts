@@ -2,10 +2,7 @@ import { getAuthenticatedPage } from "@/api-functions/getPage";
 
 type Props = { lessonId: string };
 
-export async function getStudentFeedback(
-  { lessonId }: Props,
-  prioritizeCache?: boolean,
-) {
+export async function getStudentFeedback({ lessonId }: Props) {
   const lessonNumber = Number(lessonId);
 
   if (isNaN(lessonNumber)) return null;

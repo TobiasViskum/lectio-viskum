@@ -1,7 +1,7 @@
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { NoDataSkeleton } from "./NoDataSkeleton";
 import { getRedisClient } from "@/lib/get-redis-client";
-import { getAssignmentTag } from "@/lib/lectio-api/getTags";
+import { getAssignmentTag } from "@/api-functions/getTags";
 import { getDate } from "../../../_util/getDate";
 import { Separator } from "@/components/ui/separator";
 

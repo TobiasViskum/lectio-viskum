@@ -6,7 +6,7 @@ import { setSubmitProps } from "./setSubmitProps";
 import { getTimeInMs } from "@/util/getTimeInMs";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { getRedisClient } from "@/lib/get-redis-client";
-import { getAssignmentTag } from "@/lib/lectio-api/getTags";
+import { getAssignmentTag } from "@/api-functions/getTags";
 import { setGroupInformation } from "./setGroupInformation";
 
 type Props = { assignmentId: string };
@@ -34,10 +34,7 @@ export const titleMap: { [key: string]: Titles } = {
   "I undervisningsbeskrivelse:": "inTeachingDescription",
 };
 
-export async function getAssignment(
-  { assignmentId }: Props,
-  prioritizeCache?: boolean,
-) {
+export async function getAssignment({ assignmentId }: Props) {
   const userId = getLectioProps().userId;
   const client = await getRedisClient();
   const tag = getAssignmentTag(userId, assignmentId);
@@ -45,11 +42,6 @@ export async function getAssignment(
     const foundCache = (await client.json.get(
       tag,
     )) as RedisCache<FullAssignment>;
-
-    if (foundCache && prioritizeCache) {
-      await client.quit();
-      return foundCache.data;
-    }
 
     if (foundCache && new Date().getTime() < foundCache.expires) {
       await client.quit();

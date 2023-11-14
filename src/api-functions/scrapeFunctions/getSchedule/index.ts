@@ -7,7 +7,7 @@ import { getTeachers } from "./getTeachers";
 import { getTime } from "./getTime";
 import { getTitle } from "./getTitle";
 import { getRedisClient } from "@/lib/get-redis-client";
-import { getScheduleTag } from "@/lib/lectio-api/getTags";
+import { getScheduleTag } from "@/api-functions/getTags";
 import { getTimeInMs } from "@/util/getTimeInMs";
 
 type Props = {
@@ -17,20 +17,14 @@ type Props = {
   studentId?: string;
 };
 
-export async function getSchedule(
-  { week, year, teacherId, studentId }: Props,
-  prioritizeCache?: boolean,
-) {
+export async function getSchedule({ week, year, teacherId, studentId }: Props) {
   const personalUserId = getLectioProps().userId;
   const userId = studentId || teacherId || personalUserId;
   const client = await getRedisClient();
   const tag = getScheduleTag(userId, week, year);
   if (client) {
     const foundCache = (await client.json.get(tag)) as RedisCache<Week[]>;
-    if (foundCache && prioritizeCache) {
-      await client.quit();
-      return foundCache.data;
-    }
+
     if (foundCache && new Date().getTime() < foundCache.expires) {
       await client.quit();
       return foundCache.data;

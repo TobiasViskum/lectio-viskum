@@ -10,10 +10,6 @@ export async function getAllSubjects() {
   const tag = `${schoolCode}-subjects`;
   const foundCache = global.longTermCache.get(tag);
 
-  if (foundCache) {
-    return foundCache.data;
-  }
-
   const res = await getAuthenticatedPage({
     specificPage: "FindSkema.aspx?type=hold",
   });
@@ -97,6 +93,8 @@ export async function getAllSubjects() {
       expires: getTimeInMs({ days: 3 }),
     });
   }
+
+  console.log(allSubjects);
 
   return allSubjects;
 }

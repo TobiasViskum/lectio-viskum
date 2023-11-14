@@ -1,7 +1,7 @@
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { getRedisClient } from "@/lib/get-redis-client";
 import { lectioAPI } from "@/lib/lectio-api";
-import { getAllAssignmentsTag } from "@/lib/lectio-api/getTags";
+import { getAllAssignmentsTag } from "@/api-functions/getTags";
 
 export async function PrefetchInitialPages() {
   const userId = getLectioProps().userId;

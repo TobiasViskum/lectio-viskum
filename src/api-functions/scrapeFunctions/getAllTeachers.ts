@@ -2,14 +2,24 @@ import "server-only";
 import { getTimeInMs } from "@/util/getTimeInMs";
 import { getAuthenticatedPage } from "../getPage/getAuthenticatedPage";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
+import { getRedisClient } from "@/lib/get-redis-client";
+import { getAllTeachersTag, getUserTag } from "@/api-functions/getTags";
+import { getLastAuthenticatedCookie } from "../getLastAuthenticatedCookie";
+import { standardFetchOptions } from "../standardFetchOptions";
 
 export async function getAllTeachers() {
   const schoolCode = getLectioProps().schoolCode;
-  const tag = `${schoolCode}-teachers`;
-  const foundCache = global.shortTermCache.get(tag);
 
-  if (foundCache && new Date().getTime() < foundCache.expires) {
-    return foundCache.data as Teacher[];
+  const client = await getRedisClient();
+  const tag = getAllTeachersTag(schoolCode);
+  if (client) {
+    const foundCache = (await client.json.get(tag)) as RedisCache<Teacher[]>;
+
+    if (foundCache && new Date().getTime() < foundCache.expires) {
+      await client.quit();
+
+      return foundCache.data;
+    }
   }
 
   const res = await getAuthenticatedPage({
@@ -22,43 +32,80 @@ export async function getAllTeachers() {
   if (res === null) return res;
 
   const $ = res.$;
+  const fetchCookie = res.fetchCookie;
 
-  const teachers: Teacher[] = $("span.classpicture")
-    .map((index, elem) => {
-      let obj = {
-        name: "",
-        initials: "",
-        teacherId: "",
-        imgUrl: "",
-        imgSrc: "",
-      } as Teacher;
-      const $elem = $(elem);
-      const $name = $elem.find("> span > span");
-      const name = $name.text();
-      const teacherId = $name.attr("data-lectiocontextcard");
-      if (name && teacherId) {
-        obj.name = name.split(" (")[0];
-        obj.initials = name.split(" (")[1].replace(")", "");
-        obj.teacherId = teacherId.replace("T", "");
-      }
-      const src = $elem.find("img").attr("src");
-      if (src) {
-        const fullSrc = ["https://lectio.dk", src].join("");
-        obj.imgUrl = fullSrc;
-      }
+  const $spans = $("span.classpicture");
 
-      return obj;
+  let teachers: Teacher[] = [];
+  let promises: Promise<string | null>[] = [];
+
+  for (let i = 0; i < $spans.length; i++) {
+    let obj: Teacher = {
+      name: "",
+      initials: "",
+      teacherId: "",
+      imgUrl: "",
+      imgSrc: "",
+    };
+
+    const _span = $spans[i];
+    const $_span = $(_span);
+    const $span = $_span.find("> span > span");
+    const name = $span.text();
+    const teacherId = $span.attr("data-lectiocontextcard");
+
+    if (name && teacherId) {
+      obj.name = name.split(" (")[0];
+      obj.initials = name.split(" (")[1].replace(")", "");
+      obj.teacherId = teacherId.replace("T", "");
+    }
+    const src = $_span.find("img").attr("src");
+
+    if (src) {
+      const fullSrc = ["https://lectio.dk", src].join("");
+      obj.imgUrl = fullSrc;
+    }
+    teachers.push(obj);
+
+    const imageBase64 = fetchCookie(obj.imgUrl, {
+      method: "GET",
+      headers: { Cookie: getLastAuthenticatedCookie() },
+      ...standardFetchOptions,
     })
-    .get();
+      .then(async (res) => {
+        try {
+          const arrayBuffer = await res.arrayBuffer();
+          const contentType = res.headers.get("content-type");
+          const base64 = Buffer.from(arrayBuffer).toString("base64");
+          const fullSrc = `data:${contentType};base64,${base64}`;
+          return fullSrc;
+        } catch {
+          return null;
+        }
+      })
+      .catch((err) => {
+        return null;
+      });
+    promises.push(imageBase64);
+  }
+  const imageBase64Strings = await Promise.all(promises);
+
+  for (let i = 0; i < teachers.length; i++) {
+    teachers[i].imgSrc = imageBase64Strings[i] || "";
+  }
 
   if (teachers.length === 0) {
+    if (client) await client.quit();
     return "No data";
   }
 
-  global.shortTermCache.set(tag, {
-    data: teachers,
-    expires: new Date().getTime() + getTimeInMs({ days: 1 }),
-  });
+  if (client) {
+    await client.json.set(tag, "$", {
+      data: teachers,
+      expires: new Date().getTime() + getTimeInMs({ days: 1 }),
+    });
+    await client.quit();
+  }
 
   return teachers;
 }

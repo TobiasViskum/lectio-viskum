@@ -15,13 +15,13 @@ import { standardFetchOptions } from "@/api-functions/standardFetchOptions";
 import { getTeachers } from "../getSchedule/getTeachers";
 import { getClassInformation } from "../getClassInformation";
 import { getLastAuthenticatedCookie } from "@/api-functions/getLastAuthenticatedCookie";
+import { getTeacherById } from "..";
+import { getTeacherByInitials } from "../getTeacherByInitials";
+import { getClass } from "../getSchedule/getClass";
 
 type Props = { lessonId: string; year: string; userId: string };
 
-export async function getLessonInformation(
-  { lessonId, userId, year }: Props,
-  prioritizeCache?: boolean,
-) {
+export async function getLessonInformation({ lessonId, userId, year }: Props) {
   const href = `aktivitet/aktivitetforside2.aspx?absid=${lessonId}&elevid=${userId}`;
   const numberYear = !isNaN(Number(year)) ? Number(year) : 1970;
 
@@ -67,11 +67,44 @@ export async function getLessonInformation(
       ? "cancelled"
       : "normal";
     additionalInfo.teachers = getTeachers(info);
+
+    for (let i = 0; i < additionalInfo.teachers.length; i++) {
+      const initials = additionalInfo.teachers[i].initials;
+      const foundTeacher = await getTeacherByInitials({ initials: initials });
+      if (foundTeacher && typeof foundTeacher !== "string") {
+        additionalInfo.teachers[i] = foundTeacher;
+      }
+    }
+    // console.log(getClass(info));
   }
 
   const $div = $("div.s2skemabrikcontent.OnlyDesktop");
-  const text = $div.text();
+  const $possibleTeachers = $div.find('span[data-lectiocontextcard*="T"]');
 
+  for (let i = 0; i < $possibleTeachers.length; i++) {
+    const span = $possibleTeachers[i];
+    const $span = $(span);
+    const teacherId = ($span.attr("data-lectiocontextcard") || "").replace(
+      "T",
+      "",
+    );
+    const foundTeacher = await getTeacherById({ teacherId: teacherId });
+    if (foundTeacher && typeof foundTeacher !== "string") {
+      const existingIndex = additionalInfo.teachers.findIndex((t) => {
+        return (
+          t.initials.toLocaleLowerCase() ===
+          foundTeacher.initials.toLocaleLowerCase()
+        );
+      });
+      if (existingIndex !== -1) {
+        additionalInfo.teachers[existingIndex] = foundTeacher;
+      } else {
+        additionalInfo.teachers.push(foundTeacher);
+      }
+    }
+  }
+
+  const text = $div.text();
   const lessonNumberMatch = text.match(/(.* modul)/);
   if (lessonNumberMatch) {
     const splitStr = lessonNumberMatch[1].split(" ");
@@ -117,8 +150,26 @@ export async function getLessonInformation(
       const res = await getClassInformation(classMatch[1]);
 
       if (res) {
-        additionalInfo.teachers = res.teachers;
-        additionalInfo.students = res.students;
+        for (let i = 0; i < res.teachers.length; i++) {
+          const teacher = res.teachers[i];
+          if (
+            additionalInfo.teachers.find(
+              (t) => t.teacherId === teacher.teacherId,
+            ) === undefined
+          ) {
+            additionalInfo.teachers.push(teacher);
+          }
+        }
+        for (let i = 0; i < res.students.length; i++) {
+          const students = res.students[i];
+          if (
+            additionalInfo.students.find(
+              (t) => t.studentId === students.studentId,
+            ) === undefined
+          ) {
+            additionalInfo.students.push(students);
+          }
+        }
       }
     }
   }
@@ -152,6 +203,7 @@ export async function getLessonInformation(
         if (item.img.includes("/lectio/")) {
           const src = ["https://lectio.dk", item.img].join("");
           const cachedImage = global.longTermCache.get(src);
+
           if (cachedImage) {
             item.img = cachedImage.data;
           } else {

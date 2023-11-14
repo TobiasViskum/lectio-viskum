@@ -82,6 +82,7 @@ export async function Lesson({
   if (numericTimes.endTime - numericTimes.startTime < 0.75) {
     displayOnlyTitle = true;
   }
+  let isVerySmall = numericTimes.endTime - numericTimes.startTime < 0.5;
 
   function getTitleSize() {
     let titleSize = "text-sm @[124px]:text-sm";
@@ -89,6 +90,9 @@ export async function Lesson({
       titleSize = "text-sm";
     } else if (lesson.overlappingLessons >= 1) {
       titleSize = "text-xs @[124px]:text-sm";
+    }
+    if (isVerySmall) {
+      titleSize = "text-xs";
     }
     return titleSize;
   }
@@ -121,7 +125,12 @@ export async function Lesson({
         )}
       />
       <div className="w-full overflow-hidden">
-        <div className="w-auto overflow-auto break-words pt-1">
+        <div
+          className={cn(
+            "w-auto overflow-auto break-words",
+            isVerySmall ? "" : "pt-1",
+          )}
+        >
           <div
             className={cn(
               "@[124px]:semibold flex flex-wrap items-start gap-x-1.5 font-bold leading-3 transition-colors",

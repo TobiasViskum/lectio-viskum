@@ -1,6 +1,6 @@
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { getRedisClient } from "@/lib/get-redis-client";
-import { getAllAssignmentsTag } from "@/lib/lectio-api/getTags";
+import { getAllAssignmentsTag } from "@/api-functions/getTags";
 import { Buttons } from "./Buttons";
 import { NoDataSkeleton } from "./NoDataSkeleton";
 

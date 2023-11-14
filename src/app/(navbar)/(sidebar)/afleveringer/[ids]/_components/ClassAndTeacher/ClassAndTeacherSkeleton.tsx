@@ -1,6 +1,6 @@
 import { getRedisClient } from "@/lib/get-redis-client";
 import { NoDataSkeleton } from "./NoDataSkeleton";
-import { getAssignmentTag } from "@/lib/lectio-api/getTags";
+import { getAssignmentTag } from "@/api-functions/getTags";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { ClassAndTeacher } from ".";
 import { Teacher } from "@/components/global/Teacher";

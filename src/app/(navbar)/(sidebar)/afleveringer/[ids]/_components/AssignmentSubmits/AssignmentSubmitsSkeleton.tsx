@@ -1,6 +1,6 @@
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { getRedisClient } from "@/lib/get-redis-client";
-import { getAssignmentTag } from "@/lib/lectio-api/getTags";
+import { getAssignmentTag } from "@/api-functions/getTags";
 import { Submit } from "../Submit";
 import { Badge } from "@/components/ui/badge";
 import { Fragment } from "react";

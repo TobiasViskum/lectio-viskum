@@ -1,7 +1,6 @@
 import "server-only";
-import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { getAuthenticatedPage } from "@/api-functions/getPage";
-import { getAllSubjects } from "./getAllSubjects";
+import { getAllSubjects } from "../getAllSubjects";
 
 export async function getSubject(providedClassStr: string) {
   const res = await getAuthenticatedPage({

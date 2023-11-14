@@ -2,7 +2,7 @@ import { LoadingDots } from "@/components/loading-components/LoadingDots";
 import { AssignmentsWrapper } from "./AssignmentsWrapper";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { getRedisClient } from "@/lib/get-redis-client";
-import { getAllAssignmentsTag } from "@/lib/lectio-api/getTags";
+import { getAllAssignmentsTag } from "@/api-functions/getTags";
 
 export async function AssignmentsRendererSkeleton() {
   let assignments: null | Assignment[] = null;

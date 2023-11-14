@@ -3,7 +3,9 @@ import { getAuthenticatedPage } from "@/api-functions/getPage";
 import { standardFetchOptions } from "@/api-functions/standardFetchOptions";
 import { getTimeInMs } from "@/util/getTimeInMs";
 
-export async function getClassInformation(classId: string) {
+export async function getClassInformation(
+  classId: string,
+): Promise<ClassInformation | null> {
   const tag = `${classId}-class`;
   const foundCache = global.longTermCache.get(tag);
 

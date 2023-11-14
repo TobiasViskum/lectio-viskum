@@ -7,6 +7,8 @@ import { getScheduleByStudentId } from "./getScheduleByStudentId";
 import { getAllAssignments } from "./getAllAssignments";
 import { getAssignmentByHref } from "./getAssignmentById";
 import { getLessonById } from "./getLesson";
+import { getTeacherById } from "@/api-functions/scrapeFunctions";
+import { getTeacherByInitials } from "@/api-functions/scrapeFunctions/getTeacherByInitials";
 
 const lectioAPI = {
   getSchool: getSchool,
@@ -23,6 +25,10 @@ const lectioAPI = {
     byId: getAssignmentByHref,
   },
   getLessonById: getLessonById,
+  // getTeacher: {
+  //   byId: getTeacherById,
+  //   byInitials: getTeacherByInitials,
+  // },
 };
 
 export { lectioAPI };

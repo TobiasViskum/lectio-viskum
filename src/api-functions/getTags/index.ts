@@ -10,3 +10,6 @@ export function getAllAssignmentsTag(userId: string) {
 export function getAssignmentTag(userId: string, assignmentId: string) {
   return `assignment:${userId}:${assignmentId}`;
 }
+export function getAllTeachersTag(schoolCode: string) {
+  return `all-teachers:${schoolCode}`;
+}

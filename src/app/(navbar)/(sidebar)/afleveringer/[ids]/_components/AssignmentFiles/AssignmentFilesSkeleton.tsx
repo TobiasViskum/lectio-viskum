@@ -1,7 +1,7 @@
 import { DocumentButton } from "@/components/global/DocumentButton";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { getRedisClient } from "@/lib/get-redis-client";
-import { getAssignmentTag } from "@/lib/lectio-api/getTags";
+import { getAssignmentTag } from "@/api-functions/getTags";
 
 type Props = {
   assignmentId: string;

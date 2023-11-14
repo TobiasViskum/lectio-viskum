@@ -2,7 +2,7 @@ import { lectioAPI } from "@/lib/lectio-api";
 import { Content } from "./Content";
 import { getRedisClient } from "@/lib/get-redis-client";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
-import { getAllAssignmentsTag } from "@/lib/lectio-api/getTags";
+import { getAllAssignmentsTag } from "@/api-functions/getTags";
 
 import { NoDataSkeleton } from "./NoDataSkeleton";
 
