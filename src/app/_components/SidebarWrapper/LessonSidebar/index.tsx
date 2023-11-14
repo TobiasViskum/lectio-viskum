@@ -25,8 +25,10 @@ export function LessonSidebar() {
             lessonId: lessonId,
             year: year,
           }).toString();
-          const res = await fetch("/api/get-lesson-information?" + q);
-          const newLesson = await res.json();
+          const url = "/api/get-lesson-information?" + q;
+
+          const res = await fetch(url);
+          const newLesson = (await res.json()) as FullLesson | undefined;
 
           if (newLesson !== undefined) {
             setLesson(newLesson);

@@ -20,9 +20,12 @@ export async function Lesson({
 }: Props) {
   const time = lesson.time;
   const startTime =
-    time.startDate.getHours() + time.startDate.getMinutes() / 60;
+    new Date(time.startDate).getHours() +
+    new Date(time.startDate).getMinutes() / 60;
 
-  const endTime = time.endDate.getHours() + time.endDate.getMinutes() / 60;
+  const endTime =
+    new Date(time.endDate).getHours() +
+    new Date(time.endDate).getMinutes() / 60;
 
   const multi = startTime - timestamps[0];
 
@@ -90,7 +93,7 @@ export async function Lesson({
     return titleSize;
   }
 
-  const { week, year } = getWeekAndYear(lesson.time.startDate);
+  const { week, year } = getWeekAndYear(new Date(lesson.time.startDate));
 
   return (
     <Link

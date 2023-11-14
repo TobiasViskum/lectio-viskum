@@ -129,6 +129,25 @@ export default async function LessonPage({ params }: Props) {
           </div>
         </div>
       )}
+      {lesson.presentation.length !== 0 && (
+        <div className="flex flex-col gap-y-2">
+          <Badge className="-ml-1 mt-8 w-max bg-accent px-1.5 py-0.5 text-left text-2xs text-muted-foreground transition-opacity hover:bg-accent hover:opacity-75">
+            PRÆSENTATION
+          </Badge>
+          <div className="flex flex-col gap-y-4">
+            {lesson.presentation.map((homework, _index) => {
+              return (
+                <div
+                  key={_index}
+                  className="flex flex-col gap-y-4 border-b pb-4"
+                >
+                  <RenderHomework homework={homework} key={_index} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
       {lesson.note.length === 0 &&
         lesson.homework.length === 0 &&
         lesson.other.length === 0 && (

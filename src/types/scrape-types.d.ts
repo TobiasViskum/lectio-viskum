@@ -143,6 +143,7 @@ type AdditionalLessonInfo = Prettify<{
 }>;
 type FullLesson = Prettify<
   AdditionalLessonInfo & {
+    id: string;
     subjectTheme: {
       theme: string;
       themeId: string;
@@ -150,7 +151,7 @@ type FullLesson = Prettify<
     note: string[];
     homework: LessonHomework[];
     other: LessonHomework[];
-    presentation: LessonHomework[][];
+    presentation: LessonHomework[];
   }
 >;
 

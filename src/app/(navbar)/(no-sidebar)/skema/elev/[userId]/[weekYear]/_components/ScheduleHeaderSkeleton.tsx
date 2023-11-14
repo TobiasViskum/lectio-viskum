@@ -24,7 +24,7 @@ export function ScheduleHeaderSkeleton({ userId }: Props) {
 
   return (
     <>
-      <div className="pb-4ª flex flex-col gap-x-4">
+      <div className="pb-4ª flex flex-col gap-x-4 pb-4">
         <div className="flex items-center gap-x-2 py-4 pl-1">
           <Image
             src={userSrc || profileLoading}

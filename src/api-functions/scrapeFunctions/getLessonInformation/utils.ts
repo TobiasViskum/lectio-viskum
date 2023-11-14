@@ -19,7 +19,6 @@ export function getHomework(
 
     const $article = $sibling.children().first();
 
-    // setTitle($article, currHomework, $);
     setDescription($article, currHomework, $);
 
     homework.push(currHomework);
@@ -32,7 +31,7 @@ export function getHomeworkAndOtherAndPresentation($: cheerio.Root) {
   type ResultHolder = {
     homework: LessonHomework[];
     other: LessonHomework[];
-    presentation: LessonHomework[][];
+    presentation: LessonHomework[];
   };
 
   let resultHolder: ResultHolder = {
@@ -45,7 +44,6 @@ export function getHomeworkAndOtherAndPresentation($: cheerio.Root) {
 
   for (let i = 0; i < sectionHeadings.length; i++) {
     let homework: LessonHomework[] = [];
-    let presentation: LessonHomework[][] = [];
 
     const elem = sectionHeadings[i];
     const $elem = $(elem);
@@ -62,77 +60,32 @@ export function getHomeworkAndOtherAndPresentation($: cheerio.Root) {
           .eq(1)
           .children()
           .eq(1)
-          .children();
+          .find("section");
 
-        // setPresentation($presentationsHolder, presentation, $);
+        for (let j = 0; j < $presentationsHolder.length; j++) {
+          const section = $presentationsHolder[j];
+          const $section = $(section);
+
+          let currHomework: LessonHomework = [];
+          setDescription($section, currHomework, $);
+          homework.push(currHomework);
+        }
       }
     }
+
+    removeEmptyFields(homework);
     if (resultType === "Lektier") {
       resultHolder.homework = homework;
     } else if (resultType === "Øvrigt indhold") {
       resultHolder.other = homework;
     } else if (resultType === "Præsentation") {
-      resultHolder.presentation = presentation;
+      resultHolder.presentation = homework;
     }
   }
 
   return resultHolder;
 }
 
-function getText(text: string) {
-  if (text.length === 1) return "\n";
-  text = text.trim();
-  text = text.replaceAll("&nbsp;", "\n");
-  text = text.replaceAll("<br>", "\n");
-
-  return text;
-}
-// function trimLineBreaks(currHomework: LessonHomework) {
-//   let hasChanged = false;
-//   if (currHomework.description[0] === "\n") {
-//     hasChanged = true;
-//     currHomework.description.shift();
-//   }
-//   if (currHomework.description[currHomework.description.length - 1] === "\n") {
-//     hasChanged = true;
-//     currHomework.description.pop();
-//   }
-//   if (hasChanged) {
-//     trimLineBreaks(currHomework);
-//   }
-// }
-
-// function setTitle(
-//   $article: cheerio.Cheerio,
-//   currHomework: LessonHomework,
-//   $: cheerio.Root,
-// ) {
-//   const $elements = $article.find(">");
-//   for (let i = 0; i < $elements.length; i++) {
-//     const elem = $elements[i];
-//     const $elem = $(elem);
-//     if (elem.type === "tag") {
-//       if (elem.name === "h1") {
-//         currHomework.title.push({
-//           text: $elem.text(),
-//           href: "",
-//           isBold: false,
-//         });
-//       } else if (elem.name === "ul" || elem.name === "ol") {
-//       }
-//     }
-//   }
-
-// const $title = $article.children().first();
-// let title = $title.text().trim();
-
-// currHomework.title = title;
-// const href = $title.children().first().attr("href");
-
-// if (href) {
-//   currHomework.titleHref = href;
-// }
-// }
 function getDescriptionVideoOrImage($elem: cheerio.Cheerio, $: cheerio.Root) {
   const src = $elem.attr("src");
   const imgHeight = Number($elem.attr("height"));
@@ -226,6 +179,19 @@ function setDescription(
         currHomework.push({ listContent: listContent, listType: elem.name });
 
         listContent = [];
+      } else if (elem.name === "span") {
+        const $newElem = $elem.find(">");
+
+        if ($newElem.length === 0) {
+          currHomework.push({
+            text: $elem.text(),
+            href: "",
+            isTitle: false,
+            isBold: false,
+          });
+        } else {
+          setDescription($newElem, currHomework, $);
+        }
       } else if (elem.name === "p") {
         const $a = $elem.find("a");
         if ($a.length >= 1) {
@@ -290,97 +256,35 @@ function setDescription(
       }
     }
   }
-
-  // trimLineBreaks(currHomework);
 }
-// function setPresentation(
-//   $presentationsHolder: cheerio.Cheerio,
-//   presentation: LessonHomework[][],
-//   $: cheerio.Root,
-// ) {
-//   $presentationsHolder.each((index, elem) => {
-//     let currIndex = 0;
-//     presentation.push([{ title: [], description: [] }]);
+function removeEmptyFields(homeworks: LessonHomework[]) {
+  for (let i = 0; i < homeworks.length; i++) {
+    const homework = homeworks[i];
 
-//     const $elem = $(elem);
-//     const $elements = $elem.find("*");
-//     let isAddingToUl = false;
-//     let tempUl: string[] = [];
+    let removeIndex = true;
 
-//     try {
-//       for (let i = 0; i < $elements.length; i++) {
-//         const elem = $elements[i];
-//         const $elem = $(elem);
-//         const text = getText($elem.html() as string);
+    for (let j = 0; j < homework.length; j++) {
+      const content = homework[j];
+      let removeContent = true;
 
-//         if (elem.type === "tag") {
-//           if (elem.name === "h1" || elem.name === "h2") {
-//             if (presentation[index][currIndex].title !== "") {
-//               currIndex += 1;
-//               presentation[index].push({
-//                 titleHref: "",
-//                 title: "",
-//                 description: [],
-//               });
-//             }
-//             if (text.length > 1) {
-//               presentation[index][currIndex].title = text;
-//             }
-//           }
+      if ("isTitle" in content) {
+        if (content.text !== "") {
+          removeIndex = false;
+          removeContent = false;
+          continue;
+        }
+      } else {
+        removeIndex = false;
+        removeContent = false;
+        continue;
+      }
+      if (removeContent) {
+        //Remove object in homework array, because it's empty
+      }
+    }
 
-//           if (elem.name === "ul") {
-//             isAddingToUl = true;
-//           } else if (elem.name === "li") {
-//             tempUl.push(text);
-//           } else {
-//             if (tempUl.length !== 0) {
-//               presentation[index][currIndex].description.push(tempUl);
-//               tempUl = [];
-//             }
-//             isAddingToUl = false;
-//           }
-//           if (elem.name === "p") {
-//             presentation[index][currIndex].description.push(text);
-//           } else if (elem.name === "img") {
-//             const res = getDescriptionVideoOrImage($elem, $);
-//             if (res) {
-//               presentation[index][currIndex].description.push(res);
-//             }
-//           }
-//         }
-//       }
-
-//       trimLineBreaks(presentation[index][currIndex]);
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   });
-
-//   /*
-//       This just removes the empty objects and arrays
-
-//       For some reason array.filter() doesn't work when
-//       it's an array in an array, so that's why the piece
-//       of code is as big as it is
-//     */
-//   presentation.forEach((homeworkArr) => {
-//     let indexesToRemove: number[] = [];
-//     homeworkArr.forEach((obj, index) => {
-//       if (obj.title === "" && obj.description.length === 0) {
-//         indexesToRemove.push(index);
-//       }
-//     });
-//     indexesToRemove.forEach((indexToRemove) => {
-//       homeworkArr.splice(indexToRemove, 1);
-//     });
-//   });
-//   let indexesToRemove: number[] = [];
-//   presentation.forEach((homeworkArr, index) => {
-//     if (homeworkArr.length === 0) {
-//       indexesToRemove.push(index);
-//     }
-//   });
-//   indexesToRemove.forEach((indexToRemove) => {
-//     presentation.splice(indexToRemove, 1);
-//   });
-// }
+    if (removeIndex) {
+      homeworks.splice(i, 1);
+    }
+  }
+}

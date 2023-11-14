@@ -16,6 +16,7 @@ export function RenderHomework({
     <>
       {homework.map((content, index) => {
         const isArray = Array.isArray(content);
+
         let html = <></>;
 
         if (!isArray) {

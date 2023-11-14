@@ -2,23 +2,28 @@ export function generateTimestamps(weeks: Week[]) {
   let globalStartTime = 24;
   let globalEndTime = 0;
 
-  weeks.forEach((week) => {
-    week.lessons.forEach((lesson) => {
+  for (let i = 0; i < weeks.length; i++) {
+    const week = weeks[i];
+    for (let j = 0; j < week.lessons.length; j++) {
+      const lesson = week.lessons[j];
       const time = lesson.time;
 
       const startTime =
-        time.startDate.getHours() + time.startDate.getMinutes() / 60;
+        new Date(time.startDate).getHours() +
+        new Date(time.startDate).getMinutes() / 60;
 
       if (startTime < globalStartTime) {
         globalStartTime = startTime;
       }
 
-      const endTime = time.endDate.getHours() + time.endDate.getMinutes() / 60;
+      const endTime =
+        new Date(time.endDate).getHours() +
+        new Date(time.endDate).getMinutes() / 60;
       if (endTime > globalEndTime) {
         globalEndTime = endTime;
       }
-    });
-  });
+    }
+  }
 
   globalStartTime = Math.floor(globalStartTime - 0.001);
   globalEndTime = Math.ceil(globalEndTime + 0.001);

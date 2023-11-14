@@ -29,7 +29,7 @@ export async function getLessonInformation(
   const foundCache = global.shortTermCache.get(tag);
 
   if (foundCache && new Date().getTime() < foundCache.expires) {
-    return foundCache.data;
+    // return foundCache.data;
   }
 
   const res = await getAuthenticatedPage({
@@ -189,6 +189,7 @@ export async function getLessonInformation(
   }
 
   const resultObj = {
+    id: lessonId,
     ...additionalInfo,
     subjectTheme: subjectTheme,
     note: note,

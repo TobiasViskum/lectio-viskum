@@ -1,5 +1,4 @@
 import { generateTimestamps } from "../_util/generateTimestamps";
-import { AnimateWrapper } from "./AnimateWrapper";
 import { Timestamps } from "./Timestamps";
 import { TimestampsLines } from "./TimestampsLines";
 import { Weekday } from "./Weekday";
