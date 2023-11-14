@@ -94,7 +94,7 @@ export async function getAllSubjects() {
     });
   }
 
-  console.log(allSubjects);
+  // console.log(allSubjects);
 
   return allSubjects;
 }
