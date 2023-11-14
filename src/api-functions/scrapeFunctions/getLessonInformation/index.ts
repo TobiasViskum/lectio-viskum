@@ -153,35 +153,35 @@ export async function getLessonInformation(
           const src = ["https://lectio.dk", item.img].join("");
           const cachedImage = global.longTermCache.get(src);
           if (cachedImage) {
-            return cachedImage.data;
-          }
-
-          const imageBase64 = await fetchCookie(src, {
-            method: "GET",
-            headers: { Cookie: getLastAuthenticatedCookie() },
-            ...standardFetchOptions,
-          })
-            .then(async (res) => {
-              try {
-                const arrayBuffer = await res.arrayBuffer();
-                const contentType = res.headers.get("content-type");
-                const base64 = Buffer.from(arrayBuffer).toString("base64");
-                const fullSrc = `data:${contentType};base64,${base64}`;
-                return fullSrc;
-              } catch {
-                return null;
-              }
+            item.img = cachedImage.data;
+          } else {
+            const imageBase64 = await fetchCookie(src, {
+              method: "GET",
+              headers: { Cookie: getLastAuthenticatedCookie() },
+              ...standardFetchOptions,
             })
-            .catch((err) => {
-              return null;
-            });
+              .then(async (res) => {
+                try {
+                  const arrayBuffer = await res.arrayBuffer();
+                  const contentType = res.headers.get("content-type");
+                  const base64 = Buffer.from(arrayBuffer).toString("base64");
+                  const fullSrc = `data:${contentType};base64,${base64}`;
+                  return fullSrc;
+                } catch {
+                  return null;
+                }
+              })
+              .catch((err) => {
+                return null;
+              });
 
-          if (imageBase64) {
-            global.longTermCache.set(src, {
-              data: imageBase64,
-              expires: new Date().getTime() + getTimeInMs({ days: 1 }),
-            });
-            item.img = imageBase64;
+            if (imageBase64) {
+              global.longTermCache.set(src, {
+                data: imageBase64,
+                expires: new Date().getTime() + getTimeInMs({ days: 1 }),
+              });
+              item.img = imageBase64;
+            }
           }
         }
       }
