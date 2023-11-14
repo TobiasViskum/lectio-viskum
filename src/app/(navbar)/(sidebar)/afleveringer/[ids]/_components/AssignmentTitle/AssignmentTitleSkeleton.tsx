@@ -1,7 +1,7 @@
 type Props = { title: string | undefined };
 export function AssignmentTitleSkeleton({ title }: Props) {
   return (
-    <div>
+    <div className="flex h-8 items-center md:h-9">
       {title !== undefined ? (
         <h1 className="text-2xl font-bold md:text-3xl">
           {decodeURIComponent(title)}

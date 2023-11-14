@@ -1,27 +1,12 @@
 import { DocumentButton } from "@/components/global/DocumentButton";
-import { getLectioProps } from "@/lib/auth/getLectioProps";
-import { getRedisClient } from "@/lib/get-redis-client";
-import { getAssignmentTag } from "@/api-functions/getTags";
+import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
 
 type Props = {
   assignmentId: string;
 };
 
 export async function AssignmentFilesSkeleton({ assignmentId }: Props) {
-  let assignment: FullAssignment | null = null;
-
-  const userId = getLectioProps().userId;
-  const client = await getRedisClient();
-  const tag = getAssignmentTag(userId, assignmentId);
-  if (client) {
-    const foundCache = (await client.json.get(
-      tag,
-    )) as RedisCache<FullAssignment>;
-    if (foundCache) {
-      assignment = foundCache.data;
-    }
-    await client.quit();
-  }
+  let assignment = await getCachedAssignment(assignmentId);
 
   if (assignment === null) return null;
 

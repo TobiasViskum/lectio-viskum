@@ -1,21 +1,29 @@
 export function getWeekAndYear(date: Date) {
-  // Create a copy of the date
-  let tempDate = new Date(date.valueOf());
-  // Get the first day of the year
-  let startOfYear = new Date(tempDate.getFullYear(), 0, 1);
-  // Calculate the difference in milliseconds
-  let diff = tempDate.getTime() - startOfYear.getTime();
-  // Convert to days and add 1 for the first day of the year
-  let dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
-  // Calculate the week number (ISO-8601)
-  let week = Math.ceil(dayOfYear / 7);
-  // Return the week number and year
+  const dowOffset = 1;
+  let newYear = new Date(date.getFullYear(), 0, 1);
+  let day = newYear.getDay() - dowOffset;
+  day = day >= 0 ? day : day + 7;
+  let dayNum =
+    Math.floor(
+      (date.getTime() -
+        newYear.getTime() -
+        (date.getTimezoneOffset() - newYear.getTimezoneOffset()) * 60000) /
+        86400000,
+    ) + 1;
+  let weekNum;
 
-  let strWeek = week.toString();
-  if (strWeek.length === 1) {
-    strWeek = "0" + strWeek;
+  if (day < 4) {
+    weekNum = Math.floor((dayNum + day - 1) / 7) + 1;
+    if (weekNum > 52) {
+      let nYear = new Date(date.getFullYear() + 1, 0, 1);
+      let nDay = nYear.getDay() - dowOffset;
+      nDay = nDay >= 0 ? nDay : nDay + 7;
+
+      weekNum = nDay < 4 ? 1 : 53;
+    }
+  } else {
+    weekNum = Math.floor((dayNum + day - 1) / 7);
   }
-  let strYear = tempDate.getFullYear().toString();
 
-  return { week: strWeek, year: strYear };
+  return { week: weekNum.toString(), year: date.getFullYear().toString() };
 }

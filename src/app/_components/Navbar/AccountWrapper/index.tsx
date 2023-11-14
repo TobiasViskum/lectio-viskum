@@ -13,13 +13,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Settings, StretchHorizontal } from "lucide-react";
 import { LogOutButton } from "./LogOutButton";
+import { getCachedStudent } from "@/cache-functions/getCachedStudent";
+import { NoDataSkeleton } from "./NoDataSkeleton";
 
 export async function AccountWrapper() {
   const userId = getLectioProps().userId;
 
-  const user = await lectioAPI.getStudent.byId({
+  let user = await lectioAPI.getStudent.byId({
     userId: userId,
   });
+
+  if (user === null) {
+    user = await getCachedStudent(userId);
+  }
+  if (user === null) {
+    return <NoDataSkeleton />;
+  }
 
   return (
     <Menubar className="border-0 bg-transparent px-0 py-0">
@@ -27,7 +36,7 @@ export async function AccountWrapper() {
         <MenubarTrigger asChild className="cursor-pointer">
           <Button variant={"ghost"} className="flex h-12 gap-x-2 px-2">
             <Image
-              src={user?.imgSrc || profile}
+              src={user.imgSrc || profile}
               width={40}
               height={40}
               alt="img"
@@ -38,7 +47,7 @@ export async function AccountWrapper() {
         </MenubarTrigger>
         <MenubarContent>
           <MenubarItem className="flex flex-col items-start">
-            <p className="text-base font-bold">{user?.name}</p>
+            <p className="text-base font-bold">{user.name}</p>
             <p className="text-sm text-muted-foreground">
               {user?.studentClass}
             </p>

@@ -1,12 +1,21 @@
 import { Separator } from "@/components/ui/separator";
 import { getDate } from "../../../_util/getDate";
+import { lectioAPI } from "@/lib/lectio-api";
+import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
 
-type Props = { assignmentPromise: Promise<FullAssignment | null> };
+type Props = { assignmentId: string };
 
-export async function AssignmentInfo({ assignmentPromise }: Props) {
-  const assignment = await assignmentPromise;
+export async function AssignmentInfo({ assignmentId }: Props) {
+  let assignment = await lectioAPI.getAssignment.byId({
+    assignmentId: assignmentId,
+  });
 
-  if (assignment === null) return null;
+  if (assignment === null) {
+    assignment = await getCachedAssignment(assignmentId);
+  }
+  if (assignment === null) {
+    return null;
+  }
 
   const date = getDate(assignment.dueTo);
   const formattedDate = new Intl.DateTimeFormat("da-dk", {

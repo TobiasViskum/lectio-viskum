@@ -5,25 +5,13 @@ import { Submit } from "../Submit";
 import { Badge } from "@/components/ui/badge";
 import { Fragment } from "react";
 import { Separator } from "@/components/ui/separator";
+import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
 
 type Props = {
   assignmentId: string;
 };
 export async function AssignmentSubmitsSkeleton({ assignmentId }: Props) {
-  let assignment: FullAssignment | null = null;
-
-  const userId = getLectioProps().userId;
-  const client = await getRedisClient();
-  const tag = getAssignmentTag(userId, assignmentId);
-  if (client) {
-    const foundCache = (await client.json.get(
-      tag,
-    )) as RedisCache<FullAssignment>;
-    if (foundCache) {
-      assignment = foundCache.data;
-    }
-    await client.quit();
-  }
+  let assignment = await getCachedAssignment(assignmentId);
 
   if (assignment === null) return null;
 

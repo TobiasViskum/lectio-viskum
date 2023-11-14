@@ -3,28 +3,18 @@ import { NoDataSkeleton } from "./NoDataSkeleton";
 import { getRedisClient } from "@/lib/get-redis-client";
 import { getAssignmentTag } from "@/api-functions/getTags";
 import { urlify } from "@/util/urlify";
+import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
 
 type Props = {
   assignmentId: string;
 };
 
 export async function AssignmentDescriptionSkeleton({ assignmentId }: Props) {
-  let assignment: FullAssignment | null = null;
+  let assignment = await getCachedAssignment(assignmentId);
 
-  const userId = getLectioProps().userId;
-  const client = await getRedisClient();
-  const tag = getAssignmentTag(userId, assignmentId);
-  if (client) {
-    const foundCache = (await client.json.get(
-      tag,
-    )) as RedisCache<FullAssignment>;
-    if (foundCache) {
-      assignment = foundCache.data;
-    }
-    await client.quit();
+  if (assignment === null) {
+    return null;
   }
-
-  if (assignment === null) return null;
 
   return (
     <div className="flex max-w-3xl flex-col gap-y-1">

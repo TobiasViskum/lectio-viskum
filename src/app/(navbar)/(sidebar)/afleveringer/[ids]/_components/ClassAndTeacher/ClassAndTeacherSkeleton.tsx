@@ -4,6 +4,7 @@ import { getAssignmentTag } from "@/api-functions/getTags";
 import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { ClassAndTeacher } from ".";
 import { Teacher } from "@/components/global/Teacher";
+import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
 
 type Props = {
   schoolClass: string | undefined;
@@ -16,20 +17,7 @@ export async function ClassAndTeacherSkeleton({
   subject,
   assignmentId,
 }: Props) {
-  let assignment: FullAssignment | null = null;
-
-  const userId = getLectioProps().userId;
-  const client = await getRedisClient();
-  const tag = getAssignmentTag(userId, assignmentId);
-  if (client) {
-    const foundCache = (await client.json.get(
-      tag,
-    )) as RedisCache<FullAssignment>;
-    if (foundCache) {
-      assignment = foundCache.data;
-    }
-    await client.quit();
-  }
+  let assignment = await getCachedAssignment(assignmentId);
 
   if (assignment === null) {
     return <NoDataSkeleton schoolClass={schoolClass} subject={subject} />;

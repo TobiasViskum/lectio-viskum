@@ -1,6 +1,6 @@
 "use client";
 
-import { EditableTextArea } from "@/app/(navbar)/(sidebar)/skema/elev/[userId]/modul/[id]/elevfeedback/_components/EditableTextArea";
+import { EditableTextArea } from "./EditableTextArea";
 import { Input } from "@/components/ui/input";
 
 type Props = {

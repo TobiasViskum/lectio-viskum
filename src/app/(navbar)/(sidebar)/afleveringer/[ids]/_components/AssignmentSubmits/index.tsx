@@ -2,13 +2,22 @@ import { Badge } from "@/components/ui/badge";
 import { Submit } from "../Submit";
 import { Separator } from "@/components/ui/separator";
 import { Fragment } from "react";
+import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
+import { lectioAPI } from "@/lib/lectio-api";
 
-type Props = { assignmentPromise: Promise<FullAssignment | null> };
+type Props = { assignmentId: string };
 
-export async function AssignmentSubmits({ assignmentPromise }: Props) {
-  const assignment = await assignmentPromise;
+export async function AssignmentSubmits({ assignmentId }: Props) {
+  let assignment = await lectioAPI.getAssignment.byId({
+    assignmentId: assignmentId,
+  });
 
-  if (assignment === null) return <p>Error</p>;
+  if (assignment === null) {
+    assignment = await getCachedAssignment(assignmentId);
+  }
+  if (assignment === null) {
+    return null;
+  }
 
   const studentSubmits = assignment.submits.filter(
     (obj) => "studentId" in obj.submitter,

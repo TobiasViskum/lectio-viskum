@@ -1,11 +1,21 @@
+import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
+import { lectioAPI } from "@/lib/lectio-api";
 import { urlify } from "@/util/urlify";
+import { AssignmentDescriptionSkeleton } from "./AssignmentDescriptionSkeleton";
 
-type Props = { assignmentPromise: Promise<FullAssignment | null> };
+type Props = { assignmentId: string };
 
-export async function AssignmentDescription({ assignmentPromise }: Props) {
-  const assignment = await assignmentPromise;
+export async function AssignmentDescription({ assignmentId }: Props) {
+  let assignment = await lectioAPI.getAssignment.byId({
+    assignmentId: assignmentId,
+  });
 
-  if (assignment === null) return null;
+  if (assignment === null) {
+    assignment = await getCachedAssignment(assignmentId);
+  }
+  if (assignment === null) {
+    return <AssignmentDescriptionSkeleton assignmentId={assignmentId} />;
+  }
 
   if (assignment.description.length === 0) return null;
   if (assignment.description.length === 1 && assignment.description[0] === "")

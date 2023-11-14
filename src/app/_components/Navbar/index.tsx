@@ -1,11 +1,9 @@
-import { Logo, profileLoading } from "@/assets";
 import { Separator } from "@/components/ui/separator";
-import Image from "next/image";
 import { AccountWrapper } from "./AccountWrapper";
 import { Suspense } from "react";
 import { NavbarSheet } from "./NavbarSheet";
 import { BigScreenContent } from "./BigScreenContent";
-import Link from "next/link";
+import { AccountSkeleton } from "./AccountWrapper/AccountSkeleton";
 
 export function Navbar() {
   return (
@@ -15,17 +13,7 @@ export function Navbar() {
         <BigScreenContent />
 
         <div className="ml-auto grid place-items-center rounded-full">
-          <Suspense
-            fallback={
-              <Image
-                src={profileLoading.src}
-                alt="img"
-                width={40}
-                height={40}
-                className="animate-pulse object-cover"
-              />
-            }
-          >
+          <Suspense fallback={<AccountSkeleton />}>
             <AccountWrapper />
           </Suspense>
         </div>

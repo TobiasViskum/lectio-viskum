@@ -7,7 +7,7 @@ import { NoDataSkeleton } from "./NoDataSkeleton";
 
 type Props = { strAssignments: string };
 export function Buttons({ strAssignments }: Props) {
-  let assignments: Assignment[] | null = JSON.parse(strAssignments);
+  let assignments: Assignment[] = JSON.parse(strAssignments);
 
   useEffect(() => {
     vEvent.listen("assignmentsFilter", (e) => {

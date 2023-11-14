@@ -36,13 +36,11 @@ export default async function LessonPage({ params }: Props) {
           : lesson.title}
       </h1>
       <LessonTime lessonNumber={lesson.lessonNumber} time={lesson.time} />
-
       <div className="block md:hidden">
         {lesson.teachers.map((teacher) => {
           return <Teacher key={teacher.name} teacher={teacher} />;
         })}
       </div>
-
       <div className="mt-4 flex flex-col gap-y-2">
         <Badge className="-ml-1 w-max bg-accent px-1.5 py-0.5 text-left text-2xs text-muted-foreground transition-opacity hover:bg-accent hover:opacity-75 ">
           INFORMATION
@@ -67,7 +65,6 @@ export default async function LessonPage({ params }: Props) {
           </div>
         )}
       </div>
-
       {lesson.note.length !== 0 && (
         <div className="flex flex-col gap-y-2">
           <Badge className="-ml-1 mt-8 w-max bg-accent px-1.5 py-0.5 text-left text-2xs text-muted-foreground transition-opacity hover:bg-accent hover:opacity-75">
@@ -86,7 +83,6 @@ export default async function LessonPage({ params }: Props) {
           </div>
         </div>
       )}
-
       {lesson.homework.length !== 0 && (
         <div className="flex flex-col gap-y-2">
           <Badge className="-ml-1 mt-8 w-max bg-accent px-1.5 py-0.5 text-left text-2xs text-muted-foreground transition-opacity hover:bg-accent hover:opacity-75">
@@ -109,7 +105,6 @@ export default async function LessonPage({ params }: Props) {
           </div>
         </div>
       )}
-
       {lesson.other.length !== 0 && (
         <div className="flex flex-col gap-y-2">
           <Badge className="-ml-1 mt-8 w-max bg-accent px-1.5 py-0.5 text-left text-2xs text-muted-foreground transition-opacity hover:bg-accent hover:opacity-75">
@@ -157,7 +152,7 @@ export default async function LessonPage({ params }: Props) {
         )}
 
       <Link
-        className="mt-4 block rounded-md border py-2 text-center md:hidden"
+        className="mt-8 block max-w-lg rounded-md border py-2 text-center"
         href={`/skema/elev/${params.userId}/modul/${params.id}/elevfeedback`}
       >
         Elevfeedback

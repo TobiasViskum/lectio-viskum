@@ -1,7 +1,7 @@
 import { lectioAPI } from "@/lib/lectio-api";
 import { ClassAndTeacher } from "./_components/ClassAndTeacher";
 import { AssignmentDescription } from "./_components/AssignmentDescription";
-import { AssignmentFiles } from "./_components/AssignmentFiles/AssignmentFiles";
+import { AssignmentFiles } from "./_components/AssignmentFiles";
 import { AssignmentSubmits } from "./_components/AssignmentSubmits";
 import { Suspense } from "react";
 import { ClassAndTeacherSkeleton } from "./_components/ClassAndTeacher/ClassAndTeacherSkeleton";
@@ -31,49 +31,54 @@ export default function AssignmentPage({ params, searchParams }: Props) {
   });
 
   return (
-    <>
-      <div className="flex flex-col gap-y-6 pt-6">
+    <div className="flex flex-col gap-y-6 pt-6">
+      <Suspense
+        fallback={<AssignmentTitleSkeleton title={searchParams.title} />}
+      >
+        <AssignmentTitle
+          assignmentId={assignmentId}
+          title={searchParams.title}
+        />
+      </Suspense>
+      <div className="flex flex-col gap-y-6">
         <Suspense
-          fallback={<AssignmentTitleSkeleton title={searchParams.title} />}
+          fallback={
+            <ClassAndTeacherSkeleton
+              schoolClass={searchParams.class}
+              subject={searchParams.subject}
+              assignmentId={assignmentId}
+            />
+          }
         >
-          <AssignmentTitle assignmentPromise={assignmentPromise} />
+          <ClassAndTeacher
+            assignmentId={assignmentId}
+            schoolClass={searchParams.class}
+            subject={searchParams.subject}
+          />
         </Suspense>
-        <div className="flex flex-col gap-y-6">
-          <Suspense
-            fallback={
-              <ClassAndTeacherSkeleton
-                schoolClass={searchParams.class}
-                subject={searchParams.subject}
-                assignmentId={assignmentId}
-              />
-            }
-          >
-            <ClassAndTeacher assignmentId={assignmentId} />
-          </Suspense>
-          <Suspense
-            fallback={<AssignmentInfoSkeleton assignmentId={assignmentId} />}
-          >
-            <AssignmentInfo assignmentPromise={assignmentPromise} />
-          </Suspense>
-          <Suspense
-            fallback={
-              <AssignmentDescriptionSkeleton assignmentId={assignmentId} />
-            }
-          >
-            <AssignmentDescription assignmentPromise={assignmentPromise} />
-          </Suspense>
-          <Suspense
-            fallback={<AssignmentFilesSkeleton assignmentId={assignmentId} />}
-          >
-            <AssignmentFiles assignmentPromise={assignmentPromise} />
-          </Suspense>
-          <Suspense
-            fallback={<AssignmentSubmitsSkeleton assignmentId={assignmentId} />}
-          >
-            <AssignmentSubmits assignmentPromise={assignmentPromise} />
-          </Suspense>
-        </div>
+        <Suspense
+          fallback={<AssignmentInfoSkeleton assignmentId={assignmentId} />}
+        >
+          <AssignmentInfo assignmentId={assignmentId} />
+        </Suspense>
+        <Suspense
+          fallback={
+            <AssignmentDescriptionSkeleton assignmentId={assignmentId} />
+          }
+        >
+          <AssignmentDescription assignmentId={assignmentId} />
+        </Suspense>
+        <Suspense
+          fallback={<AssignmentFilesSkeleton assignmentId={assignmentId} />}
+        >
+          <AssignmentFiles assignmentId={assignmentId} />
+        </Suspense>
+        <Suspense
+          fallback={<AssignmentSubmitsSkeleton assignmentId={assignmentId} />}
+        >
+          <AssignmentSubmits assignmentId={assignmentId} />
+        </Suspense>
       </div>
-    </>
+    </div>
   );
 }

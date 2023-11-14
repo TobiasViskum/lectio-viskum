@@ -36,8 +36,6 @@ export function Content({ strAssignments }: Props) {
     vEvent.dispatch("assignmentsFilter", { filter: filter, search: newValue });
   }
 
-  if (assignments === null) return <p>Error</p>;
-
   const totalAssignments = assignments.length;
   const submittedAssignments = assignments.filter(
     (obj) => obj.status === "Afleveret",
