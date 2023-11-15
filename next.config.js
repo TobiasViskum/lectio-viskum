@@ -7,7 +7,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "lectio.dk",
+        hostname: "**",
       },
     ],
   },
