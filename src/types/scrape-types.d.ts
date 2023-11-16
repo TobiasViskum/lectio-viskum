@@ -89,9 +89,10 @@ type FullAssignment = Prettify<{
   subject: string;
   class: string;
   gradeSystem: string;
+  assignmentId: string;
   teacher: Teacher;
   students: Student[];
-  groupMembersToAdd: Student[];
+  groupMembersToAdd: { name: string; studentId: string }[];
   studentTime: number;
   dueTo: string;
   inTeachingDescription: boolean;

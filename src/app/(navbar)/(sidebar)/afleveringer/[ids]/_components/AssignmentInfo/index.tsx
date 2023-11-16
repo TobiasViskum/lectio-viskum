@@ -1,6 +1,8 @@
 import { Separator } from "@/components/ui/separator";
 import { getDate } from "../../../_util/getDate";
 import { getPageState } from "../../page-state";
+import { Student } from "@/components/global/Student";
+import { AddUserToAssignment } from "./AddUserToAssignment";
 
 export async function AssignmentInfo() {
   const pageState = getPageState();
@@ -74,6 +76,34 @@ export async function AssignmentInfo() {
               <p className={p_2Tw}>{assignment.gradeNote}</p>
             </div>
           </>
+        )}
+        {(assignment.students.length > 1 ||
+          assignment.groupMembersToAdd.length > 0) && (
+          <div className="flex flex-col gap-y-4 pt-4 md:hidden">
+            <div className="flex flex-col gap-y-2">
+              <p className="text-xs text-muted-foreground">GRUPPEMEDLEMMER</p>
+              <div className="w-max">
+                {assignment.students.map((student) => {
+                  return (
+                    <Student
+                      student={student}
+                      key={student.studentId}
+                      size="small"
+                    />
+                  );
+                })}
+              </div>
+            </div>
+            {assignment.groupMembersToAdd.length > 0 && (
+              <div className="flex flex-col gap-y-2">
+                <p className="text-xs text-muted-foreground">TILFØJ MEDLEM</p>
+                <AddUserToAssignment
+                  groupMembersToAdd={assignment.groupMembersToAdd}
+                  assignmentId={assignment.assignmentId}
+                />
+              </div>
+            )}
+          </div>
         )}
       </div>
     </div>

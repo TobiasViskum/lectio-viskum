@@ -2,6 +2,8 @@ import { NoDataSkeleton } from "./NoDataSkeleton";
 import { getDate } from "../../../_util/getDate";
 import { Separator } from "@/components/ui/separator";
 import { getPageState } from "../../page-state";
+import { Student } from "@/components/global/Student";
+import { AddUserToAssignment } from "./AddUserToAssignment";
 
 export async function AssignmentInfoSkeleton() {
   const pageState = getPageState();
@@ -72,6 +74,34 @@ export async function AssignmentInfoSkeleton() {
               <p className={p_2Tw}>{cachedAssignment.gradeNote}</p>
             </div>
           </>
+        )}
+        {(cachedAssignment.students.length > 1 ||
+          cachedAssignment.groupMembersToAdd.length > 0) && (
+          <div className="flex flex-col gap-y-4 pt-4 md:hidden">
+            <div className="flex flex-col gap-y-2">
+              <p className="text-xs text-muted-foreground">GRUPPEMEDLEMMER</p>
+              <div className="w-max">
+                {cachedAssignment.students.map((student) => {
+                  return (
+                    <Student
+                      student={student}
+                      key={student.studentId}
+                      size="small"
+                    />
+                  );
+                })}
+              </div>
+            </div>
+            {cachedAssignment.groupMembersToAdd.length > 0 && (
+              <div className="flex flex-col gap-y-2">
+                <p className="text-xs text-muted-foreground">TILFØJ MEDLEM</p>
+                <AddUserToAssignment
+                  groupMembersToAdd={cachedAssignment.groupMembersToAdd}
+                  assignmentId={cachedAssignment.assignmentId}
+                />
+              </div>
+            )}
+          </div>
         )}
       </div>
     </div>

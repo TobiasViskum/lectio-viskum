@@ -4,6 +4,8 @@ export async function setGroupInformation(
   $: cheerio.Root,
   assignment: FullAssignment,
 ) {
+  let studentPromises: Promise<Student | string | null>[] = [];
+
   const $spans = $(
     "table#m_Content_groupMembersGV > tbody > tr:not(:first-child) > td > span",
   );
@@ -16,10 +18,14 @@ export async function setGroupInformation(
       id !== "" &&
       assignment.students.find((obj) => obj.studentId === id) === undefined
     ) {
-      const foundStudent = await getStudentById({ userId: id });
-      if (foundStudent !== null && typeof foundStudent !== "string") {
-        assignment.students.push(foundStudent);
-      }
+      studentPromises.push(getStudentById({ userId: id }));
+    }
+  }
+  const students = await Promise.all(studentPromises);
+  for (let i = 0; i < students.length; i++) {
+    const student = students[i];
+    if (student !== null && typeof student !== "string") {
+      assignment.students.push(student);
     }
   }
 
@@ -28,10 +34,9 @@ export async function setGroupInformation(
   for (let i = 0; i < $select.length; i++) {
     const option = $select[i];
     const $option = $(option);
+    const name = $option.text().split(" (")[0];
     const id = $option.val();
-    const foundStudent = await getStudentById({ userId: id });
-    if (foundStudent !== null && typeof foundStudent !== "string") {
-      assignment.groupMembersToAdd.push(foundStudent);
-    }
+
+    assignment.groupMembersToAdd.push({ name: name, studentId: id });
   }
 }

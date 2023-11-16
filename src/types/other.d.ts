@@ -14,6 +14,10 @@ type APIResponse<T> = Prettify<
   )
 >;
 
+type RegularAPIResponse<T> = Prettify<
+  { message: string } & ({ status: "error" } | { status: "success"; data: T })
+>;
+
 type XSidebar = Prettify<
   "none" | "all-assignments" | "assignment" | "lesson" | "student-feedback"
 >;

@@ -44,8 +44,8 @@ export async function getAssignment({ assignmentId }: Props) {
     )) as RedisCache<FullAssignment>;
 
     if (foundCache && new Date().getTime() < foundCache.expires) {
-      await client.quit();
-      return foundCache.data;
+      // await client.quit();
+      // return foundCache.data;
     }
   }
 
@@ -89,6 +89,7 @@ export async function getAssignment({ assignmentId }: Props) {
     gradeNote: "",
     studentNote: "",
     submits: [],
+    assignmentId: assignmentId,
   };
 
   await setInformationProps($, assignment);

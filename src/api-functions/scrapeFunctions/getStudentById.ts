@@ -78,8 +78,8 @@ export async function getStudentById({ userId }: Props) {
   let name = "";
   let studentClass = "";
 
-  const nameMatch = nameAndClass.match(/Eleven ([a-z0-9 ]+), /i);
-  const classMatch = nameAndClass.match(/Eleven [a-z0-9 ]+, ([a-z0-9-]+) /i);
+  const nameMatch = nameAndClass.match(/Eleven (.*), /i);
+  const classMatch = nameAndClass.match(/Eleven .*, ([a-z0-9-]+) /i);
 
   if (nameMatch) {
     name = nameMatch[1];

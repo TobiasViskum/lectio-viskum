@@ -5,12 +5,11 @@ import { Submit } from "../Submit";
 import { Badge } from "@/components/ui/badge";
 import { Fragment } from "react";
 import { Separator } from "@/components/ui/separator";
-import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
 import { getPageState } from "../../page-state";
 
 export async function AssignmentSubmitsSkeleton() {
   const pageState = getPageState();
-  const assignment = await pageState.assignment;
+  const assignment = await pageState.cachedAssignment;
 
   if (assignment === null) return null;
 

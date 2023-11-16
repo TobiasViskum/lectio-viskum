@@ -33,6 +33,7 @@
     "cheerio": "1.0.0-rc.12",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
     "fetch-cookie": "^2.1.0",
     "framer-motion": "^10.16.5",
