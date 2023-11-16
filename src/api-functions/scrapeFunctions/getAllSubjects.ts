@@ -4,24 +4,33 @@ import { getAuthenticatedPage } from "@/api-functions/getPage";
 import { load } from "cheerio";
 import { getTimeInMs } from "@/util/getTimeInMs";
 import { getLastAuthenticatedCookie } from "@/api-functions/getLastAuthenticatedCookie";
+import { getRedisClient } from "@/lib/get-redis-client";
+import { getAllSubjectsTag } from "../getTags";
 
 export async function getAllSubjects() {
   const schoolCode = getLectioProps().schoolCode;
-  const tag = `${schoolCode}-subjects`;
-  const foundCache = global.longTermCache.get(tag);
+  const client = await getRedisClient();
+  const tag = getAllSubjectsTag(schoolCode);
+  if (client) {
+    const foundCache = (await client.json.get(tag)) as RedisCache<Subject[]>;
+    if (foundCache && new Date().getTime() < foundCache.expires) {
+      await client.quit();
+      return foundCache.data;
+    }
+  }
 
   const res = await getAuthenticatedPage({
     specificPage: "FindSkema.aspx?type=hold",
   });
 
-  if (res === null) return "";
-  if (res === "Not authenticated") return "";
-  if (res === "Forbidden access") return "";
-  if (res === "Invalid school") return "";
+  if (res === null) return null;
+  if (res === "Not authenticated") return null;
+  if (res === "Forbidden access") return null;
+  if (res === "Invalid school") return null;
 
   const $_a = res.$("div#m_Content_listecontainer > ul > li > a");
 
-  let allSubjects: { shortName: string; fullName: string }[] = [];
+  let allSubjects: Subject[] = [];
 
   let href = "";
   for (let i = 0; i < $_a.length; i++) {
@@ -31,10 +40,13 @@ export async function getAllSubjects() {
 
     const shortName = $a.find("span").text().trim();
     const fullName = text.replace(shortName, "").trim();
-    if (shortName.toLowerCase() === "øh") {
+    if (i === $_a.length - 1 || shortName.toLowerCase() === "øh") {
       href = $a.attr("href") || "";
     } else {
-      allSubjects.push({ shortName: shortName, fullName: fullName });
+      allSubjects.push({
+        shortName: shortName,
+        fullName: fullName,
+      });
     }
   }
   if (href !== "") {
@@ -80,21 +92,26 @@ export async function getAllSubjects() {
           if (
             allSubjects.find((obj) => obj.fullName === foundStr) === undefined
           ) {
-            allSubjects.push({ shortName: "", fullName: foundStr });
+            allSubjects.push({
+              shortName: "",
+              fullName: foundStr,
+            });
           }
         }
       }
     }
   }
 
-  if (allSubjects.length !== 0) {
-    global.longTermCache.set(tag, {
-      data: allSubjects,
-      expires: getTimeInMs({ days: 3 }),
-    });
-  }
+  if (client) {
+    if (allSubjects.length !== 0) {
+      await client.json.set(tag, "$", {
+        data: allSubjects,
+        expires: new Date().getTime() + getTimeInMs({ days: 1 }),
+      });
+    }
 
-  // console.log(allSubjects);
+    await client.quit();
+  }
 
   return allSubjects;
 }

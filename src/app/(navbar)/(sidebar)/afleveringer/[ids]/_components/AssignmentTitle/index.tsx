@@ -1,15 +1,16 @@
-import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
-import { lectioAPI } from "@/lib/lectio-api";
 import { AssignmentTitleSkeleton } from "./AssignmentTitleSkeleton";
+import { getPageState } from "../../page-state";
 
-type Props = { assignmentId: string; title: string | undefined };
-export async function AssignmentTitle({ assignmentId, title }: Props) {
-  let assignment = await lectioAPI.getAssignment.byId({
-    assignmentId: assignmentId,
-  });
+type Props = {
+  title: string | undefined;
+};
+export async function AssignmentTitle({ title }: Props) {
+  const pageState = getPageState();
+
+  let assignment = await pageState.assignment;
 
   if (assignment === null) {
-    assignment === (await getCachedAssignment(assignmentId));
+    assignment === (await pageState.cachedAssignment);
   }
   if (assignment === null) {
     return <AssignmentTitleSkeleton title={title} />;

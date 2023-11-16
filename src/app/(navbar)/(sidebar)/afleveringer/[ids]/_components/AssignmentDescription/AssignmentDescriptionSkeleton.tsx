@@ -1,18 +1,12 @@
-import { getLectioProps } from "@/lib/auth/getLectioProps";
-import { NoDataSkeleton } from "./NoDataSkeleton";
-import { getRedisClient } from "@/lib/get-redis-client";
-import { getAssignmentTag } from "@/api-functions/getTags";
 import { urlify } from "@/util/urlify";
-import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
+import { getPageState } from "../../page-state";
 
-type Props = {
-  assignmentId: string;
-};
+export async function AssignmentDescriptionSkeleton() {
+  const pageState = getPageState();
 
-export async function AssignmentDescriptionSkeleton({ assignmentId }: Props) {
-  let assignment = await getCachedAssignment(assignmentId);
+  const cachedAssignment = await pageState.cachedAssignment;
 
-  if (assignment === null) {
+  if (cachedAssignment === null) {
     return null;
   }
 
@@ -22,7 +16,7 @@ export async function AssignmentDescriptionSkeleton({ assignmentId }: Props) {
       <p
         className="text-sm text-muted-foreground"
         dangerouslySetInnerHTML={{
-          __html: urlify(assignment.description.join("<br/>")),
+          __html: urlify(cachedAssignment.description.join("<br/>")),
         }}
       ></p>
     </div>

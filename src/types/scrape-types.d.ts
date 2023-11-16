@@ -56,7 +56,6 @@ type Lesson = Prettify<{
   hasOtherContent: boolean;
   hasPresentation: boolean;
   overlappingLessons: number;
-  hasPossibleTest: boolean;
 }>;
 type Week = Prettify<{ lessons: Lesson[]; notes: string[] }>;
 
@@ -164,3 +163,5 @@ type ClassInformation = Prettify<{
   teachers: Teacher[];
   students: Student[];
 }>;
+
+type Subject = Prettify<{ shortName: string; fullName: string }>;

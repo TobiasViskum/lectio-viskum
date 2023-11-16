@@ -1,20 +1,18 @@
 import { DocumentButton } from "@/components/global/DocumentButton";
-import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
+import { getPageState } from "../../page-state";
 
-type Props = {
-  assignmentId: string;
-};
-
-export async function AssignmentFilesSkeleton({ assignmentId }: Props) {
-  let assignment = await getCachedAssignment(assignmentId);
+export async function AssignmentFilesSkeleton() {
+  const pageState = getPageState();
+  let assignment = await pageState.cachedAssignment;
 
   if (assignment === null) return null;
+  if (assignment.documents.length === 0) return null;
 
   return (
     <div>
       <p className="font-medium">Vedhæftede filer:</p>
       <ul className="flex flex-col gap-y-2">
-        {assignment.documents.map((item, index) => {
+        {assignment.documents.map((item) => {
           const key = `${item.href}-${item.name}`;
           return (
             <li key={key} className="flex ">

@@ -1,20 +1,15 @@
-import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { NoDataSkeleton } from "./NoDataSkeleton";
-import { getRedisClient } from "@/lib/get-redis-client";
-import { getAssignmentTag } from "@/api-functions/getTags";
 import { getDate } from "../../../_util/getDate";
 import { Separator } from "@/components/ui/separator";
-import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
+import { getPageState } from "../../page-state";
 
-type Props = {
-  assignmentId: string;
-};
-export async function AssignmentInfoSkeleton({ assignmentId }: Props) {
-  let assignment = await getCachedAssignment(assignmentId);
+export async function AssignmentInfoSkeleton() {
+  const pageState = getPageState();
+  const cachedAssignment = await pageState.cachedAssignment;
 
-  if (assignment === null) return <NoDataSkeleton />;
+  if (cachedAssignment === null) return <NoDataSkeleton />;
 
-  const date = getDate(assignment.dueTo);
+  const date = getDate(cachedAssignment.dueTo);
   const formattedDate = new Intl.DateTimeFormat("da-dk", {
     dateStyle: "long",
     timeStyle: "short",
@@ -37,42 +32,44 @@ export async function AssignmentInfoSkeleton({ assignmentId }: Props) {
         <Separator />
         <div className={divTw}>
           <p className={p_1Tw}>Status:</p>
-          <p className={p_2Tw}>{assignment.status}</p>
+          <p className={p_2Tw}>{cachedAssignment.status}</p>
         </div>
         <Separator />
         <div className={divTw}>
           <p className={p_1Tw}>Fravær:</p>
-          <p className={p_2Tw}>{isAssignmentDue ? assignment.absence : "0%"}</p>
+          <p className={p_2Tw}>
+            {isAssignmentDue ? cachedAssignment.absence : "0%"}
+          </p>
         </div>
         <Separator />
         <div className={divTw}>
           <p className={p_1Tw}>Afventer:</p>
-          <p className={p_2Tw}>{assignment.awaiter}</p>
+          <p className={p_2Tw}>{cachedAssignment.awaiter}</p>
         </div>
-        {assignment.grade !== "" && (
+        {cachedAssignment.grade !== "" && (
           <>
             <Separator />
             <div className={divTw}>
               <p className={p_1Tw}>Karakter:</p>
-              <p className={p_2Tw}>{assignment.grade}</p>
+              <p className={p_2Tw}>{cachedAssignment.grade}</p>
             </div>
           </>
         )}
-        {assignment.studentNote !== "" && (
+        {cachedAssignment.studentNote !== "" && (
           <>
             <Separator />
             <div className={divTw}>
               <p className={p_1Tw}>Elevnote:</p>
-              <p className={p_2Tw}>{assignment.studentNote}</p>
+              <p className={p_2Tw}>{cachedAssignment.studentNote}</p>
             </div>
           </>
         )}
-        {assignment.gradeNote !== "" && (
+        {cachedAssignment.gradeNote !== "" && (
           <>
             <Separator />
             <div className={divTw}>
               <p className={p_1Tw}>Karakternote:</p>
-              <p className={p_2Tw}>{assignment.gradeNote}</p>
+              <p className={p_2Tw}>{cachedAssignment.gradeNote}</p>
             </div>
           </>
         )}

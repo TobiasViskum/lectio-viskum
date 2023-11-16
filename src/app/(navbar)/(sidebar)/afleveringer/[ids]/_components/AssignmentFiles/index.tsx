@@ -1,17 +1,14 @@
 import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
 import { DocumentButton } from "@/components/global/DocumentButton";
 import { lectioAPI } from "@/lib/lectio-api";
-import { AssignmentFilesSkeleton } from "./AssignmentFilesSkeleton";
+import { getPageState } from "../../page-state";
 
-type Props = { assignmentId: string };
-
-export async function AssignmentFiles({ assignmentId }: Props) {
-  let assignment = await lectioAPI.getAssignment.byId({
-    assignmentId: assignmentId,
-  });
+export async function AssignmentFiles() {
+  const pageState = getPageState();
+  let assignment = await pageState.assignment;
 
   if (assignment === null) {
-    assignment = await getCachedAssignment(assignmentId);
+    assignment = await pageState.cachedAssignment;
   }
   if (assignment === null) {
     return null;

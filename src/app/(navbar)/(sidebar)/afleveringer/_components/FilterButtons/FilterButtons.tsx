@@ -1,13 +1,13 @@
-import { lectioAPI } from "@/lib/lectio-api";
 import { Buttons } from "./Buttons";
 import { NoDataSkeleton } from "./NoDataSkeleton";
-import { getCachedAllAssignments } from "@/cache-functions/getCachedAllAssignments";
+import { getPageState } from "../../page-state";
 
 export async function FilterButtons() {
-  let assignments = await lectioAPI.getAssignment.all();
+  const pageState = getPageState();
+  let assignments = await pageState.assignment;
 
   if (assignments === null) {
-    assignments = await getCachedAllAssignments();
+    assignments = await pageState.cachedAssignment;
 
     if (assignments === null) {
       return <NoDataSkeleton />;

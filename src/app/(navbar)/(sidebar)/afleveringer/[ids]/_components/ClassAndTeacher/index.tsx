@@ -2,32 +2,24 @@ import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
 import { Teacher } from "@/components/global/Teacher";
 import { lectioAPI } from "@/lib/lectio-api";
 import { ClassAndTeacherSkeleton } from "./ClassAndTeacherSkeleton";
+import { getPageState } from "../../page-state";
 
 type Props = {
   schoolClass: string | undefined;
   subject: string | undefined;
-  assignmentId: string;
 };
 
-export async function ClassAndTeacher({
-  assignmentId,
-  schoolClass,
-  subject,
-}: Props) {
-  let assignment = await lectioAPI.getAssignment.byId({
-    assignmentId: assignmentId,
-  });
+export async function ClassAndTeacher({ schoolClass, subject }: Props) {
+  const pageState = getPageState();
+
+  let assignment = await pageState.assignment;
 
   if (assignment === null) {
-    assignment = await getCachedAssignment(assignmentId);
+    assignment = await pageState.cachedAssignment;
   }
   if (assignment === null) {
     return (
-      <ClassAndTeacherSkeleton
-        schoolClass={schoolClass}
-        subject={subject}
-        assignmentId={assignmentId}
-      />
+      <ClassAndTeacherSkeleton schoolClass={schoolClass} subject={subject} />
     );
   }
 

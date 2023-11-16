@@ -18,7 +18,7 @@ type XSidebar = Prettify<
   "none" | "all-assignments" | "assignment" | "lesson" | "student-feedback"
 >;
 
-type RedisCache<T> = Prettify<{ data: T; expires: number }>;
+type RedisCache<T> = Prettify<{ data: T; expires: number } | undefined>;
 
 type Day =
   | "Mandag"

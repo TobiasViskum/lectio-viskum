@@ -3,8 +3,11 @@ import { Suspense } from "react";
 import { FilterButtons } from "./_components/FilterButtons/FilterButtons";
 import { AssignmentsRendererSkeleton } from "./_components/AssignmentsRendererSkeleton";
 import { FilterButtonsSkeleton } from "./_components/FilterButtons/FilterButtonsSkeleton";
+import { setPageState } from "./page-state";
 
 export default function AssignmentsPage() {
+  setPageState();
+
   return (
     <>
       <h1 className="pt-6 text-4xl font-medium">Afleveringer</h1>

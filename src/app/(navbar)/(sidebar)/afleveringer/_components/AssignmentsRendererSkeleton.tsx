@@ -1,9 +1,10 @@
 import { LoadingDots } from "@/components/loading-components/LoadingDots";
 import { AssignmentsWrapper } from "./AssignmentsWrapper";
-import { getCachedAllAssignments } from "@/cache-functions/getCachedAllAssignments";
+import { getPageState } from "../page-state";
 
 export async function AssignmentsRendererSkeleton() {
-  let assignments = await getCachedAllAssignments();
+  const pageState = getPageState();
+  let assignments = await pageState.cachedAssignment;
 
   if (assignments === null) {
     return <LoadingDots className="mt-8" />;

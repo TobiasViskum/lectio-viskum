@@ -6,12 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Fragment } from "react";
 import { Separator } from "@/components/ui/separator";
 import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
+import { getPageState } from "../../page-state";
 
-type Props = {
-  assignmentId: string;
-};
-export async function AssignmentSubmitsSkeleton({ assignmentId }: Props) {
-  let assignment = await getCachedAssignment(assignmentId);
+export async function AssignmentSubmitsSkeleton() {
+  const pageState = getPageState();
+  const assignment = await pageState.assignment;
 
   if (assignment === null) return null;
 

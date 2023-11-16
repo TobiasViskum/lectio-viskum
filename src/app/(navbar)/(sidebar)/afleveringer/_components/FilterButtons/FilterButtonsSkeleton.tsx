@@ -1,9 +1,11 @@
+import { getPageState } from "../../page-state";
 import { Buttons } from "./Buttons";
 import { NoDataSkeleton } from "./NoDataSkeleton";
-import { getCachedAllAssignments } from "@/cache-functions/getCachedAllAssignments";
 
 export async function FilterButtonsSkeleton() {
-  let assignments = await getCachedAllAssignments();
+  const pageState = getPageState();
+
+  let assignments = await pageState.cachedAssignment;
 
   if (assignments === null) {
     return <NoDataSkeleton />;

@@ -42,12 +42,12 @@ export async function Lesson({
     textColor = "text-red-300";
     fillColor = "fill-red-300";
     hoverSidebarColor = "group-hover:bg-red-200";
-  } else if (lesson.hasPossibleTest && lesson.subjects.length === 1) {
-    backgroundColor = "bg-yellow-500";
-    sidebarColor = "bg-yellow-400";
-    textColor = "text-yellow-300";
-    fillColor = "fill-yellow-300";
-    hoverSidebarColor = "group-hover:bg-yellow-200";
+    // } else if (lesson.hasPossibleTest && lesson.subjects.length === 1) {
+    //   backgroundColor = "bg-yellow-500";
+    //   sidebarColor = "bg-yellow-400";
+    //   textColor = "text-yellow-300";
+    //   fillColor = "fill-yellow-300";
+    //   hoverSidebarColor = "group-hover:bg-yellow-200";
   } else if (lesson.status === "changed") {
     backgroundColor = "bg-green-500";
     sidebarColor = "bg-green-400";
@@ -169,6 +169,7 @@ export async function Lesson({
               hoverTextColor,
             )}
           >
+            {}
             {lesson.title}
             {isSubjectsEmpty && (
               <div className="flex items-center">

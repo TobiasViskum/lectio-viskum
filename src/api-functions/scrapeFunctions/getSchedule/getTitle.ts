@@ -14,9 +14,5 @@ export function getTitle(info: string) {
   if (pattern2.test(potentialTitle)) return "";
   if (pattern3.test(potentialTitle)) return "";
 
-  if (potentialTitle.includes("Lektiecafé")) {
-    return potentialTitle.split(" ")[0];
-  }
-
   return capitalizeFirstLetter(potentialTitle);
 }

@@ -2,13 +2,15 @@ import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { getAuthenticatedPage } from "../../getPage";
 import { getClass } from "./getClass";
 import { getClassroom } from "./getClassroom";
-import { getSubject } from "./getSubject";
 import { getTeachers } from "./getTeachers";
 import { getTime } from "./getTime";
 import { getTitle } from "./getTitle";
 import { getRedisClient } from "@/lib/get-redis-client";
 import { getScheduleTag } from "@/api-functions/getTags";
 import { getTimeInMs } from "@/util/getTimeInMs";
+import { getSubjects } from "../getSubjects";
+import { getSubjectArray } from "./getSubjectArray";
+import { getAllSubjects } from "../getAllSubjects";
 
 type Props = {
   week: string;
@@ -26,8 +28,8 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
     const foundCache = (await client.json.get(tag)) as RedisCache<Week[]>;
 
     if (foundCache && new Date().getTime() < foundCache.expires) {
-      await client.quit();
-      return foundCache.data;
+      // await client.quit();
+      // return foundCache.data;
     }
   }
 
@@ -52,118 +54,120 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
 
   const $ = res.$;
 
-  const weekSchedule: Week[] = $(
-    ".s2skemabrikcontainer.lec-context-menu-instance",
-  )
-    .map((_index, _elem) => {
-      const $_elem = $(_elem);
+  const $containers = $(".s2skemabrikcontainer.lec-context-menu-instance");
 
-      const lessons: Lesson[] = $_elem
-        .find("a[data-additionalinfo]")
-        .map((index, elem) => {
-          const $elem = $(elem);
-          let id = "";
-          let href = ["https://lectio.dk", $elem.attr("href")].join("");
+  const weekSchedule: Week[] = [];
+  const allSubjects = await getAllSubjects();
 
-          const idRegex = /absid=([0-9]+)/i;
-          const idMath = href.match(idRegex);
-          const info = $elem.attr("data-additionalinfo");
-          let status: LessonStatus = "normal";
-          if (idMath && info) {
-            status = info.includes("Ændret!")
-              ? "changed"
-              : info.includes("Aflyst!")
-              ? "cancelled"
-              : "normal";
-            id = idMath[1];
-          }
+  for (let i = 0; i < $containers.length; i++) {
+    const container = $containers[i];
+    const $container = $(container);
+    const $lessons = $container.find("a[data-additionalinfo]");
 
-          const lesson: Lesson = {
-            id: "",
-            status: "normal",
-            time: { startDate: new Date(1970), endDate: new Date(1970) },
-            teachers: [],
-            classrooms: [""],
-            classes: [],
-            subjects: [],
-            title: "",
-            hasNote: false,
-            hasHomework: false,
-            hasOtherContent: false,
-            hasPresentation: false,
-            overlappingLessons: 0,
-            hasPossibleTest: false,
-          };
+    const lessons: Lesson[] = [];
 
-          if (info) {
-            lesson.id = id;
-            lesson.status = status;
-            lesson.time = getTime(info, {
-              week: numberWeek,
-              year: numberYear,
-              day: index,
-            });
-            lesson.teachers = getTeachers(info);
-            lesson.classrooms = getClassroom(info);
-            lesson.classes = getClass(info);
-            lesson.subjects = getSubject(info);
-            lesson.title = getTitle(info);
-            lesson.hasNote = info.includes("Note:");
-            lesson.hasHomework = info.includes("Lektier:");
-            lesson.hasOtherContent = info.includes("Øvrigt indhold:");
-            lesson.hasPresentation = info.includes(
-              "Aktiviteten har en præsentation.",
-            );
-            lesson.hasPossibleTest =
-              info.toLowerCase().includes("prøve ") ||
-              info.toLowerCase().includes(" prøve");
-          }
+    let subjectPromises: Promise<string[]>[] = [];
 
-          if (
-            lesson.subjects.length === 1 &&
-            lesson.classes.length === 1 &&
-            lesson.subjects[0] === lesson.classes[0]
-          ) {
-            lesson.classes = [""];
-          }
+    for (let j = 0; j < $lessons.length; j++) {
+      const elem = $lessons[j];
+      const $elem = $(elem);
 
-          return lesson;
-        })
-        .get();
+      let id = "";
+      let href = ["https://lectio.dk", $elem.attr("href")].join("");
 
-      lessons.forEach((lesson1, index1) => {
-        lessons.forEach((lesson2, index2) => {
-          const startDate1 = lesson1.time.startDate;
-          const endDate1 = lesson1.time.endDate;
-          const startTime1 =
-            startDate1.getHours() + startDate1.getMinutes() / 60;
-          const endTime1 = endDate1.getHours() + endDate1.getMinutes() / 60;
-
-          const startDate2 = lesson2.time.startDate;
-          const startTime2 =
-            startDate2.getHours() + startDate2.getMinutes() / 60;
-
-          if (index1 !== index2) {
-            if (startTime1 === startTime2) {
-              lessons[index2].overlappingLessons += 1;
-            } else if (startTime2 > startTime1 && startTime2 < endTime1) {
-              lessons[index2].overlappingLessons += 1;
-            }
-          }
-        });
-      });
-
-      lessons.sort(
-        (a, b) =>
-          b.time.startDate.getTime() - a.time.startDate.getTime() ||
-          b.time.endDate.getTime() - a.time.endDate.getTime(),
-      );
-
-      if (_index <= 4) {
-        return { lessons: lessons, notes: [""] };
+      const idRegex = /absid=([0-9]+)/i;
+      const idMath = href.match(idRegex);
+      const info = $elem.attr("data-additionalinfo");
+      let status: LessonStatus = "normal";
+      if (idMath && info) {
+        status = info.includes("Ændret!")
+          ? "changed"
+          : info.includes("Aflyst!")
+          ? "cancelled"
+          : "normal";
+        id = idMath[1];
       }
-    })
-    .get();
+
+      const lesson: Lesson = {
+        id: "",
+        status: "normal",
+        time: { startDate: new Date(1970), endDate: new Date(1970) },
+        teachers: [],
+        classrooms: [""],
+        classes: [],
+        subjects: [],
+        title: "",
+        hasNote: false,
+        hasHomework: false,
+        hasOtherContent: false,
+        hasPresentation: false,
+        overlappingLessons: 0,
+      };
+
+      if (info) {
+        lesson.id = id;
+        lesson.status = status;
+        lesson.time = getTime(info, {
+          week: numberWeek,
+          year: numberYear,
+          day: j,
+        });
+        lesson.teachers = getTeachers(info);
+        lesson.classrooms = getClassroom(info);
+        lesson.classes = getClass(info);
+        const res = await getSubjects(getSubjectArray(info), allSubjects);
+
+        lesson.subjects = res;
+        lesson.title = getTitle(info);
+        lesson.hasNote = info.includes("Note:");
+        lesson.hasHomework = info.includes("Lektier:");
+        lesson.hasOtherContent = info.includes("Øvrigt indhold:");
+        lesson.hasPresentation = info.includes(
+          "Aktiviteten har en præsentation.",
+        );
+      }
+
+      if (
+        lesson.subjects.length === 1 &&
+        lesson.classes.length === 1 &&
+        lesson.subjects[0] === lesson.classes[0]
+      ) {
+        lesson.classes = [""];
+      }
+
+      lessons.push(lesson);
+    }
+
+    lessons.forEach((lesson1, index1) => {
+      lessons.forEach((lesson2, index2) => {
+        const startDate1 = lesson1.time.startDate;
+        const endDate1 = lesson1.time.endDate;
+        const startTime1 = startDate1.getHours() + startDate1.getMinutes() / 60;
+        const endTime1 = endDate1.getHours() + endDate1.getMinutes() / 60;
+
+        const startDate2 = lesson2.time.startDate;
+        const startTime2 = startDate2.getHours() + startDate2.getMinutes() / 60;
+
+        if (index1 !== index2) {
+          if (startTime1 === startTime2) {
+            lessons[index2].overlappingLessons += 1;
+          } else if (startTime2 > startTime1 && startTime2 < endTime1) {
+            lessons[index2].overlappingLessons += 1;
+          }
+        }
+      });
+    });
+
+    lessons.sort(
+      (a, b) =>
+        b.time.startDate.getTime() - a.time.startDate.getTime() ||
+        b.time.endDate.getTime() - a.time.endDate.getTime(),
+    );
+
+    if (i <= 4) {
+      weekSchedule.push({ lessons: lessons, notes: [""] });
+    }
+  }
 
   if (weekSchedule.length === 0) {
     if (client) await client.quit();

@@ -5,19 +5,17 @@ import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { ClassAndTeacher } from ".";
 import { Teacher } from "@/components/global/Teacher";
 import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
+import { getPageState } from "../../page-state";
 
 type Props = {
   schoolClass: string | undefined;
   subject: string | undefined;
-  assignmentId: string;
 };
 
-export async function ClassAndTeacherSkeleton({
-  schoolClass,
-  subject,
-  assignmentId,
-}: Props) {
-  let assignment = await getCachedAssignment(assignmentId);
+export async function ClassAndTeacherSkeleton({ schoolClass, subject }: Props) {
+  const pageState = getPageState();
+
+  const assignment = await pageState.assignment;
 
   if (assignment === null) {
     return <NoDataSkeleton schoolClass={schoolClass} subject={subject} />;

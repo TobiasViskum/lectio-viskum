@@ -1,17 +1,13 @@
 import { Separator } from "@/components/ui/separator";
 import { getDate } from "../../../_util/getDate";
-import { lectioAPI } from "@/lib/lectio-api";
-import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
+import { getPageState } from "../../page-state";
 
-type Props = { assignmentId: string };
-
-export async function AssignmentInfo({ assignmentId }: Props) {
-  let assignment = await lectioAPI.getAssignment.byId({
-    assignmentId: assignmentId,
-  });
+export async function AssignmentInfo() {
+  const pageState = getPageState();
+  let assignment = await pageState.assignment;
 
   if (assignment === null) {
-    assignment = await getCachedAssignment(assignmentId);
+    assignment = await pageState.cachedAssignment;
   }
   if (assignment === null) {
     return null;

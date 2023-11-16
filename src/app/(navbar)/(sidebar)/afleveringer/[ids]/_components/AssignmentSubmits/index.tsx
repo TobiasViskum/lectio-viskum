@@ -2,18 +2,14 @@ import { Badge } from "@/components/ui/badge";
 import { Submit } from "../Submit";
 import { Separator } from "@/components/ui/separator";
 import { Fragment } from "react";
-import { getCachedAssignment } from "@/cache-functions/getCachedAssignment";
-import { lectioAPI } from "@/lib/lectio-api";
+import { getPageState } from "../../page-state";
 
-type Props = { assignmentId: string };
-
-export async function AssignmentSubmits({ assignmentId }: Props) {
-  let assignment = await lectioAPI.getAssignment.byId({
-    assignmentId: assignmentId,
-  });
+export async function AssignmentSubmits() {
+  const pageState = getPageState();
+  let assignment = await pageState.assignment;
 
   if (assignment === null) {
-    assignment = await getCachedAssignment(assignmentId);
+    assignment = await pageState.cachedAssignment;
   }
   if (assignment === null) {
     return null;

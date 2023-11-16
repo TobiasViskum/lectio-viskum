@@ -13,3 +13,6 @@ export function getAssignmentTag(userId: string, assignmentId: string) {
 export function getAllTeachersTag(schoolCode: string) {
   return `all-teachers:${schoolCode}`;
 }
+export function getAllSubjectsTag(schoolCode: string) {
+  return `all-subjects:${schoolCode}`;
+}
