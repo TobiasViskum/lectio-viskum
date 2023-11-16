@@ -136,7 +136,6 @@ export function AddUserToAssignment({
       >
         {isLoading ? "Tilføjer.." : "Tilføj"}
       </Button>
-      <input type="file" />
     </div>
   );
 }
