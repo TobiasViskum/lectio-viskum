@@ -3,7 +3,7 @@
 import { downloadAsset } from "@/lib/downloadAsset";
 import { debounce } from "@/util";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 export function MainClientHandler() {
@@ -62,26 +62,42 @@ export function MainClientHandler() {
       const name = target.text;
 
       if (href.includes("/lectio/")) {
+        function toHtmlClass(str: string) {
+          // Remove http:// or https://
+          str = str.replace(/http[s]?:\/\//, "");
+          // Replace non-alphanumeric characters with underscores
+          str = str.replace(/\W/g, "_");
+          // Remove any leading non-letters
+          str = str.replace(/^[^a-zA-Z]+/, "");
+          return str;
+        }
+
+        const toastId = toHtmlClass(`toast-${href}-${name}`);
         e.preventDefault();
         async function downloadAssetWithCheck() {
-          const result = await downloadAsset(href, name);
-          console.log(result);
-
-          if (result === null) {
-            throw new Error("Download failed");
+          const downloader = downloadAsset(href, name);
+          for await (const progress of downloader) {
+            const existingToast = document.querySelector(
+              `.${toastId} > div:nth-child(2) > div`,
+            );
+            if (existingToast) {
+              existingToast.textContent = `Henter fra Lectio... (${+progress.toFixed(
+                0,
+              )}%)`;
+            }
           }
-          return result;
         }
         const promise = downloadAssetWithCheck();
 
         toast.promise(promise, {
-          loading: "Henter fra Lectio...",
+          loading: "Henter fra Lectio... (0%)",
           success: (res) => {
             return "Download startet!";
           },
           error: (res) => {
             return "Der skete en fejl";
           },
+          className: toastId,
         });
       }
     }

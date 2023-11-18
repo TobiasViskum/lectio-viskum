@@ -4,7 +4,7 @@ import { getFetchCookie } from "@/lib/getFetchCookie";
 import { getLoginForm } from "./login-form";
 import { load } from "cheerio";
 
-export async function downloadAsset(href: string, name: string) {
+export async function* downloadAsset(href: string, name: string) {
   const { fetchCookie } = getFetchCookie();
   const cookies = getCookies();
 
@@ -18,6 +18,7 @@ export async function downloadAsset(href: string, name: string) {
       .then(async (res) => await res.text())
       .catch((err) => null);
   }
+
   function getForm(text: string) {
     const $ = load(text);
 
@@ -37,7 +38,6 @@ export async function downloadAsset(href: string, name: string) {
       return null;
     }
   }
-
   let text: string | null = "";
   text = text = await getLoginText();
   if (text === null || text === "") {
@@ -46,10 +46,10 @@ export async function downloadAsset(href: string, name: string) {
   if (text === null || text === "") {
     text = await getLoginText();
   }
-  if (text === null || text === "") return null;
+  if (text === null || text === "") throw new Error("Download failed!");
   const form = getForm(text);
-  if (form === null) return null;
-
+  if (form === null) throw new Error("Download failed!");
+  yield 10;
   const targetPageContent = await fetchCookie(
     `/lectio/${cookies.schoolCode}/login.aspx?prevurl=forside.aspx`,
     { method: "POST", body: form, ...standardFetchOptions },
@@ -74,31 +74,45 @@ export async function downloadAsset(href: string, name: string) {
     });
 
   if (targetPageContent) {
-    const res = await fetchCookie(href, {
-      method: "GET",
-      ...standardFetchOptions,
-    })
-      .then((res) => {
-        return res.blob();
-      })
-      .then(async (res) => {
-        try {
-          const url = URL.createObjectURL(res);
-          const link = document.createElement("a");
-          link.href = url;
-          link.target = "_blank";
-          link.download = name;
-          link.click();
-          return true;
-        } catch {
-          return null;
-        }
-      })
-      .catch((err) => {
-        return null;
+    yield 20;
+    try {
+      const res = await fetchCookie(href, {
+        method: "GET",
+        ...standardFetchOptions,
       });
-
-    return res;
+      const fileContentLength = res.headers.get("Content-Length");
+      if (res.body && fileContentLength) {
+        const reader = res.body.getReader();
+        const contentLength = +fileContentLength;
+        let receivedLength = 0;
+        let chunks = [];
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) {
+            break;
+          }
+          chunks.push(value);
+          receivedLength += value.length;
+          yield (receivedLength / contentLength) * 70 + 20;
+        }
+        let chunksAll = new Uint8Array(receivedLength);
+        let position = 0;
+        for (let chunk of chunks) {
+          chunksAll.set(chunk, position);
+          position += chunk.length;
+        }
+        const blob = new Blob([chunksAll]);
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.target = "_blank";
+        link.download = name;
+        link.click();
+        return true;
+      }
+    } catch {
+      throw new Error("Download failed!");
+    }
   }
-  return null;
+  throw new Error("Download failed!");
 }
