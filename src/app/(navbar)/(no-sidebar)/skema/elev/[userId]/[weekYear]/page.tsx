@@ -55,14 +55,18 @@ export default function SchedulePage({ params }: Props) {
         <h1 className="pt-4 text-2xl font-bold">
           Uge {searchParamsObj.week}, {searchParamsObj.year}
         </h1>
-        <Suspense fallback={<ScheduleHeaderSkeleton userId={params.userId} />}>
-          <ScheduleHeader
-            schedulePromise={schedulePromise}
-            searchParamsObj={searchParamsObj}
-            userId={params.userId}
-          />
-        </Suspense>
-        <div className="relative flex w-full rounded-md pt-8">
+        <div className="py-4">
+          <Suspense
+            fallback={<ScheduleHeaderSkeleton userId={params.userId} />}
+          >
+            <ScheduleHeader
+              schedulePromise={schedulePromise}
+              searchParamsObj={searchParamsObj}
+              userId={params.userId}
+            />
+          </Suspense>
+        </div>
+        <div className="relative flex w-full rounded-md">
           <Suspense fallback={<TimestampSkeleton />}>
             <MainContent
               schedulePromise={schedulePromise}

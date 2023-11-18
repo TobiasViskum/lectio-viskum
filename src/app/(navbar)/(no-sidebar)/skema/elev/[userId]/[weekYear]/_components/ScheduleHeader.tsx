@@ -21,10 +21,10 @@ export async function ScheduleHeader({
   if (student === null || schedule === null) return <p>Error</p>;
 
   return (
-    <div className="flex flex-col gap-x-4 pb-4 ">
-      <div className="py-2">
+    <div className="flex flex-col gap-x-4">
+      {/* <div className="py-2">
         <Student student={student} disableHover />
-      </div>
+      </div> */}
       <div className="hidden 2xl:block">
         <DateNavigationPc searchParamsObj={searchParamsObj} />
       </div>
