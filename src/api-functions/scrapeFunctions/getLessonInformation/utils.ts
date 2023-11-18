@@ -148,7 +148,7 @@ async function setDescription(
 
   for (let i = 0; i < $elements.length; i++) {
     const elem = $elements[i];
-    let $elem = $(elem);
+    const $elem = $(elem);
 
     if (elem.type === "tag") {
       let color = "";
@@ -178,6 +178,10 @@ async function setDescription(
           continue;
         }
       }
+      if (elem.name === "a") {
+        $elem.attr("target", "_blank");
+      }
+
       const attrs = $elem.attr();
 
       for (let attr in attrs) {
