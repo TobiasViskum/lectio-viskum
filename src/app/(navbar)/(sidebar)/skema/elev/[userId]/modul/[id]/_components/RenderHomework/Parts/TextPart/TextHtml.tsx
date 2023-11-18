@@ -13,9 +13,10 @@ export function TextHtml({ content }: { content: LessonText }) {
         className={cn(
           content.isTitle
             ? "text-lg text-foreground"
-            : "text-sm text-muted-foreground",
-          content.isBold ? "font-semibold" : "font-light opacity-80",
+            : "text-sm text-foreground",
+          // content.isBold ? "" : "font-light",
         )}
+        style={{ color: content.color }}
       />
     );
   } else if (content.href !== "") {
@@ -36,12 +37,11 @@ export function TextHtml({ content }: { content: LessonText }) {
           target="_blank"
           className={cn(
             content.isTitle ? "text-lg" : "text-sm",
-            content.isBold ? "font-bold" : "font-light",
-            "text-blue-400",
+            // content.isBold ? "" : "font-light",
+            "text-blue-400 hover:underline  ",
           )}
-        >
-          {content.text}
-        </Link>
+          dangerouslySetInnerHTML={{ __html: content.text }}
+        />
       );
     }
   }

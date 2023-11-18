@@ -39,7 +39,7 @@ export function DocumentButton({ strDocument, className }: Props) {
     <button
       onClick={handleClick}
       className={cn(
-        "break-keep text-left text-blue-400",
+        "break-keep text-left text-blue-400 hover:underline",
         isDownloading ? "animate-pulse" : "",
         className,
       )}

@@ -110,7 +110,8 @@ type LessonText = {
   text: string;
   href: string;
   isTitle: boolean;
-  isBold: boolean;
+
+  color: string;
 };
 type LessonVideo = {
   thumbnail: string;
@@ -124,6 +125,7 @@ type LessonImage = { img: string; width: number; height: number };
 type LessonHomework = Prettify<
   (
     | Prettify<LessonText>
+    | Prettify<{ html: string }>
     | Prettify<LessonTable>
     | Prettify<LessonList>
     | Prettify<LessonImage>
@@ -166,3 +168,12 @@ type ClassInformation = Prettify<{
 }>;
 
 type Subject = Prettify<{ shortName: string; fullName: string }>;
+
+type FrontPageInformation = Prettify<{
+  importantInformation: string[][];
+  unreadMessages: [];
+  education: {
+    nextAssignments: { title: string; dueTo: Date; schoolClass: SchoolClass }[];
+    nextHomework: { title: string; dueTo: Date; schoolClass: SchoolClass }[];
+  };
+}>;

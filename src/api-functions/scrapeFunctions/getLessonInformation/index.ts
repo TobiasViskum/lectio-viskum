@@ -3,11 +3,6 @@ import { getClassroom } from "../getSchedule/getClassroom";
 import { getHomeworkAndOtherAndPresentation } from "./utils";
 import { getTitle } from "../getSchedule/getTitle";
 import { setClasses } from "./setClasses";
-import {
-  getTimeFromPattern1,
-  getTimeFromPattern2,
-  getTimeFromPattern3,
-} from "./getTime";
 import { getSubjectTheme } from "./getSubjectTheme";
 import { getNote } from "./getNote";
 import { getTimeInMs } from "@/util/getTimeInMs";
@@ -17,13 +12,12 @@ import { getClassInformation } from "../getClassInformation";
 import { getLastAuthenticatedCookie } from "@/api-functions/getLastAuthenticatedCookie";
 import { getTeacherById } from "..";
 import { getTeacherByInitials } from "../getTeacherByInitials";
-import { getClass } from "../getSchedule/getClass";
+import { getTime } from "../getSchedule/getTime";
 
-type Props = { lessonId: string; year: string; userId: string };
+type Props = { lessonId: string; userId: string };
 
-export async function getLessonInformation({ lessonId, userId, year }: Props) {
+export async function getLessonInformation({ lessonId, userId }: Props) {
   const href = `aktivitet/aktivitetforside2.aspx?absid=${lessonId}&elevid=${userId}`;
-  const numberYear = !isNaN(Number(year)) ? Number(year) : 1970;
 
   const tag = `${userId}-lesson-${lessonId}`;
   const foundCache = global.shortTermCache.get(tag);
@@ -67,6 +61,7 @@ export async function getLessonInformation({ lessonId, userId, year }: Props) {
       ? "cancelled"
       : "normal";
     additionalInfo.teachers = getTeachers(info);
+    additionalInfo.time = getTime(info);
 
     for (let i = 0; i < additionalInfo.teachers.length; i++) {
       const initials = additionalInfo.teachers[i].initials;
@@ -75,7 +70,6 @@ export async function getLessonInformation({ lessonId, userId, year }: Props) {
         additionalInfo.teachers[i] = foundTeacher;
       }
     }
-    // console.log(getClass(info));
   }
 
   const $div = $("div.s2skemabrikcontent.OnlyDesktop");
@@ -109,35 +103,6 @@ export async function getLessonInformation({ lessonId, userId, year }: Props) {
   if (lessonNumberMatch) {
     const splitStr = lessonNumberMatch[1].split(" ");
     additionalInfo.lessonNumber = Number(splitStr[2].replace(/[^0-9]+/g, ""));
-  }
-
-  const datePatterns = [
-    /[a-z]{2} [0-9]{1,2}\/[0-9]{1,2} [0-9]{2}:[0-9]{2} (-|til) [a-z]{2} [0-9]{1,2}\/[0-9]{1,2} [0-9]{2}:[0-9]{2}/i,
-    /[a-z]{2} [0-9]{1,2}\/[0-9]{1,2} [0-9]{2}:[0-9]{2} (-|til) [0-9]{2}:[0-9]{2}/i,
-    /[a-z]{2} [0-9]{1,2}\/[0-9]{1,2}/i,
-  ];
-  for (let i = 0; i < datePatterns.length; i++) {
-    const pattern = datePatterns[i];
-    const textMatch = text.match(pattern);
-    if (textMatch && info) {
-      if (i === 0) {
-        additionalInfo.time = getTimeFromPattern1(textMatch[0], numberYear);
-      } else if (i === 1) {
-        additionalInfo.time = getTimeFromPattern2(textMatch[0], numberYear);
-      } else if (i === 2) {
-        const startEndTimeMatch = info.match(
-          /[0-9]{2}:[0-9]{2} (-|til) [0-9]{2}:[0-9]{2}/i,
-        );
-        if (startEndTimeMatch) {
-          additionalInfo.time = getTimeFromPattern3(
-            textMatch[0],
-            startEndTimeMatch[0],
-            numberYear,
-          );
-        }
-      }
-      break;
-    }
   }
 
   const $classLink = $("a#s_m_Content_Content_holdActLink");
@@ -191,7 +156,8 @@ export async function getLessonInformation({ lessonId, userId, year }: Props) {
   const subjectTheme = getSubjectTheme($);
 
   const note = getNote($);
-  const homeWorkAndOtherAndPresentation = getHomeworkAndOtherAndPresentation($);
+  const homeWorkAndOtherAndPresentation =
+    await getHomeworkAndOtherAndPresentation($);
 
   for (let i = 0; i < homeWorkAndOtherAndPresentation.homework.length; i++) {
     const homework = homeWorkAndOtherAndPresentation.homework[i];

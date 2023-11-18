@@ -20,12 +20,12 @@ export function TablePart({ content }: { content: LessonTable }) {
                 <p
                   key={tableColumn.text}
                   className={cn(
-                    tableColumn.isBold ? "font-semibold" : "",
+                    // tableColumn.isBold ? "font-semibold" : "",
                     "break-words px-2 py-1 group-[:nth-child(2)]:bg-accent",
                   )}
-                >
-                  {tableColumn.text}
-                </p>
+                  dangerouslySetInnerHTML={{ __html: tableColumn.text }}
+                  style={{ color: tableColumn.color }}
+                />
               );
             })}
           </div>

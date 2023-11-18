@@ -13,7 +13,6 @@ export default async function StudentFeedbackPage({ params }: Props) {
   const lessonPromise = lectioAPI.getLessonById({
     lessonId: params.id,
     userId: params.userId,
-    year: "2023",
   });
   const studentFeedbackPromise = getStudentFeedback({
     lessonId: params.id,

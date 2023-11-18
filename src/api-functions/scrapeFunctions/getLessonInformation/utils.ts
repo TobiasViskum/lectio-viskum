@@ -1,4 +1,7 @@
-export function getHomework(
+import { getLastAuthenticatedCookie } from "@/api-functions/getLastAuthenticatedCookie";
+import { urlify } from "@/util/urlify";
+
+export async function getHomework(
   $parent: cheerio.Cheerio,
   $: cheerio.Root,
   homework: LessonHomework[],
@@ -19,15 +22,15 @@ export function getHomework(
 
     const $article = $sibling.children().first();
 
-    setDescription($article, currHomework, $);
+    await setDescription($article, currHomework, $);
 
     homework.push(currHomework);
-    getHomework($sibling, $, homework);
+    await getHomework($sibling, $, homework);
   } else if ($sibling.hasClass("ls-hr-solid")) {
-    getHomework($sibling, $, homework);
+    await getHomework($sibling, $, homework);
   }
 }
-export function getHomeworkAndOtherAndPresentation($: cheerio.Root) {
+export async function getHomeworkAndOtherAndPresentation($: cheerio.Root) {
   type ResultHolder = {
     homework: LessonHomework[];
     other: LessonHomework[];
@@ -51,7 +54,7 @@ export function getHomeworkAndOtherAndPresentation($: cheerio.Root) {
     const resultType = $elem.text();
 
     if (resultType === "Lektier" || resultType === "Øvrigt indhold") {
-      getHomework($parent, $, homework);
+      await getHomework($parent, $, homework);
     } else {
       const $sibling = $parent.next();
       if ($sibling.length !== 0) {
@@ -67,7 +70,7 @@ export function getHomeworkAndOtherAndPresentation($: cheerio.Root) {
           const $section = $(section);
 
           let currHomework: LessonHomework = [];
-          setDescription($section, currHomework, $);
+          await setDescription($section, currHomework, $);
           homework.push(currHomework);
         }
       }
@@ -115,147 +118,324 @@ function getDescriptionVideoOrImage($elem: cheerio.Cheerio, $: cheerio.Root) {
     }
   }
 }
-function setDescription(
+async function setDescription(
   $article: cheerio.Cheerio,
   currHomework: LessonHomework,
   $: cheerio.Root,
   listNumber: number = 0,
 ) {
-  const $elements = $article.find("*");
-  $elements.find("br").replaceWith("\n");
+  const tw = "@md:text-2xs";
 
-  let isAddingToUl = false;
+  const styleMap: { [key: string]: string } = {
+    h1: "text-lg py-2",
+    h2: "text-lg py-2",
+    h3: "",
+    h4: "",
+    h5: "",
+    h6: "",
+    p: "text-foreground",
+    a: "text-blue-400 hover:underline cursor-pointer",
+    ul: "pl-12 list-disc",
+    ol: "pl-12 list-decimal",
+    table: "text-xs @container",
+    tbody: "text-xs rounded-md overflow-x-hidden",
+    tr: "text-xs @sm:text-2xs first:border-t border-b",
+    td: "text-xs @sm:text-2xs py-2 md:px-2 first:border-l border-r",
+    iframe: "w-full",
+  };
+
+  const $elements = $article.find("*");
 
   for (let i = 0; i < $elements.length; i++) {
     const elem = $elements[i];
-    const $elem = $(elem);
-    let text = $elem.text().trim();
-    let isBold = $elem.find("strong").length >= 1;
-    let href = $elem.attr("href") || "";
+    let $elem = $(elem);
 
-    if (
-      $elem.parents("ol").length > listNumber ||
-      $elem.parents("ul").length > listNumber
-    ) {
-      continue;
-    } else if (elem.type === "tag") {
-      if (elem.name === "h1" || elem.name === "h2" || elem.name === "h3") {
-        const $a = $elem.find("a");
-        if ($a.length >= 1) {
-          href = $a.attr("href") || "";
-          isBold = $a.find("strong").length >= 1;
-          text = $a.text().trim();
+    if (elem.type === "tag") {
+      let color = "";
+
+      if (elem.name === "img") {
+        const newHtml = $elem.attr("data-embed-xhtml");
+        if (newHtml) {
+          const $temp = $(newHtml);
+          const width = Number($temp.attr("width"));
+          const height = Number($temp.attr("height"));
+          const aspectRatio = (width || 1) / (height || 0);
+
+          $elem.replaceWith(
+            `<style>
+              .videoClass {
+                aspect-ratio: ${aspectRatio} / 1;
+                width: 100%;
+                height: 100%;
+                max-width: 500px;
+              }
+            </style>` +
+              newHtml
+                .replace("autoplay=1", "")
+                .replace(/class=\".*\"/, `class="videoClass"`),
+          );
+
+          continue;
         }
-        currHomework.push({
-          isTitle: true,
-          isBold: isBold,
-          text: text,
-          href: href,
-        });
-      } else if (elem.name === "ul" || elem.name === "ol") {
-        let listContent: LessonHomework = [];
-
-        const children = $elem.children();
-        for (let j = 0; j < children.length; j++) {
-          const e = children[j];
-          const $e = $(e);
-
-          if ($e.find("li").html() === null && $e.find("*").length === 0) {
-            listContent.push({
-              text: $e.text(),
-              href: "",
-              isTitle: false,
-              isBold: false,
-            });
-          }
-        }
-
-        $elem.find(">").each((i_2, e) => {});
-
-        isAddingToUl = true;
-        const $newElem = $elem.find(">");
-
-        setDescription($newElem, listContent, $, listNumber + 1);
-        currHomework.push({ listContent: listContent, listType: elem.name });
-
-        listContent = [];
-      } else if (elem.name === "span") {
-        const $newElem = $elem.find(">");
-
-        if ($newElem.length === 0) {
-          currHomework.push({
-            text: $elem.text(),
-            href: "",
-            isTitle: false,
-            isBold: false,
-          });
-        } else {
-          setDescription($newElem, currHomework, $);
-        }
-      } else if (elem.name === "p") {
-        const $a = $elem.find("a");
-        if ($a.length >= 1) {
-          href = $a.attr("href") || "";
-          isBold = $a.find("strong").length >= 1;
-          text = $a.text().trim();
-        }
-
-        const splitText = text.split("\n");
-
-        if (splitText.length > 1) {
-          let content: LessonText[] = [];
-          for (let j = 0; j < splitText.length; j++) {
-            content.push({
-              href: href,
-              isBold: isBold,
-              isTitle: false,
-              text: splitText[j],
-            });
-          }
-          currHomework.push({ listContent: content, listType: "" });
-        } else {
-          currHomework.push({
-            href: href,
-            isBold: isBold,
-            isTitle: false,
-            text: text,
-          });
-        }
-      } else if (elem.name === "img") {
-        const res = getDescriptionVideoOrImage($elem, $);
-        if (res) {
-          currHomework.push(res);
-        }
-      } else if (elem.name === "table") {
-        let table: LessonTable = { tableContent: [] };
-        const $_tr = $elem.find("tbody > tr");
-        for (let j = 0; j < $_tr.length; j++) {
-          let rowContent = [];
-          const tr = $_tr[j];
-          const $tr = $(tr);
-          const $_td = $tr.find("td");
-          for (let l = 0; l < $_td.length; l++) {
-            const td = $_td[l];
-            const $td = $(td);
-            const href = $td.find("a").attr("href") || "";
-            const isBold = $td.find("strong").length >= 1;
-            const isTitle =
-              $td.find("h1").length >= 1 || $td.find("h2").length >= 1;
-
-            rowContent.push({
-              isBold: isBold,
-              href: href,
-              isTitle: isTitle,
-              text: $td.text().trim(),
-            });
-          }
-
-          table.tableContent.push(rowContent);
-        }
-        currHomework.push(table);
       }
+      const attrs = $elem.attr();
+
+      for (let attr in attrs) {
+        if (attr === "style") {
+          let colorMatch = $elem.attr(attr)!.match(/color:( )?(.*)(;)?/i);
+
+          if (colorMatch) {
+            color = colorMatch[2];
+          }
+        }
+
+        if (attr === "href") continue;
+        if (attr === "width") continue;
+        if (attr === "height") continue;
+        if (attr === "target") continue;
+        if (attr === "src") {
+          const src = $elem.attr(attr)!;
+          if (src.includes("/lectio/")) {
+            const base64String = await fetch("https://www.lectio.dk" + src, {
+              method: "GET",
+              headers: { Cookie: getLastAuthenticatedCookie() },
+            })
+              .then(async (res) => {
+                const arrayBuffer = await res.arrayBuffer();
+                const contentType = res.headers.get("content-type");
+
+                const base64 = Buffer.from(arrayBuffer).toString("base64");
+                const fullSrc = `data:${contentType};base64,${base64}`;
+
+                return fullSrc;
+              })
+              .catch(() => null);
+            if (base64String) {
+              $elem.attr(attr, base64String);
+            }
+          }
+
+          continue;
+        }
+
+        $elem.removeAttr(attr);
+      }
+      if (color !== "" && color !== "black") {
+        $elem.attr("style", `color:${color}`);
+      }
+
+      $elem.attr("class", styleMap[elem.name]);
     }
   }
+  //@ts-ignore
+  currHomework.push({ content: $article.html() });
+
+  return;
+  // const $elements = $article.find("*");
+  // $elements.find("br").replaceWith("\n");
+
+  // let isAddingToUl = false;
+  // let style = "";
+  // let isOnSameLine = false;
+
+  // for (let i = 0; i < $elements.length; i++) {
+  //   const elem = $elements[i];
+  //   const $elem = $(elem);
+  //   const newStyle = $elem.attr("style");
+  //   if (newStyle && newStyle !== "") {
+  //     style = newStyle;
+  //   }
+
+  //   let text = ($elem.text() || "").trim();
+  //   let isBold = $elem.find("strong").length >= 1;
+  //   let isItalic = $elem.find("em").length >= 1;
+  //   let href = $elem.attr("href") || "";
+  //   let color = "";
+  //   let colorMatch = style.match(/color:( )?(.*)(;)?/i);
+  //   if (colorMatch) {
+  //     color = colorMatch[2];
+  //   }
+
+  //   if ($elem.html() === "&nbsp;") continue;
+
+  //   if (
+  //     $elem.parents("ol").length > listNumber ||
+  //     $elem.parents("ul").length > listNumber
+  //   ) {
+  //     continue;
+  //   } else if (elem.type === "tag") {
+  //     if (elem.name !== "span") {
+  //       isOnSameLine = false;
+  //     }
+  //     if (elem.name === "h1" || elem.name === "h2" || elem.name === "h3") {
+  //       const $a = $elem.find("a");
+
+  //       if ($a.length === 0) {
+  //         currHomework.push({
+  //           isTitle: true,
+  //           // isBold: isBold,
+  //           text: $elem.html() || "",
+  //           href: href,
+  //           // isItalic: isItalic,
+  //           color: color,
+  //         });
+  //       } else if ($a.length === 1) {
+  //         href = $a.attr("href") || "";
+  //         isBold = $a.find("strong").length >= 1;
+  //         isItalic = $a.find("em").length >= 1;
+  //         text = ($a.html() || "").trim();
+  //         if (isBold || isItalic) {
+  //           currHomework.push({
+  //             html: $elem.html() || "",
+  //           });
+  //         } else {
+  //           currHomework.push({
+  //             isTitle: true,
+  //             // isBold: isBold,
+  //             text: text,
+  //             href: href,
+  //             // isItalic: isItalic,
+  //             color: color,
+  //           });
+  //         }
+  //       } else if ($a.length > 1) {
+  //         for (let j = 0; j < $a.length; j++) {
+  //           const _a = $a[j];
+  //           const $_a = $(_a);
+  //           const href = $_a.attr("href") || "";
+  //           const target = $_a.attr("target") || "";
+  //           const attrs = $_a.attr();
+
+  //           for (let attr in attrs) {
+  //             $_a.removeAttr(attr);
+  //           }
+  //           $_a.attr("href", href);
+  //           $_a.attr("target", target);
+  //           $_a.attr("class", "text-blue-400 font-medium hover:underline");
+  //         }
+  //         currHomework.push({ html: $elem.html() || "" });
+  //       }
+  //     } else if (elem.name === "ul" || elem.name === "ol") {
+  //       let listContent: LessonHomework = [];
+
+  //       const children = $elem.children();
+  //       for (let j = 0; j < children.length; j++) {
+  //         const e = children[j];
+  //         const $e = $(e);
+
+  //         if ($e.find("li").html() === null && $e.find("*").length === 0) {
+  //           listContent.push({
+  //             text: ($e.html() || "").trim(),
+  //             href: "",
+  //             isTitle: false,
+  //             // isBold: false,
+  //             // isItalic: false,
+  //             color: color,
+  //           });
+  //         }
+  //       }
+
+  //       isAddingToUl = true;
+  //       const $newElem = $elem.find(">");
+
+  //       setDescription($newElem, listContent, $, listNumber + 1);
+  //       currHomework.push({ listContent: listContent, listType: elem.name });
+
+  //       listContent = [];
+  //     } else if (elem.name === "span") {
+  //       const $newElem = $elem.find("span");
+
+  //       if ($newElem.length === 0) {
+  //         if (isOnSameLine) {
+  //           //@ts-ignore
+  //           currHomework[currHomework.length - 1].text += $elem.html() || "";
+  //           //@ts-ignore
+  //           currHomework[currHomework.length - 1].color = color;
+  //         } else {
+  //           // currHomework.push({
+  //           //   text: ($elem.html() || "").trim(),
+  //           //   href: "",
+  //           //   isTitle: false,
+  //           //   color: color,
+  //           //   // isBold: $elem.find("strong").length >= 1,
+  //           //   // isItalic: $elem.find("em").length >= 1,
+  //           // });
+  //         }
+
+  //         isOnSameLine = true;
+  //       }
+  //     } else if (elem.name === "p") {
+  //       const $a = $elem.find("a");
+  //       if ($a.length >= 1) {
+  //         href = $a.attr("href") || "";
+  //         isBold = $a.find("strong").length >= 1;
+  //         isItalic = $a.find("em").length >= 1;
+  //         text = ($a.html() || "").trim();
+  //       }
+
+  //       const splitText = text.split("\n");
+
+  //       if (splitText.length > 1) {
+  //         let content: LessonText[] = [];
+  //         for (let j = 0; j < splitText.length; j++) {
+  //           content.push({
+  //             href: href,
+  //             // isBold: isBold,
+  //             isTitle: false,
+  //             text: splitText[j],
+  //             // isItalic: isItalic,
+  //             color: color,
+  //           });
+  //         }
+  //         currHomework.push({ listContent: content, listType: "" });
+  //       } else {
+  //         currHomework.push({
+  //           href: href,
+  //           // isBold: isBold,
+  //           isTitle: false,
+  //           text: text,
+  //           // isItalic: isItalic,
+  //           color: color,
+  //         });
+  //       }
+  //     } else if (elem.name === "img") {
+  //       const res = getDescriptionVideoOrImage($elem, $);
+  //       if (res) {
+  //         currHomework.push(res);
+  //       }
+  //     } else if (elem.name === "table") {
+  //       let table: LessonTable = { tableContent: [] };
+  //       const $_tr = $elem.find("tbody > tr");
+  //       for (let j = 0; j < $_tr.length; j++) {
+  //         let rowContent = [];
+  //         const tr = $_tr[j];
+  //         const $tr = $(tr);
+  //         const $_td = $tr.find("td");
+  //         for (let l = 0; l < $_td.length; l++) {
+  //           const td = $_td[l];
+  //           const $td = $(td);
+  //           const href = $td.find("a").attr("href") || "";
+  //           const isBold = $td.find("strong").length >= 1;
+  //           const isItalic = $td.find("em").length >= 1;
+  //           const isTitle =
+  //             $td.find("h1").length >= 1 || $td.find("h2").length >= 1;
+
+  //           rowContent.push({
+  //             // isBold: isBold,
+  //             href: href,
+  //             isTitle: isTitle,
+  //             text: ($td.html() || "").trim(),
+  //             // isItalic: isItalic,
+  //             color: color,
+  //           });
+  //         }
+
+  //         table.tableContent.push(rowContent);
+  //       }
+  //       currHomework.push(table);
+  //     }
+  //   }
+  // }
 }
 function removeEmptyFields(homeworks: LessonHomework[]) {
   for (let i = 0; i < homeworks.length; i++) {

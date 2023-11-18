@@ -20,7 +20,9 @@ export function RenderHomework({
         let html = <></>;
 
         if (!isArray) {
-          if ("isTitle" in content) {
+          if ("html" in content) {
+            html = <div dangerouslySetInnerHTML={{ __html: content.html }} />;
+          } else if ("isTitle" in content) {
             html = <TextPart content={content} listType={listType} />;
           } else if ("videoHref" in content) {
             html = <VideoPart content={content} />;

@@ -4,8 +4,11 @@ import { FilterButtons } from "./_components/FilterButtons/FilterButtons";
 import { AssignmentsRendererSkeleton } from "./_components/AssignmentsRendererSkeleton";
 import { FilterButtonsSkeleton } from "./_components/FilterButtons/FilterButtonsSkeleton";
 import { setPageState } from "./page-state";
+import { revalidatePath } from "next/cache";
 
 export default function AssignmentsPage() {
+  revalidatePath("/(navbar)/(sidebar)/afleveringer");
+
   setPageState();
 
   return (

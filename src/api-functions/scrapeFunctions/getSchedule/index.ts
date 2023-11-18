@@ -107,11 +107,7 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
       if (info) {
         lesson.id = id;
         lesson.status = status;
-        lesson.time = getTime(info, {
-          week: numberWeek,
-          year: numberYear,
-          day: j,
-        });
+        lesson.time = getTime(info);
         lesson.teachers = getTeachers(info);
         lesson.classrooms = getClassroom(info);
         lesson.classes = getClass(info);

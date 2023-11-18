@@ -12,7 +12,6 @@ export async function GET(req: NextRequest) {
     const lesson = await lectioAPI.getLessonById({
       lessonId: lessonId,
       userId: userId,
-      year: year,
     });
 
     return NextResponse.json(lesson);

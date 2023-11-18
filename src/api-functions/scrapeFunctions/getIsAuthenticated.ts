@@ -66,7 +66,9 @@ export async function getIsAuthenticated({
         const school = await getSchoolBySchoolCode({ schoolCode: schoolCode });
         if (school === null) return "Invalid school";
         return null;
-      } else {
+      } else if (text.includes("Server Error")) {
+        return "Forbidden access";
+      } else if (text.includes("Eleven")) {
         const $ = load(text);
         let studentId = "";
         const tempStudentId = $("#s_m_HeaderContent_MainTitle").attr(

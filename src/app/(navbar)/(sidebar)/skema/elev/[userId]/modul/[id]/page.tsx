@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Fragment } from "react";
+import { getPageState, setPageState } from "./page-state";
 
 type Props = {
   params: {
@@ -15,15 +16,15 @@ type Props = {
 };
 
 export default async function LessonPage({ params }: Props) {
-  const lesson = await lectioAPI.getLessonById({
-    lessonId: params.id,
-    userId: params.userId,
-    year: "2023",
-  });
+  setPageState(params.userId, params.id);
+  const pageState = getPageState();
+
+  const lesson = await pageState.lesson;
 
   if (lesson === null) {
     return <p>An error happened</p>;
   }
+  // console.log(lesson.homework);
 
   return (
     <div className="flex max-w-4xl flex-col gap-y-2 pt-4">
@@ -71,10 +72,10 @@ export default async function LessonPage({ params }: Props) {
             NOTE
           </Badge>
           <div className="flex flex-col text-muted-foreground">
-            {lesson.note.map((note) => {
+            {lesson.note.map((note, index) => {
               return (
                 <p
-                  key={note}
+                  key={note + index}
                   className="min-h-[24px]"
                   dangerouslySetInnerHTML={{ __html: note }}
                 />
@@ -88,6 +89,23 @@ export default async function LessonPage({ params }: Props) {
           <Badge className="-ml-1 mt-8 w-max bg-accent px-1.5 py-0.5 text-left text-2xs text-muted-foreground transition-opacity hover:bg-accent hover:opacity-75">
             LEKTIER
           </Badge>
+          <div className="flex flex-col gap-y-2">
+            {lesson.homework.map((c, i) => {
+              const addSeparator = i !== 0 && i !== lesson.homework.length;
+
+              return (
+                <Fragment key={i}>
+                  {addSeparator && <Separator className="my-3" />}
+                  <div
+                    key={i}
+                    //@ts-ignore
+                    dangerouslySetInnerHTML={{ __html: c[0].content }}
+                  />
+                </Fragment>
+              );
+            })}
+          </div>
+
           <div className="flex flex-col">
             {lesson.homework.map((homework, _index) => {
               const addSeparator =
@@ -97,7 +115,7 @@ export default async function LessonPage({ params }: Props) {
                 <Fragment key={_index}>
                   {addSeparator && <Separator className="my-3" />}
                   <div className="flex flex-col gap-y-2">
-                    <RenderHomework homework={homework} key={_index} />
+                    {/* <RenderHomework homework={homework} key={_index} /> */}
                   </div>
                 </Fragment>
               );
@@ -117,7 +135,7 @@ export default async function LessonPage({ params }: Props) {
                   key={_index}
                   className="flex flex-col gap-y-4 border-b pb-4"
                 >
-                  <RenderHomework homework={homework} key={_index} />
+                  {/* <RenderHomework homework={homework} key={_index} /> */}
                 </div>
               );
             })}
@@ -136,7 +154,7 @@ export default async function LessonPage({ params }: Props) {
                   key={_index}
                   className="flex flex-col gap-y-4 border-b pb-4"
                 >
-                  <RenderHomework homework={homework} key={_index} />
+                  {/* <RenderHomework homework={homework} key={_index} /> */}
                 </div>
               );
             })}

@@ -5,7 +5,6 @@ import { processResult } from "./processResult";
 type MainType = FullLesson;
 type FunctionProps = Prettify<{
   lessonId: string;
-  year: string;
   userId: string;
 }>;
 
