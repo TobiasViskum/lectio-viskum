@@ -62,7 +62,7 @@ export default function SchedulePage({ params }: Props) {
             userId={params.userId}
           />
         </Suspense>
-        <div className="relative flex w-full justify-center rounded-md pt-8">
+        <div className="relative flex w-full rounded-md pt-8">
           <Suspense fallback={<TimestampSkeleton />}>
             <MainContent
               schedulePromise={schedulePromise}

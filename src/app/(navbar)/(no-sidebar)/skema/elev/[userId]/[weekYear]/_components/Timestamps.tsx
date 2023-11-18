@@ -15,7 +15,7 @@ export function Timestamps({ timestamps }: Props) {
 
         return (
           <p
-            className="text-sm"
+            className="text-xs sm:text-sm"
             key={timeStamp}
             style={{ height: "var(--height-hour)" }}
           >
