@@ -178,9 +178,6 @@ async function setDescription(
           continue;
         }
       }
-      if (elem.name === "a") {
-        $elem.attr("target", "_blank");
-      }
 
       const attrs = $elem.attr();
 
