@@ -178,6 +178,13 @@ async function setDescription(
           continue;
         }
       }
+      if (elem.name === "a") {
+        $elem.attr("target", "_blank");
+        const href = $elem.attr("href");
+        if (href && href.includes("/lectio/")) {
+          $elem.attr("href", "https://www.lectio.dk" + href);
+        }
+      }
 
       const attrs = $elem.attr();
 

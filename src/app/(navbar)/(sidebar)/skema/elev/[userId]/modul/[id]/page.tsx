@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Fragment } from "react";
 import { getPageState, setPageState } from "./page-state";
-import { Tester } from "./_components/Tester";
 
 type Props = {
   params: {
@@ -176,7 +175,6 @@ export default async function LessonPage({ params }: Props) {
       >
         Elevfeedback
       </Link>
-      <Tester />
     </div>
   );
 }
