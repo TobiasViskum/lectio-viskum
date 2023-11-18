@@ -25,7 +25,7 @@ export function generateTimestamps(weeks: Week[]) {
     }
   }
 
-  globalStartTime = Math.floor(globalStartTime - 0.001);
+  globalStartTime = Math.ceil(globalStartTime - 0.001);
   globalEndTime = Math.ceil(globalEndTime + 0.001);
 
   let timeStamps = [];
@@ -34,7 +34,7 @@ export function generateTimestamps(weeks: Week[]) {
   }
 
   if (timeStamps.length === 0) {
-    return [7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+    return [8, 9, 10, 11, 12, 13, 14, 15, 16];
   }
 
   return timeStamps;

@@ -5,7 +5,7 @@ type Props = { timestamps: number[] };
 export function TimestampsLines({ timestamps }: Props) {
   return (
     <>
-      {timestamps.map((timeStamp, index) => {
+      {timestamps.map((timeStamp, i) => {
         return (
           <div key={timeStamp} style={{ height: "var(--height-hour)" }}>
             <Separator />

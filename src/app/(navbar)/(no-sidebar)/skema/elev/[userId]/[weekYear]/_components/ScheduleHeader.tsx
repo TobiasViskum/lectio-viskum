@@ -8,12 +8,17 @@ type Props = {
   userId: string;
   searchParamsObj: { week: string; year: string };
 };
-export async function ScheduleHeader({ userId, searchParamsObj }: Props) {
+export async function ScheduleHeader({
+  userId,
+  searchParamsObj,
+  schedulePromise,
+}: Props) {
   const student = await lectioAPI.getStudent.byId({
     userId: userId,
   });
+  const schedule = await schedulePromise;
 
-  if (student === null) return <p>Error</p>;
+  if (student === null || schedule === null) return <p>Error</p>;
 
   return (
     <div className="flex flex-col gap-x-4 pb-4 ">

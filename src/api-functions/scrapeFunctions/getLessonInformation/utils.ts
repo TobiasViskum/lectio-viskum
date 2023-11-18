@@ -1,10 +1,9 @@
 import { getLastAuthenticatedCookie } from "@/api-functions/getLastAuthenticatedCookie";
-import { urlify } from "@/util/urlify";
 
 export async function getHomework(
   $parent: cheerio.Cheerio,
   $: cheerio.Root,
-  homework: LessonHomework[],
+  homework: string[],
 ) {
   const $sibling = $parent.next();
 
@@ -18,13 +17,10 @@ export async function getHomework(
   const id = $sibling.attr("id");
 
   if (id && id.includes("ACH")) {
-    let currHomework: LessonHomework = [];
-
     const $article = $sibling.children().first();
 
-    await setDescription($article, currHomework, $);
-
-    homework.push(currHomework);
+    const res = await setDescription($article, $);
+    homework.push(res);
     await getHomework($sibling, $, homework);
   } else if ($sibling.hasClass("ls-hr-solid")) {
     await getHomework($sibling, $, homework);
@@ -32,9 +28,9 @@ export async function getHomework(
 }
 export async function getHomeworkAndOtherAndPresentation($: cheerio.Root) {
   type ResultHolder = {
-    homework: LessonHomework[];
-    other: LessonHomework[];
-    presentation: LessonHomework[];
+    homework: string[];
+    other: string[];
+    presentation: string[];
   };
 
   let resultHolder: ResultHolder = {
@@ -46,7 +42,7 @@ export async function getHomeworkAndOtherAndPresentation($: cheerio.Root) {
   const sectionHeadings = $("h1.ls-paper-section-heading");
 
   for (let i = 0; i < sectionHeadings.length; i++) {
-    let homework: LessonHomework[] = [];
+    let homework: string[] = [];
 
     const elem = sectionHeadings[i];
     const $elem = $(elem);
@@ -69,14 +65,11 @@ export async function getHomeworkAndOtherAndPresentation($: cheerio.Root) {
           const section = $presentationsHolder[j];
           const $section = $(section);
 
-          let currHomework: LessonHomework = [];
-          await setDescription($section, currHomework, $);
-          homework.push(currHomework);
+          homework.push(await setDescription($section, $));
         }
       }
     }
 
-    removeEmptyFields(homework);
     if (resultType === "Lektier") {
       resultHolder.homework = homework;
     } else if (resultType === "Øvrigt indhold") {
@@ -89,46 +82,12 @@ export async function getHomeworkAndOtherAndPresentation($: cheerio.Root) {
   return resultHolder;
 }
 
-function getDescriptionVideoOrImage($elem: cheerio.Cheerio, $: cheerio.Root) {
-  const src = $elem.attr("src");
-  const imgHeight = Number($elem.attr("height"));
-  const imgWidth = Number($elem.attr("width"));
-
-  const iframe = $elem.attr("data-embed-xhtml");
-  let isVideo = iframe !== undefined;
-
-  if (src) {
-    let fullSrc = src;
-    if (!isVideo && !isNaN(imgHeight) && !isNaN(imgWidth)) {
-      return { img: fullSrc, width: imgWidth, height: imgHeight };
-    } else if (isVideo) {
-      const $iframe = $(iframe);
-      const videoHref = $iframe.attr("src") || "";
-      const videoHeight = Number($iframe.attr("height"));
-      const videoWidth = Number($iframe.attr("width"));
-
-      if (!isNaN(videoHeight) && !isNaN(videoWidth)) {
-        return {
-          thumbnail: fullSrc,
-          videoHref: videoHref.split("?")[0],
-
-          aspectRatio: `1 / ${videoHeight / videoWidth}`,
-        } as LessonVideo;
-      }
-    }
-  }
-}
-async function setDescription(
-  $article: cheerio.Cheerio,
-  currHomework: LessonHomework,
-  $: cheerio.Root,
-  listNumber: number = 0,
-) {
+async function setDescription($article: cheerio.Cheerio, $: cheerio.Root) {
   const tw = "@md:text-2xs";
 
   const styleMap: { [key: string]: string } = {
-    h1: "text-lg py-2",
-    h2: "text-lg py-2",
+    h1: "text-lg md:text-xl py-2",
+    h2: "text-lg md:text-xl py-2",
     h3: "",
     h4: "",
     h5: "",
@@ -180,10 +139,6 @@ async function setDescription(
       }
       if (elem.name === "a") {
         $elem.attr("target", "_blank");
-        const href = $elem.attr("href");
-        // if (href && href.includes("/lectio/")) {
-        //   $elem.attr("href", "https://www.muksiv.dk" + href);
-        // }
       }
 
       const attrs = $elem.attr();
@@ -232,13 +187,15 @@ async function setDescription(
         $elem.attr("style", `color:${color}`);
       }
 
+      if ($elem.text().trim().length === 0) {
+        $elem.remove();
+      }
+
       $elem.attr("class", styleMap[elem.name]);
     }
   }
-  //@ts-ignore
-  currHomework.push({ content: $article.html() });
 
-  return;
+  return $article.html() || "";
   // const $elements = $article.find("*");
   // $elements.find("br").replaceWith("\n");
 
@@ -445,34 +402,64 @@ async function setDescription(
   //   }
   // }
 }
-function removeEmptyFields(homeworks: LessonHomework[]) {
-  for (let i = 0; i < homeworks.length; i++) {
-    const homework = homeworks[i];
+// function removeEmptyFields(homeworks: LessonHomework[]) {
+//   for (let i = 0; i < homeworks.length; i++) {
+//     const homework = homeworks[i];
 
-    let removeIndex = true;
+//     let removeIndex = true;
 
-    for (let j = 0; j < homework.length; j++) {
-      const content = homework[j];
-      let removeContent = true;
+//     for (let j = 0; j < homework.length; j++) {
+//       const content = homework[j];
+//       let removeContent = true;
 
-      if ("isTitle" in content) {
-        if (content.text !== "") {
-          removeIndex = false;
-          removeContent = false;
-          continue;
-        }
-      } else {
-        removeIndex = false;
-        removeContent = false;
-        continue;
-      }
-      if (removeContent) {
-        //Remove object in homework array, because it's empty
-      }
-    }
+//       if ("isTitle" in content) {
+//         if (content.text !== "") {
+//           removeIndex = false;
+//           removeContent = false;
+//           continue;
+//         }
+//       } else {
+//         removeIndex = false;
+//         removeContent = false;
+//         continue;
+//       }
+//       if (removeContent) {
+//         //Remove object in homework array, because it's empty
+//       }
+//     }
 
-    if (removeIndex) {
-      homeworks.splice(i, 1);
-    }
-  }
-}
+//     if (removeIndex) {
+//       homeworks.splice(i, 1);
+//     }
+//   }
+// }
+
+// function getDescriptionVideoOrImage($elem: cheerio.Cheerio, $: cheerio.Root) {
+//   const src = $elem.attr("src");
+//   const imgHeight = Number($elem.attr("height"));
+//   const imgWidth = Number($elem.attr("width"));
+
+//   const iframe = $elem.attr("data-embed-xhtml");
+//   let isVideo = iframe !== undefined;
+
+//   if (src) {
+//     let fullSrc = src;
+//     if (!isVideo && !isNaN(imgHeight) && !isNaN(imgWidth)) {
+//       return { img: fullSrc, width: imgWidth, height: imgHeight };
+//     } else if (isVideo) {
+//       const $iframe = $(iframe);
+//       const videoHref = $iframe.attr("src") || "";
+//       const videoHeight = Number($iframe.attr("height"));
+//       const videoWidth = Number($iframe.attr("width"));
+
+//       if (!isNaN(videoHeight) && !isNaN(videoWidth)) {
+//         return {
+//           thumbnail: fullSrc,
+//           videoHref: videoHref.split("?")[0],
+
+//           aspectRatio: `1 / ${videoHeight / videoWidth}`,
+//         } as LessonVideo;
+//       }
+//     }
+//   }
+// }

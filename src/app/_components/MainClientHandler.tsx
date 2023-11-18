@@ -3,7 +3,7 @@
 import { downloadAsset } from "@/lib/downloadAsset";
 import { debounce } from "@/util";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 export function MainClientHandler() {
@@ -63,11 +63,8 @@ export function MainClientHandler() {
 
       if (href.includes("/lectio/")) {
         function toHtmlClass(str: string) {
-          // Remove http:// or https://
           str = str.replace(/http[s]?:\/\//, "");
-          // Replace non-alphanumeric characters with underscores
           str = str.replace(/\W/g, "_");
-          // Remove any leading non-letters
           str = str.replace(/^[^a-zA-Z]+/, "");
           return str;
         }

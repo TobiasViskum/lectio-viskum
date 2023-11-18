@@ -54,7 +54,7 @@
   --text-width: 64px;
   --lesson-gap: calc(12px * var(--multi));
   --offset-top-text: calc(18px * var(--multi));
-  --offset-top-lesson: calc(30px * var(--multi));
+  --offset-top-lesson: calc(0px * var(--multi));
   --height-hour: calc(68px * var(--multi));
 }
 

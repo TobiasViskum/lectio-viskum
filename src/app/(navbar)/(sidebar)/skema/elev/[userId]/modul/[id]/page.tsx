@@ -1,5 +1,3 @@
-import { lectioAPI } from "@/lib/lectio-api";
-import { RenderHomework } from "./_components/RenderHomework";
 import { Teacher } from "@/components/global/Teacher";
 import { LessonTime } from "./_components/LessonTime";
 import Link from "next/link";
@@ -24,7 +22,6 @@ export default async function LessonPage({ params }: Props) {
   if (lesson === null) {
     return <p>An error happened</p>;
   }
-  // console.log(lesson.homework);
 
   return (
     <div className="flex max-w-4xl flex-col gap-y-2 pt-4">
@@ -90,33 +87,13 @@ export default async function LessonPage({ params }: Props) {
             LEKTIER
           </Badge>
           <div className="flex flex-col gap-y-2">
-            {lesson.homework.map((c, i) => {
+            {lesson.homework.map((str, i) => {
               const addSeparator = i !== 0 && i !== lesson.homework.length;
 
               return (
                 <Fragment key={i}>
                   {addSeparator && <Separator className="my-3" />}
-                  <div
-                    key={i}
-                    //@ts-ignore
-                    dangerouslySetInnerHTML={{ __html: c[0].content }}
-                  />
-                </Fragment>
-              );
-            })}
-          </div>
-
-          <div className="flex flex-col">
-            {lesson.homework.map((homework, _index) => {
-              const addSeparator =
-                _index !== 0 && _index !== lesson.homework.length;
-
-              return (
-                <Fragment key={_index}>
-                  {addSeparator && <Separator className="my-3" />}
-                  <div className="flex flex-col gap-y-2">
-                    {/* <RenderHomework homework={homework} key={_index} /> */}
-                  </div>
+                  <div key={i} dangerouslySetInnerHTML={{ __html: str }} />
                 </Fragment>
               );
             })}
@@ -128,15 +105,15 @@ export default async function LessonPage({ params }: Props) {
           <Badge className="-ml-1 mt-8 w-max bg-accent px-1.5 py-0.5 text-left text-2xs text-muted-foreground transition-opacity hover:bg-accent hover:opacity-75">
             ØVRIGT INDHOLD
           </Badge>
-          <div className="flex flex-col gap-y-4">
-            {lesson.other.map((homework, _index) => {
+          <div className="flex flex-col gap-y-2">
+            {lesson.other.map((str, i) => {
+              const addSeparator = i !== 0 && i !== lesson.other.length;
+
               return (
-                <div
-                  key={_index}
-                  className="flex flex-col gap-y-4 border-b pb-4"
-                >
-                  {/* <RenderHomework homework={homework} key={_index} /> */}
-                </div>
+                <Fragment key={i}>
+                  {addSeparator && <Separator className="my-3" />}
+                  <div key={i} dangerouslySetInnerHTML={{ __html: str }} />
+                </Fragment>
               );
             })}
           </div>
@@ -147,15 +124,15 @@ export default async function LessonPage({ params }: Props) {
           <Badge className="-ml-1 mt-8 w-max bg-accent px-1.5 py-0.5 text-left text-2xs text-muted-foreground transition-opacity hover:bg-accent hover:opacity-75">
             PRÆSENTATION
           </Badge>
-          <div className="flex flex-col gap-y-4">
-            {lesson.presentation.map((homework, _index) => {
+          <div className="flex flex-col gap-y-2">
+            {lesson.presentation.map((str, i) => {
+              const addSeparator = i !== 0 && i !== lesson.presentation.length;
+
               return (
-                <div
-                  key={_index}
-                  className="flex flex-col gap-y-4 border-b pb-4"
-                >
-                  {/* <RenderHomework homework={homework} key={_index} /> */}
-                </div>
+                <Fragment key={i}>
+                  {addSeparator && <Separator className="my-3" />}
+                  <div key={i} dangerouslySetInnerHTML={{ __html: str }} />
+                </Fragment>
               );
             })}
           </div>

@@ -35,7 +35,6 @@ export async function getLessonInformation({ lessonId, userId }: Props) {
   if (res === "Invalid school") return res;
   if (res === null) return res;
 
-  const fetchCookie = res.fetchCookie;
   const $ = res.$;
 
   let additionalInfo: AdditionalLessonInfo = {
@@ -159,54 +158,7 @@ export async function getLessonInformation({ lessonId, userId }: Props) {
   const homeWorkAndOtherAndPresentation =
     await getHomeworkAndOtherAndPresentation($);
 
-  for (let i = 0; i < homeWorkAndOtherAndPresentation.homework.length; i++) {
-    const homework = homeWorkAndOtherAndPresentation.homework[i];
-
-    for (let j = 0; j < homework.length; j++) {
-      const item = homework[j];
-
-      if (typeof item === "object" && "img" in item) {
-        if (item.img.includes("/lectio/")) {
-          const src = ["https://lectio.dk", item.img].join("");
-          const cachedImage = global.longTermCache.get(src);
-
-          if (cachedImage) {
-            item.img = cachedImage.data;
-          } else {
-            const imageBase64 = await fetchCookie(src, {
-              method: "GET",
-              headers: { Cookie: getLastAuthenticatedCookie() },
-              ...standardFetchOptions,
-            })
-              .then(async (res) => {
-                try {
-                  const arrayBuffer = await res.arrayBuffer();
-                  const contentType = res.headers.get("content-type");
-                  const base64 = Buffer.from(arrayBuffer).toString("base64");
-                  const fullSrc = `data:${contentType};base64,${base64}`;
-                  return fullSrc;
-                } catch {
-                  return null;
-                }
-              })
-              .catch((err) => {
-                return null;
-              });
-
-            if (imageBase64) {
-              global.longTermCache.set(src, {
-                data: imageBase64,
-                expires: new Date().getTime() + getTimeInMs({ days: 1 }),
-              });
-              item.img = imageBase64;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  const resultObj = {
+  const resultObj: FullLesson = {
     id: lessonId,
     ...additionalInfo,
     subjectTheme: subjectTheme,

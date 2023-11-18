@@ -8,16 +8,10 @@ import { getWeekAndYear } from "@/util/getWeekAndYear";
 type Props = {
   lesson: Lesson;
   timestamps: number[];
-  lessonsAddedAtTimestamp: { start: number; end: number; totalAdded: number }[];
   userId: string;
 };
 
-export async function Lesson({
-  lesson,
-  timestamps,
-  lessonsAddedAtTimestamp,
-  userId,
-}: Props) {
+export async function Lesson({ lesson, timestamps, userId }: Props) {
   const time = lesson.time;
   const startTime =
     new Date(time.startDate).getHours() +
@@ -56,21 +50,9 @@ export async function Lesson({
     hoverSidebarColor = "group-hover:bg-green-200";
   }
 
-  let leftOffset = "";
-  const foundLesson = lessonsAddedAtTimestamp.find(
-    (obj) => startTime === obj.start,
-  );
-  lessonsAddedAtTimestamp.push({
-    start: startTime,
-    end: endTime,
-    totalAdded: 1,
-  });
-  if (foundLesson) {
-    leftOffset = `calc(((100% - 16px) / ${lesson.overlappingLessons + 1}) * ${
-      foundLesson.totalAdded
-    })`;
-    foundLesson.totalAdded += 1;
-  }
+  const leftOffset = `calc(((100% - 16px) / ${
+    lesson.styling.overlappingLessons + 1
+  }) * ${lesson.styling.position})`;
 
   const isSubjectsEmpty = lesson.subjects.length === 0;
   const hasNote = lesson.hasNote;
@@ -82,13 +64,13 @@ export async function Lesson({
   if (numericTimes.endTime - numericTimes.startTime < 0.75) {
     displayOnlyTitle = true;
   }
-  let isVerySmall = numericTimes.endTime - numericTimes.startTime < 0.5;
+  let isVerySmall = numericTimes.endTime - numericTimes.startTime < 0.4;
 
   function getTitleSize() {
     let titleSize = "text-sm @[124px]:text-sm";
     if (displayOnlyTitle) {
       titleSize = "text-sm";
-    } else if (lesson.overlappingLessons >= 1) {
+    } else if (lesson.styling.overlappingLessons >= 1) {
       titleSize = "text-xs @[124px]:text-sm";
     }
     if (isVerySmall) {
@@ -113,7 +95,7 @@ export async function Lesson({
       style={{
         top: `calc(var(--offset-top-lesson) + var(--height-hour) * ${multi})`,
         height: `calc((${endTime - startTime}) * var(--height-hour))`,
-        width: `calc((100% - 16px) / ${lesson.overlappingLessons + 1})`,
+        width: `calc((100% - 16px) / ${lesson.styling.overlappingLessons + 1})`,
         left: leftOffset,
       }}
     >

@@ -1,7 +1,10 @@
 import { Badge } from "@/components/ui/badge";
 import { Lesson } from "./Lesson";
+import { capitalizeFirstLetter } from "@/util/capitalizeFirstLetter";
+import { Dot } from "lucide-react";
+import Link from "next/link";
 
-type Props = { week: Week; timestamps: number[]; day: string; userId: string };
+type Props = { week: Week; timestamps: number[]; userId: string };
 
 export function getDateFromWeekAndYear(week: number, year: number): Date {
   const dowOffset = 0;
@@ -18,33 +21,56 @@ export function getDateFromWeekAndYear(week: number, year: number): Date {
   return date;
 }
 
-export async function Weekday({ week, timestamps, day, userId }: Props) {
-  let lessonsAddedAtTimestamp: {
-    start: number;
-    end: number;
-    totalAdded: number;
-  }[] = [];
-  const monday = getDateFromWeekAndYear(46, 2023);
+export async function Weekday({ week, timestamps, userId }: Props) {
+  const formattedDate = new Intl.DateTimeFormat("da-dk", {
+    dateStyle: "long",
+  }).format(week.date);
+
+  const weekDay = capitalizeFirstLetter(
+    new Intl.DateTimeFormat("da-dk", {
+      weekday: "long",
+    }).format(week.date),
+  );
 
   return (
-    <div className="flex min-w-full sm:min-w-1/2 lg:min-w-1/3 xl:min-w-1/4 2xl:min-w-1/5">
-      <div className="relative w-full">
-        <div className="absolute grid w-full place-items-center px-2 ">
-          <Badge className="px-6 py-1">{day}</Badge>
+    <div className="min-w-full sm:min-w-1/2 lg:min-w-1/3 xl:min-w-1/4 2xl:min-w-1/5">
+      {/* <div className="flex w-full flex-col items-center gap-y-2">
+        <div className="text-center">
+          <p className="text-lg font-medium text-muted-foreground">{weekDay}</p>
+          <p className="text-sm text-muted-foreground">{formattedDate}</p>
         </div>
-        <div className="absolute z-50 flex h-full w-full justify-between">
-          {week.lessons.map((lesson, index) => {
+        <div className="flex flex-col items-center text-center text-xs">
+          {week.notes.map((note) => {
+            if (note.lessonId === "") {
+              return (
+                <div key={note.text} className="flex items-center">
+                  <Dot /> {note.text}
+                </div>
+              );
+            }
             return (
-              <Lesson
-                key={lesson.id}
-                lesson={lesson}
-                timestamps={timestamps}
-                lessonsAddedAtTimestamp={lessonsAddedAtTimestamp}
-                userId={userId}
-              />
+              <Link
+                href={`/skema/elev/${userId}/modul/${note.lessonId}`}
+                key={note.text}
+                className="flex items-center text-blue-400 hover:underline"
+              >
+                <Dot /> {note.text}
+              </Link>
             );
           })}
         </div>
+      </div> */}
+      <div className="relative z-50 flex h-full w-full justify-between">
+        {week.lessons.map((lesson, index) => {
+          return (
+            <Lesson
+              key={lesson.id}
+              lesson={lesson}
+              timestamps={timestamps}
+              userId={userId}
+            />
+          );
+        })}
       </div>
     </div>
   );

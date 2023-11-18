@@ -55,9 +55,16 @@ type Lesson = Prettify<{
   hasHomework: boolean;
   hasOtherContent: boolean;
   hasPresentation: boolean;
-  overlappingLessons: number;
+  styling: {
+    overlappingLessons: number;
+    position: number;
+  };
 }>;
-type Week = Prettify<{ lessons: Lesson[]; notes: string[] }>;
+type Week = Prettify<{
+  lessons: Lesson[];
+  notes: { text: string; lessonId: string }[];
+  date: date;
+}>;
 
 type Assignment = Prettify<{
   week: string;
@@ -151,9 +158,9 @@ type FullLesson = Prettify<
       themeId: string;
     };
     note: string[];
-    homework: LessonHomework[];
-    other: LessonHomework[];
-    presentation: LessonHomework[];
+    homework: string[];
+    other: string[];
+    presentation: string[];
   }
 >;
 
