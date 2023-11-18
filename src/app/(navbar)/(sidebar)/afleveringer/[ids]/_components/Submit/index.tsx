@@ -1,7 +1,7 @@
 import { getDate } from "../../../_util/getDate";
-import { DocumentButton } from "@/components/global/DocumentButton";
 import { DrawingPinFilledIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import Link from "next/link";
 
 type Props = { submit: Submit };
 
@@ -32,10 +32,13 @@ export function Submit({ submit }: Props) {
         />
         <div className="flex flex-col justify-center gap-y-0.5">
           <p className="text-lg font-medium">{submit.submitter.name}</p>
-          <DocumentButton
-            strDocument={JSON.stringify(submit.document)}
-            className="line-clamp-1 text-sm"
-          />
+          <Link
+            href={submit.document.href}
+            target="_blank"
+            className="text-sm text-blue-400 hover:underline"
+          >
+            {submit.document.name}
+          </Link>
         </div>
       </div>
       {submit.comment !== "" && (

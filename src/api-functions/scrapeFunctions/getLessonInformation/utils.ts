@@ -179,8 +179,8 @@ async function setDescription(
         }
       }
       if (elem.name === "a") {
-        $elem.attr("target", "_top");
-        // const href = $elem.attr("href");
+        $elem.attr("target", "_blank");
+        const href = $elem.attr("href");
         // if (href && href.includes("/lectio/")) {
         //   $elem.attr("href", "https://www.muksiv.dk" + href);
         // }

@@ -1,5 +1,5 @@
-import { DocumentButton } from "@/components/global/DocumentButton";
 import { getPageState } from "../../page-state";
+import Link from "next/link";
 
 export async function AssignmentFilesSkeleton() {
   const pageState = getPageState();
@@ -16,10 +16,13 @@ export async function AssignmentFilesSkeleton() {
           const key = `${item.href}-${item.name}`;
           return (
             <li key={key} className="flex ">
-              <DocumentButton
-                className="text-sm"
-                strDocument={JSON.stringify(item)}
-              />
+              <Link
+                href={item.href}
+                target="_blank"
+                className="text-sm text-blue-400 hover:underline"
+              >
+                {item.name}
+              </Link>
             </li>
           );
         })}
