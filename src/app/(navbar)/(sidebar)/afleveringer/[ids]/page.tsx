@@ -12,6 +12,7 @@ import { AssignmentInfoSkeleton } from "./_components/AssignmentInfo/AssignmentI
 import { AssignmentFilesSkeleton } from "./_components/AssignmentFiles/AssignmentFilesSkeleton";
 import { AssignmentSubmitsSkeleton } from "./_components/AssignmentSubmits/AssignmentSubmitsSkeleton";
 import { setPageState } from "./page-state";
+import { UploadAssignment } from "./_components/UploadAssignment";
 
 type Props = {
   params: { ids: string };
@@ -57,6 +58,9 @@ export default function AssignmentPage({ params, searchParams }: Props) {
         </Suspense>
         <Suspense fallback={<AssignmentFilesSkeleton />}>
           <AssignmentFiles />
+        </Suspense>
+        <Suspense fallback={null}>
+          <UploadAssignment />
         </Suspense>
         <Suspense fallback={<AssignmentSubmitsSkeleton />}>
           <AssignmentSubmits />

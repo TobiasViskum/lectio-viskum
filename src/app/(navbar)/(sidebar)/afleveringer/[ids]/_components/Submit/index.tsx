@@ -28,14 +28,14 @@ export function Submit({ submit }: Props) {
           alt="img"
           width={56}
           height={56}
-          className="obj aspect-square rounded-full object-cover"
+          className="obj aspect-square h-14 w-14 rounded-full object-cover"
         />
         <div className="flex flex-col justify-center gap-y-0.5">
           <p className="text-lg font-medium">{submit.submitter.name}</p>
           <Link
             href={submit.document.href}
             target="_blank"
-            className="text-sm text-blue-400 hover:underline"
+            className="break-all text-sm text-blue-400 [text-wrap:balance] hover:underline"
           >
             {submit.document.name}
           </Link>
