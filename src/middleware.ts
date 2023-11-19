@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { lectioAPI } from "./lib/lectio-api";
-import { getLastAuthenticatedCookie } from "./api-functions/getLastAuthenticatedCookie";
 
 export async function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;

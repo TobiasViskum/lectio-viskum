@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-.school-list:has(:hover) > .school-list__item:not(:hover) {
-  opacity: 0.35;
+@media (hover: hover) {
+  .school-list:has(:hover) > .school-list__item:not(:hover) {
+    opacity: 0.35;
+  }
 }
 
 @layer base {

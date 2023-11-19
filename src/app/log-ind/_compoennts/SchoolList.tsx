@@ -86,7 +86,7 @@ export function SchoolList({ allSchoolsPromise }: Props) {
               }}
               key={school.name}
               className={cn(
-                "school-list__item flex w-full flex-col items-center rounded-md transition-all duration-75 hover:scale-[1.015] hover:opacity-100",
+                "school-list__item flex w-full flex-col items-center rounded-md transition-all duration-300 hover:scale-[1.015] hover:opacity-100",
                 index === items.length - 1 ? "mb-4" : "",
                 school.name.length >= 35 ? "max-sm:pt-1" : "",
               )}
