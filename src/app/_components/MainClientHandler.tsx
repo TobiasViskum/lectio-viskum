@@ -2,13 +2,12 @@
 
 import { downloadAsset } from "@/lib/downloadAsset";
 import { debounce } from "@/util";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 export function MainClientHandler() {
   const path = usePathname();
-  const searchParams = useSearchParams();
   const router = useRouter();
 
   const debouncedFunction = useRef(
@@ -21,6 +20,8 @@ export function MainClientHandler() {
               message: string;
             };
             if (path.includes("/log-ind") === false) {
+              console.log(path);
+
               if (json.status === "error") {
                 if (json.message.includes("Forbidden")) {
                   toast.error("For mange requests til Lectio", {
@@ -29,7 +30,7 @@ export function MainClientHandler() {
                   });
                 } else if (json.message.includes("Invalid")) {
                   toast.error("Kunne ikke logge dig ind");
-                  router.push("/log-ind");
+                  // router.push("/log-ind");
                 } else if (json.message.includes("down")) {
                   toast.error("Lectio er nede", {
                     description:
@@ -44,17 +45,16 @@ export function MainClientHandler() {
           .catch(() => undefined);
       }
 
-      const isRedirected = searchParams.get("redirected");
-      if (isRedirected && isRedirected === "true") {
+      if (window.location.search.includes("redirected=true")) {
         toast.error("Du skal logge ind før du kan bruge Lectio");
-        router.replace(path);
+        router.push("/log-ind?");
       }
     }, 200),
   );
 
   useEffect(() => {
     debouncedFunction.current();
-  }, [path, searchParams, router]);
+  }, [path, router]);
 
   async function handleClick(e: MouseEvent) {
     const target = e.target as HTMLAnchorElement | null;

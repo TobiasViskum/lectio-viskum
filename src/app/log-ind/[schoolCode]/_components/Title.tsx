@@ -30,7 +30,10 @@ export function Title({ schoolPromise, name }: Props) {
   useEffect(() => {
     async function verifySchool() {
       const school = await schoolPromise;
+
       if (school === null) {
+        console.log("falsely redirected");
+
         router.push("/log-ind");
       } else if (school.name !== name) {
         setSchoolName(school.name);
