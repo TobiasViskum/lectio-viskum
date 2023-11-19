@@ -14,7 +14,7 @@ type Props = {
 export function UploadButton({ assignmentId }: Props) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [file, setFile] = useState<Blob | null>(null);
+  const [file, setFile] = useState<File | null>(null);
 
   async function doPostAssignment() {
     const formData = new FormData();
