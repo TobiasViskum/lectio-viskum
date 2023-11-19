@@ -48,67 +48,72 @@ export function Content({ strAssignments }: Props) {
   ).length;
 
   return (
-    <div className="flex flex-col gap-y-6">
+    <div className="flex flex-col gap-y-6 px-1">
       <div className="flex flex-col gap-y-2">
-        <h3 className="text-muted-foreground">Filtre:</h3>
+        <h3 className="text-muted-foreground">Søg:</h3>
         <Input
           placeholder="Search..."
           value={search}
           onChange={(e) => handleInput(e.target.value)}
         />
       </div>
-      <div className="flex flex-col gap-y-5 px-2">
-        <div className="group flex w-full items-center justify-between">
-          <div className="flex justify-center gap-x-2">
-            <Checkbox
-              id="all"
-              checked={filter === "all"}
-              onCheckedChange={() => handleClick("all")}
-            />
-            <Label htmlFor="all">Alle</Label>
+      <div className="flex flex-col gap-y-4">
+        <h3 className="text-muted-foreground">Filtrér:</h3>
+        <div className="flex flex-col gap-y-5 px-1">
+          <div className="group flex w-full items-center justify-between">
+            <div className="flex justify-center gap-x-2">
+              <Checkbox
+                id="all"
+                checked={filter === "all"}
+                onCheckedChange={() => handleClick("all")}
+              />
+              <Label htmlFor="all">Alle</Label>
+            </div>
+            <Label className="text-muted-foreground">
+              ({totalAssignments})
+            </Label>
           </div>
-          <Label className="text-muted-foreground">({totalAssignments})</Label>
-        </div>
-        <div className="flex w-full items-center justify-between">
-          <div className="flex justify-center gap-x-2">
-            <Checkbox
-              id="submitted"
-              checked={filter === "submitted"}
-              onCheckedChange={() => handleClick("submitted")}
-            />
-            <Label htmlFor="submitted">Afleveret</Label>
+          <div className="flex w-full items-center justify-between">
+            <div className="flex justify-center gap-x-2">
+              <Checkbox
+                id="submitted"
+                checked={filter === "submitted"}
+                onCheckedChange={() => handleClick("submitted")}
+              />
+              <Label htmlFor="submitted">Afleveret</Label>
+            </div>
+            <Label className="text-muted-foreground">
+              ({submittedAssignments})
+            </Label>
           </div>
-          <Label className="text-muted-foreground">
-            ({submittedAssignments})
-          </Label>
-        </div>
 
-        <div className="flex w-full items-center justify-between">
-          <div className="flex justify-center gap-x-2">
-            <Checkbox
-              id="pending"
-              checked={filter === "pending"}
-              onCheckedChange={() => handleClick("pending")}
-            />
-            <Label htmlFor="pending">Venter</Label>
+          <div className="flex w-full items-center justify-between">
+            <div className="flex justify-center gap-x-2">
+              <Checkbox
+                id="pending"
+                checked={filter === "pending"}
+                onCheckedChange={() => handleClick("pending")}
+              />
+              <Label htmlFor="pending">Venter</Label>
+            </div>
+            <Label className="text-muted-foreground">
+              ({pendingAssignments})
+            </Label>
           </div>
-          <Label className="text-muted-foreground">
-            ({pendingAssignments})
-          </Label>
-        </div>
 
-        <div className="flex w-full items-center justify-between">
-          <div className="flex justify-center gap-x-2">
-            <Checkbox
-              id="missing"
-              checked={filter === "missing"}
-              onCheckedChange={() => handleClick("missing")}
-            />
-            <Label htmlFor="missing">Mangler</Label>
+          <div className="flex w-full items-center justify-between">
+            <div className="flex justify-center gap-x-2">
+              <Checkbox
+                id="missing"
+                checked={filter === "missing"}
+                onCheckedChange={() => handleClick("missing")}
+              />
+              <Label htmlFor="missing">Mangler</Label>
+            </div>
+            <Label className="text-muted-foreground">
+              ({missingAssignments})
+            </Label>
           </div>
-          <Label className="text-muted-foreground">
-            ({missingAssignments})
-          </Label>
         </div>
       </div>
     </div>

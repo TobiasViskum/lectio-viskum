@@ -1,7 +1,8 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import { Upload, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
@@ -9,9 +10,10 @@ import { toast } from "sonner";
 
 type Props = {
   assignmentId: string;
+  inSidebar?: boolean;
 };
 
-export function UploadButton({ assignmentId }: Props) {
+export function UploadButton({ assignmentId, inSidebar = false }: Props) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -49,8 +51,18 @@ export function UploadButton({ assignmentId }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-y-2 pb-4 md:hidden">
-      <p className="font-medium">Upload besvarelse:</p>
+    <div
+      className={cn("flex flex-col gap-y-2 pb-4", inSidebar ? "" : "md:hidden")}
+    >
+      {inSidebar ? (
+        <div>
+          <Badge variant={"secondary"} className="w-fit text-muted-foreground">
+            Upload:
+          </Badge>
+        </div>
+      ) : (
+        <p className={cn("font-medium")}>Upload besvarelse:</p>
+      )}
       <div className="flex gap-x-2">
         <Button
           onClick={() => {
@@ -75,22 +87,28 @@ export function UploadButton({ assignmentId }: Props) {
               setFile(e.target.files[0]);
             } else {
               setFile(null);
+              if (inputRef.current) inputRef.current.value = "";
             }
           }}
           className="hidden"
         />
         <Button
-          onClick={() => setFile(null)}
-          className="aspect-square h-8 w-8 p-0 text-xs"
+          onClick={() => {
+            setFile(null);
+            if (inputRef.current) inputRef.current.value = "";
+          }}
+          className={cn(
+            "aspect-square h-8 w-8 p-0 text-xs",
+            file === null ? "hidden" : "grid place-items-center",
+          )}
           variant={"destructive"}
-          disabled={file === null}
         >
           <X />
         </Button>
       </div>
       <Button
         onClick={doPostAssignment}
-        className="h-8 w-20 text-xs"
+        className={cn("h-8 text-xs", inSidebar ? "w-44" : "w-20")}
         disabled={file === null}
       >
         Upload

@@ -1,20 +1,21 @@
-import { lectioAPI } from "@/lib/lectio-api";
 import { Content } from "./Content";
-import { getCachedAllAssignments } from "@/cache-functions/getCachedAllAssignments";
 import { NoDataSkeleton } from "./NoDataSkeleton";
+import { getPageState } from "@/app/(navbar)/(sidebar)/afleveringer/page-state";
 
 export async function AssignmentsSidebar() {
-  let assignments = await lectioAPI.getAssignment.all();
+  const pageState = getPageState();
+  let assignments = await pageState.assignment;
 
   if (assignments === null) {
-    assignments = await getCachedAllAssignments();
-
-    if (assignments === null) {
-      return <NoDataSkeleton />;
-    }
-
-    return <Content strAssignments={JSON.stringify(assignments)} />;
+    assignments = await pageState.cachedAssignment;
+  }
+  if (assignments === null) {
+    return <NoDataSkeleton />;
   }
 
-  return <Content strAssignments={JSON.stringify(assignments)} />;
+  return (
+    <>
+      <Content strAssignments={JSON.stringify(assignments)} />
+    </>
+  );
 }

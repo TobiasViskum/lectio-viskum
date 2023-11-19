@@ -3,7 +3,7 @@ import { getDate } from "../../../_util/getDate";
 import { Separator } from "@/components/ui/separator";
 import { getPageState } from "../../page-state";
 import { Student } from "@/components/global/Student";
-import { AddUserToAssignment } from "./AddUserToAssignment";
+import { AddUserToAssignment } from "../AddUserToAssignment";
 
 export async function AssignmentInfoSkeleton() {
   const pageState = getPageState();

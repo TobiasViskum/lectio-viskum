@@ -20,8 +20,6 @@ export function MainClientHandler() {
               message: string;
             };
             if (path.includes("/log-ind") === false) {
-              console.log(path);
-
               if (json.status === "error") {
                 if (json.message.includes("Forbidden")) {
                   toast.error("For mange requests til Lectio", {
@@ -30,7 +28,7 @@ export function MainClientHandler() {
                   });
                 } else if (json.message.includes("Invalid")) {
                   toast.error("Kunne ikke logge dig ind");
-                  // router.push("/log-ind");
+                  router.push("/log-ind");
                 } else if (json.message.includes("down")) {
                   toast.error("Lectio er nede", {
                     description:

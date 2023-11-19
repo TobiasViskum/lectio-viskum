@@ -47,7 +47,7 @@ export function Content({ assignment }: { assignment: FullAssignment }) {
               </p>
               <div className="flex flex-col gap-y-4">
                 {studentSubmits.map((submit, i) => {
-                  if (i < 2) return null;
+                  if (i < 1) return null;
 
                   const addSeparator = i !== studentSubmits.length - 1;
 

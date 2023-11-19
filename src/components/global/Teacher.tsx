@@ -69,7 +69,7 @@ export function Teacher({
         alt="img"
         className="obj aspect-square rounded-full object-cover"
       />
-      <div className="flex flex-col text-start">
+      <div className="flex flex-col overflow-hidden text-start">
         <p
           className={cn(
             "line-clamp-2 break-words text-lg font-semibold",

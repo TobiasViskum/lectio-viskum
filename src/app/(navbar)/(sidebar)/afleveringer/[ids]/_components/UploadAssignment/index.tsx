@@ -1,7 +1,11 @@
 import { getPageState } from "../../page-state";
 import { UploadButton } from "./UploadButton";
 
-export async function UploadAssignment() {
+type Props = {
+  inSidebar?: boolean;
+};
+
+export async function UploadAssignment({ inSidebar = false }: Props) {
   const pageState = getPageState();
 
   let assignment = await pageState.assignment;
@@ -16,7 +20,10 @@ export async function UploadAssignment() {
 
   return (
     <>
-      <UploadButton assignmentId={assignment.assignmentId} />
+      <UploadButton
+        assignmentId={assignment.assignmentId}
+        inSidebar={inSidebar}
+      />
     </>
   );
 }

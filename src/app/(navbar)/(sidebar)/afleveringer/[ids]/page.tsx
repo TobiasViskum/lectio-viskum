@@ -14,6 +14,8 @@ import { AssignmentSubmitsSkeleton } from "./_components/AssignmentSubmits/Assig
 import { setPageState } from "./page-state";
 import { UploadAssignment } from "./_components/UploadAssignment";
 import { UploadAssignmentSkeleton } from "./_components/UploadAssignment/UploadAssignmentSkeleton";
+import { SidebarWrapper } from "@/app/_components/SidebarWrapper";
+import { AssignmentSidebar } from "@/app/_components/SidebarWrapper/AssignmentSidebar";
 
 type Props = {
   params: { ids: string };
@@ -31,42 +33,50 @@ export default function AssignmentPage({ params, searchParams }: Props) {
   setPageState(assignmentId);
 
   return (
-    <div className="flex flex-col gap-y-6 pt-6">
-      <Suspense
-        fallback={<AssignmentTitleSkeleton title={searchParams.title} />}
-      >
-        <AssignmentTitle title={searchParams.title} />
-      </Suspense>
-      <div className="flex flex-col gap-y-6">
+    <SidebarWrapper
+      component={
+        <Suspense fallback={<p>Loading</p>}>
+          <AssignmentSidebar />
+        </Suspense>
+      }
+    >
+      <div className="flex flex-col gap-y-6 pt-6">
         <Suspense
-          fallback={
-            <ClassAndTeacherSkeleton
+          fallback={<AssignmentTitleSkeleton title={searchParams.title} />}
+        >
+          <AssignmentTitle title={searchParams.title} />
+        </Suspense>
+        <div className="flex flex-col gap-y-6">
+          <Suspense
+            fallback={
+              <ClassAndTeacherSkeleton
+                schoolClass={searchParams.class}
+                subject={searchParams.subject}
+              />
+            }
+          >
+            <ClassAndTeacher
               schoolClass={searchParams.class}
               subject={searchParams.subject}
             />
-          }
-        >
-          <ClassAndTeacher
-            schoolClass={searchParams.class}
-            subject={searchParams.subject}
-          />
-        </Suspense>
-        <Suspense fallback={<AssignmentInfoSkeleton />}>
-          <AssignmentInfo />
-        </Suspense>
-        <Suspense fallback={<AssignmentDescriptionSkeleton />}>
-          <AssignmentDescription />
-        </Suspense>
-        <Suspense fallback={<AssignmentFilesSkeleton />}>
-          <AssignmentFiles />
-        </Suspense>
-        <Suspense fallback={<UploadAssignmentSkeleton />}>
-          <UploadAssignment />
-        </Suspense>
-        <Suspense fallback={<AssignmentSubmitsSkeleton />}>
-          <AssignmentSubmits />
-        </Suspense>
+          </Suspense>
+          <Suspense fallback={<AssignmentInfoSkeleton />}>
+            <AssignmentInfo />
+          </Suspense>
+          <Suspense fallback={<AssignmentDescriptionSkeleton />}>
+            <AssignmentDescription />
+          </Suspense>
+          <Suspense fallback={<AssignmentFilesSkeleton />}>
+            <AssignmentFiles />
+          </Suspense>
+          <Suspense fallback={<UploadAssignmentSkeleton />}>
+            <UploadAssignment />
+          </Suspense>
+          <Suspense fallback={<AssignmentSubmitsSkeleton />}>
+            <AssignmentSubmits />
+          </Suspense>
+        </div>
       </div>
-    </div>
+    </SidebarWrapper>
   );
 }
