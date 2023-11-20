@@ -6,7 +6,7 @@ import Link from "next/link";
 type Props = { submit: Submit };
 
 export function Submit({ submit }: Props) {
-  const date = submit.time;
+  const date = new Date(submit.time);
   const formattedDate = new Intl.DateTimeFormat("da-dk", {
     dateStyle: "long",
     timeStyle: "short",

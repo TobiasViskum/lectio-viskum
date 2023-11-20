@@ -56,8 +56,9 @@ export default async function AssignmentPage({ params, searchParams }: Props) {
   const formattedDate = new Intl.DateTimeFormat("da-dk", {
     dateStyle: "long",
     timeStyle: "short",
-  }).format(assignment.dueTo);
-  const isAssignmentDue = assignment.dueTo.getTime() - new Date().getTime() < 0;
+  }).format(new Date(assignment.dueTo));
+  const isAssignmentDue =
+    new Date(assignment.dueTo).getTime() - new Date().getTime() < 0;
 
   const studentSubmits = assignment.submits.filter(
     (obj) => "studentId" in obj.submitter,

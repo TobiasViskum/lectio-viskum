@@ -50,7 +50,6 @@ export function Assignment({ assignment, addWeek }: Props) {
             title: assignment.title,
             class: assignment.class,
             subject: assignment.subject,
-            dueTo: assignment.dueTo,
           },
         }}
         className="group relative flex h-[88px] w-full items-center gap-x-4 whitespace-nowrap rounded-lg py-1 pl-1 transition-colors hover:bg-accent focus:bg-accent focus:outline-0"

@@ -52,7 +52,7 @@ export function Content({ assignment }: { assignment: FullAssignment }) {
                   const addSeparator = i !== studentSubmits.length - 1;
 
                   const key = JSON.stringify(submit.time);
-                  const date = submit.time;
+                  const date = new Date(submit.time);
                   const formattedDate = new Intl.DateTimeFormat("da-dk", {
                     dateStyle: "long",
                     timeStyle: "short",

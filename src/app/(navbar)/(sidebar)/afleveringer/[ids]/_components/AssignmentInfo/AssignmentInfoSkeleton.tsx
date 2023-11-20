@@ -11,7 +11,7 @@ export async function AssignmentInfoSkeleton() {
 
   if (cachedAssignment === null) return <NoDataSkeleton />;
 
-  const date = cachedAssignment.dueTo;
+  const date = new Date(cachedAssignment.dueTo);
   const formattedDate = new Intl.DateTimeFormat("da-dk", {
     dateStyle: "long",
     timeStyle: "short",

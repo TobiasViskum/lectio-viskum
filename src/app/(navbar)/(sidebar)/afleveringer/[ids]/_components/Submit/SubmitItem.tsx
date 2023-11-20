@@ -15,7 +15,7 @@ export function SubmitItem({
   const formattedTime = new Intl.DateTimeFormat("da-dk", {
     dateStyle: "long",
     timeStyle: "short",
-  }).format(submit.time);
+  }).format(new Date(submit.time));
 
   return (
     <div className="space-y-2">
