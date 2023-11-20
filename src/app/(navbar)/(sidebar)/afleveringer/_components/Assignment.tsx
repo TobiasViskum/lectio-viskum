@@ -4,8 +4,8 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
-import { getColors } from "../_util/getColors";
-import { getFormattedDate } from "../_util/getFormattedDate";
+import { getColors } from "../../../../../util/schedule/getColors";
+import { getFormattedDate } from "../../../../../util/schedule/getFormattedDate";
 import TooltipHover from "@/components/global/TooltipHover";
 
 type Props = { assignment: Assignment; addWeek: boolean };
@@ -53,7 +53,7 @@ export function Assignment({ assignment, addWeek }: Props) {
             dueTo: assignment.dueTo,
           },
         }}
-        className="group relative flex h-[88px] w-full items-center gap-x-4 whitespace-nowrap rounded-lg bg-background py-1 pl-1 transition-colors hover:bg-muted focus:bg-muted focus:outline-0"
+        className="group relative flex h-[88px] w-full items-center gap-x-4 whitespace-nowrap rounded-lg py-1 pl-1 transition-colors hover:bg-accent focus:bg-accent focus:outline-0"
       >
         {addWeek && <Separator className={cn(separatorTw, "top-0")} />}
         <div className={cn("h-2/3 w-2 rounded-md", sideColor)} />

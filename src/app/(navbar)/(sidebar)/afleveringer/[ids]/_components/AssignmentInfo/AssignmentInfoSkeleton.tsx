@@ -1,5 +1,5 @@
 import { NoDataSkeleton } from "./NoDataSkeleton";
-import { getDate } from "../../../_util/getDate";
+import { getDate } from "../../../../../../../util/schedule/getDate";
 import { Separator } from "@/components/ui/separator";
 import { getPageState } from "../../page-state";
 import { Student } from "@/components/global/Student";
@@ -11,7 +11,7 @@ export async function AssignmentInfoSkeleton() {
 
   if (cachedAssignment === null) return <NoDataSkeleton />;
 
-  const date = getDate(cachedAssignment.dueTo);
+  const date = cachedAssignment.dueTo;
   const formattedDate = new Intl.DateTimeFormat("da-dk", {
     dateStyle: "long",
     timeStyle: "short",

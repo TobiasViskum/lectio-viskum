@@ -1,4 +1,4 @@
-import { getDate } from "../../../_util/getDate";
+import { getDate } from "../../../../../../../util/schedule/getDate";
 import { DrawingPinFilledIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,7 +6,7 @@ import Link from "next/link";
 type Props = { submit: Submit };
 
 export function Submit({ submit }: Props) {
-  const date = getDate(submit.time);
+  const date = submit.time;
   const formattedDate = new Intl.DateTimeFormat("da-dk", {
     dateStyle: "long",
     timeStyle: "short",
@@ -35,7 +35,7 @@ export function Submit({ submit }: Props) {
           <Link
             href={submit.document.href}
             target="_blank"
-            className="break-all text-sm text-blue-400 [text-wrap:balance] hover:underline"
+            className="text-link break-all text-sm [text-wrap:balance] hover:underline"
           >
             {submit.document.name}
           </Link>

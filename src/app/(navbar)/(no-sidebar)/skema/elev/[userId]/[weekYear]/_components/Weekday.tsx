@@ -52,7 +52,7 @@ export async function Weekday({ week, timestamps, userId }: Props) {
               <Link
                 href={`/skema/elev/${userId}/modul/${note.lessonId}`}
                 key={note.text}
-                className="flex items-center text-blue-400 hover:underline"
+                className="flex items-center text-link hover:underline"
               >
                 <Dot /> {note.text}
               </Link>

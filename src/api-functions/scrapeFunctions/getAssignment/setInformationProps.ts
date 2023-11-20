@@ -1,3 +1,4 @@
+import { getDate } from "@/util/schedule/getDate";
 import { titleMap } from ".";
 import { getAllSubjects } from "../getAllSubjects";
 import { getSubjects } from "../getSubjects";
@@ -47,13 +48,16 @@ export async function setInformationProps(
         }
       }
     } else if (foundTitle === "note") {
-      assignment.description = $td.text().split("\n");
+      const text = $td.text().trim();
+      if (text !== "") {
+        assignment.description = text.split("\n");
 
-      for (let l = 0; l < assignment.description.length; l++) {
-        assignment.description[l] = assignment.description[l].replace(
-          /\s{2,}/g,
-          " ",
-        );
+        for (let l = 0; l < assignment.description.length; l++) {
+          assignment.description[l] = assignment.description[l].replace(
+            /\s{2,}/g,
+            " ",
+          );
+        }
       }
     } else if (foundTitle === "class") {
       assignment.subject = getSubjects(
@@ -87,7 +91,7 @@ export async function setInformationProps(
       }
     } else if (foundTitle === "dueTo") {
       const dueTo = $td.text();
-      assignment.dueTo = dueTo;
+      assignment.dueTo = getDate(dueTo);
     } else if (foundTitle === "inTeachingDescription") {
       const inTeachingDescription = $td.text() === "Ja";
       assignment.inTeachingDescription = inTeachingDescription;

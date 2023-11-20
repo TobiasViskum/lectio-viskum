@@ -63,7 +63,7 @@ export function Buttons({ strAssignments }: Props) {
         onClick={() => handleClick("all")}
         className={cn(
           linkTw,
-          filter === "all" ? "text-blue-400" : "text-muted-foreground",
+          filter === "all" ? "text-link" : "text-muted-foreground",
         )}
       >
         <p

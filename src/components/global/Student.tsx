@@ -13,7 +13,7 @@ type Props = {
 
 export function Student({
   student,
-  size = "normal",
+  size,
   disableHover = false,
   linkToSchedule = false,
 }: Props) {

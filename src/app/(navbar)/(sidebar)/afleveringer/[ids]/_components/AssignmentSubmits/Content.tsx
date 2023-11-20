@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Submit } from "../Submit";
 import { Fragment } from "react";
 import { Separator } from "@/components/ui/separator";
-import { getDate } from "../../../_util/getDate";
+import { getDate } from "../../../../../../../util/schedule/getDate";
 import Link from "next/link";
 
 export function Content({ assignment }: { assignment: FullAssignment }) {
@@ -52,7 +52,7 @@ export function Content({ assignment }: { assignment: FullAssignment }) {
                   const addSeparator = i !== studentSubmits.length - 1;
 
                   const key = JSON.stringify(submit.time);
-                  const date = getDate(submit.time);
+                  const date = submit.time;
                   const formattedDate = new Intl.DateTimeFormat("da-dk", {
                     dateStyle: "long",
                     timeStyle: "short",
@@ -67,7 +67,7 @@ export function Content({ assignment }: { assignment: FullAssignment }) {
                         <Link
                           href={submit.document.href}
                           target="_blank"
-                          className="text-sm text-blue-400 hover:underline"
+                          className="text-link text-sm hover:underline"
                         >
                           {submit.document.name}
                         </Link>

@@ -1,5 +1,5 @@
 export function urlify(text: string) {
-  const linkTw = "text-blue-400 font-medium hover:underline";
+  const linkTw = "text-link font-medium hover:underline";
 
   const urlRegex = /(https?:\/\/[^\s<]+)/g;
 

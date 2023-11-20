@@ -8,6 +8,7 @@ import { revalidatePath } from "next/cache";
 import { SidebarWrapper } from "@/app/_components/SidebarWrapper";
 import { AssignmentsSidebar } from "@/app/_components/SidebarWrapper/AssignmentsSidebar";
 import { AssignmentsSidebarSkeleton } from "@/app/_components/SidebarWrapper/AssignmentsSidebar/AssignmentsSidebarSkeleton";
+import { H1 } from "@/components/ui/h1";
 
 export default function AssignmentsPage() {
   revalidatePath("/(navbar)/(sidebar)/afleveringer");
@@ -23,7 +24,7 @@ export default function AssignmentsPage() {
       }
     >
       <div>
-        <h1 className="pt-6 text-4xl font-medium">Afleveringer</h1>
+        <H1 className="pt-6">Afleveringer</H1>
         <div className="sticky top-12 z-40 block bg-black bg-opacity-50 pb-4 pt-6 backdrop-blur-sm md:hidden ">
           <Suspense fallback={<FilterButtonsSkeleton />}>
             <FilterButtons />

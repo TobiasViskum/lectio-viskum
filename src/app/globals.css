@@ -38,7 +38,26 @@
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
 
+    --link: 217 91% 60%;
+
     --radius: 0.5rem;
+  }
+
+  .text-gradient {
+    --text-gradient: linear-gradient(180deg, #fff, #adadad);
+    /* --text-gradient: linear-gradient(180deg, #555, #000); */
+    background: var(--text-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .text-gradient-2 {
+    /* --text-gradient: linear-gradient(180deg, #fff, #adadad); */
+    --text-gradient: linear-gradient(180deg, #bbbbbb, #6b6b6b);
+    background: var(--text-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }
 
@@ -47,7 +66,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-black text-foreground;
   }
 }
 

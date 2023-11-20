@@ -50,6 +50,7 @@ export async function* downloadAsset(href: string, name: string) {
   const form = getForm(text);
   if (form === null) throw new Error("Download failed!");
   yield 10;
+
   const targetPageContent = await fetchCookie(
     `/lectio/${cookies.schoolCode}/login.aspx?prevurl=forside.aspx`,
     { method: "POST", body: form, ...standardFetchOptions },
@@ -65,7 +66,7 @@ export async function* downloadAsset(href: string, name: string) {
         } else {
           return true;
         }
-      } catch {
+      } catch (e) {
         return null;
       }
     })
@@ -80,6 +81,7 @@ export async function* downloadAsset(href: string, name: string) {
         method: "GET",
         ...standardFetchOptions,
       });
+
       const fileContentLength = res.headers.get("Content-Length");
       if (res.body && fileContentLength) {
         const reader = res.body.getReader();

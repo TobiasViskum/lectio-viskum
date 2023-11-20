@@ -53,7 +53,7 @@ export default async function LessonPage({ params }: Props) {
           <Badge className="-ml-1 w-max bg-accent px-1.5 py-0.5 text-left text-2xs text-muted-foreground transition-opacity hover:bg-accent hover:opacity-75 ">
             INFORMATION
           </Badge>
-          {/* <InfoCircledIcon className="h-6 w-6 text-blue-400" /> */}
+          {/* <InfoCircledIcon className="h-6 w-6 text-link" /> */}
           {lesson.classes.length !== 0 && (
             <div className="flex flex-col text-sm">
               <p className="font-semibold">Klasser:</p>

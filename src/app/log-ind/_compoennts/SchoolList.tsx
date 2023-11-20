@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { lectioAPI } from "@/lib/lectio-api";
 import { getAllSchools } from "../_actions/getAllSchools";
 import { toast } from "sonner";
+import { H2 } from "@/components/ui/h2";
 
 type Props = {
   allSchoolsPromise: Promise<School[] | null>;
@@ -75,7 +76,7 @@ export function SchoolList({ allSchoolsPromise }: Props) {
 
   return (
     <>
-      <h2 className="w-full pb-4 text-left font-medium">Skoler</h2>
+      <H2 className="w-full pb-4 text-left">Skoler</H2>
       <div className="school-list group">
         {items.map((school, index) => {
           return (

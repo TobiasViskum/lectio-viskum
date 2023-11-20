@@ -1,3 +1,4 @@
+import { getDate } from "@/util/schedule/getDate";
 import { getStudentById, getTeacherById } from "..";
 
 export async function setSubmitProps(
@@ -12,7 +13,7 @@ export async function setSubmitProps(
     if ($tr.text().includes("Der er ingen indlæg!")) return;
 
     assignment.submits.push({
-      time: "",
+      time: new Date(1970),
       submitter: {},
       comment: "",
       document: { name: "", href: "" },
@@ -24,7 +25,7 @@ export async function setSubmitProps(
       const $td = $(td);
       if (j === 0) {
         const time = $td.text();
-        assignment.submits[i].time = time;
+        assignment.submits[i].time = getDate(time);
       } else if (j === 1) {
         const span = $td.find("span");
 

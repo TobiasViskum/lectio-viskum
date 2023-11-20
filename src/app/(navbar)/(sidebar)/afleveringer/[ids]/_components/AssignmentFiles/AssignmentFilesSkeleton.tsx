@@ -19,7 +19,7 @@ export async function AssignmentFilesSkeleton() {
               <Link
                 href={item.href}
                 target="_blank"
-                className="text-sm text-blue-400 hover:underline"
+                className="text-link text-sm hover:underline"
               >
                 {item.name}
               </Link>

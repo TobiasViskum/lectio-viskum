@@ -24,7 +24,7 @@ export async function AssignmentFiles() {
               <Link
                 href={item.href}
                 target="_blank"
-                className="break-all text-sm text-blue-400 [text-wrap:balance] hover:underline"
+                className="text-link break-all text-sm [text-wrap:balance] hover:underline"
               >
                 {item.name}
               </Link>

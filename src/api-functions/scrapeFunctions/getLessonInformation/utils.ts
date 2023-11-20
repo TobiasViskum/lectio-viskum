@@ -93,7 +93,7 @@ async function setDescription($article: cheerio.Cheerio, $: cheerio.Root) {
     h5: "",
     h6: "",
     p: "text-foreground",
-    a: "text-blue-400 hover:underline cursor-pointer",
+    a: "text-link hover:underline cursor-pointer",
     ul: "pl-12 list-disc",
     ol: "pl-12 list-decimal",
     table: "text-xs @container",
@@ -276,7 +276,7 @@ async function setDescription($article: cheerio.Cheerio, $: cheerio.Root) {
   //           }
   //           $_a.attr("href", href);
   //           $_a.attr("target", target);
-  //           $_a.attr("class", "text-blue-400 font-medium hover:underline");
+  //           $_a.attr("class", "text-link font-medium hover:underline");
   //         }
   //         currHomework.push({ html: $elem.html() || "" });
   //       }

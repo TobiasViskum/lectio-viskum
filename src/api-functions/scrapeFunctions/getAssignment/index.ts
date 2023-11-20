@@ -79,7 +79,7 @@ export async function getAssignment({ assignmentId }: Props) {
     students: [],
     studentTime: 0,
     groupMembersToAdd: [],
-    dueTo: "",
+    dueTo: new Date(1970),
     inTeachingDescription: false,
     awaiter: "",
     status: "",

@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import { getDate } from "../../../_util/getDate";
+import { getDate } from "../../../../../../../util/schedule/getDate";
 import { getPageState } from "../../page-state";
 import { Student } from "@/components/global/Student";
 import { AddUserToAssignment } from "../AddUserToAssignment";
@@ -15,7 +15,7 @@ export async function AssignmentInfo() {
     return null;
   }
 
-  const date = getDate(assignment.dueTo);
+  const date = assignment.dueTo;
   const formattedDate = new Intl.DateTimeFormat("da-dk", {
     dateStyle: "long",
     timeStyle: "short",

@@ -54,30 +54,40 @@ export function UploadButton({ assignmentId, inSidebar = false }: Props) {
     <div
       className={cn("flex flex-col gap-y-2 pb-4", inSidebar ? "" : "md:hidden")}
     >
-      {inSidebar ? (
-        <div>
-          <Badge variant={"secondary"} className="w-fit text-muted-foreground">
-            Upload:
-          </Badge>
-        </div>
-      ) : (
-        <p className={cn("font-medium")}>Upload besvarelse:</p>
-      )}
-      <div className="flex gap-x-2">
-        <Button
+      {!inSidebar && <p className={cn("font-medium")}>Upload besvarelse:</p>}
+      <div className="relative flex items-center gap-x-2 rounded-md border transition-colors [&:hover:not(:has(#close:hover))]:bg-accent">
+        <button
           onClick={() => {
             if (inputRef.current) {
               inputRef.current.click();
             }
           }}
-          variant={"ghost"}
-          className="flex h-auto w-44 gap-x-2 overflow-x-hidden text-ellipsis whitespace-nowrap border px-2 py-2 text-xs"
+          className="flex h-8 w-full items-center gap-x-2 pl-2 text-left text-xs"
         >
-          {file?.name || (
+          {(file !== null && (
+            <p className="w-[calc(100%-32px)] overflow-hidden text-ellipsis whitespace-nowrap">
+              {file?.name}
+            </p>
+          )) || (
             <>
-              Vælg fil <Upload className="h-3 w-3" />
+              Vælg fil
+              <Upload className="aspect-square h-3 min-h-[12px] w-3 min-w-[12px]" />
             </>
           )}
+        </button>
+        <Button
+          id="close"
+          variant={"destructive"}
+          onClick={() => {
+            setFile(null);
+            if (inputRef.current) inputRef.current.value = "";
+          }}
+          className={cn(
+            "absolute right-0 aspect-square h-8 w-8 rounded-sm bg-transparent p-0 text-xs text-foreground",
+            file === null ? "hidden" : "grid place-items-center",
+          )}
+        >
+          <X />
         </Button>
         <input
           ref={inputRef}
@@ -92,23 +102,10 @@ export function UploadButton({ assignmentId, inSidebar = false }: Props) {
           }}
           className="hidden"
         />
-        <Button
-          onClick={() => {
-            setFile(null);
-            if (inputRef.current) inputRef.current.value = "";
-          }}
-          className={cn(
-            "aspect-square h-8 w-8 p-0 text-xs",
-            file === null ? "hidden" : "grid place-items-center",
-          )}
-          variant={"destructive"}
-        >
-          <X />
-        </Button>
       </div>
       <Button
         onClick={doPostAssignment}
-        className={cn("h-8 text-xs", inSidebar ? "w-44" : "w-20")}
+        className={cn("h-8 text-xs", inSidebar ? "w-full" : "w-20")}
         disabled={file === null}
       >
         Upload

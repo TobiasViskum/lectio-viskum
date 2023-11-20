@@ -67,7 +67,7 @@ export async function MainContent({ schedulePromise, userId }: Props) {
                           <li key={note.text}>
                             <Link
                               href={`/skema/elev/${userId}/modul/${note.lessonId}`}
-                              className=" text-blue-400 hover:underline"
+                              className=" text-link hover:underline"
                             >
                               {note.text}
                             </Link>

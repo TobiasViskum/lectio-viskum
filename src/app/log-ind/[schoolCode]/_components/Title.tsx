@@ -1,6 +1,7 @@
 "use client";
 
 import { LoadingDots } from "@/components/loading-components/LoadingDots";
+import { H1 } from "@/components/ui/h1";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -24,9 +25,6 @@ export function Title({ schoolPromise, name }: Props) {
   const [schoolName, setSchoolName] = useState(name || null);
   const router = useRouter();
 
-  const titleTw =
-    "sm:text-4xl text-3xl leading-snug font-semibold flex flex-col [text-wrap:balance] text-center drop-shadow-glow-sm";
-
   useEffect(() => {
     async function verifySchool() {
       const school = await schoolPromise;
@@ -42,13 +40,5 @@ export function Title({ schoolPromise, name }: Props) {
     verifySchool();
   }, [schoolPromise, router, name]);
 
-  return (
-    <>
-      {schoolName === null ? (
-        <TitleSkeleton />
-      ) : (
-        <h1 className={titleTw}>{schoolName}</h1>
-      )}
-    </>
-  );
+  return <>{schoolName === null ? <TitleSkeleton /> : <H1>{schoolName}</H1>}</>;
 }

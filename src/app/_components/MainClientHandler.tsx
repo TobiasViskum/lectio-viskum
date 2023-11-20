@@ -6,6 +6,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
+function deleteCookie(name: string) {
+  // document.cookie = name + "=" + ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
+  // console.log("delete:", name);
+}
+
 export function MainClientHandler() {
   const path = usePathname();
   const router = useRouter();
@@ -94,6 +99,17 @@ export function MainClientHandler() {
           error: (res) => {
             return "Der skete en fejl";
           },
+          finally: () => {
+            console.log(document.cookie);
+
+            // deleteCookie("ASP.NET_SessionId");
+            // deleteCookie("BaseSchoolUrl");
+            // deleteCookie("isloggedin3");
+            // deleteCookie("autologinkey");
+            // deleteCookie("LastAuthenticatedPageLoad");
+            // deleteCookie("lectiogsc");
+          },
+
           className: toastId,
         });
       }

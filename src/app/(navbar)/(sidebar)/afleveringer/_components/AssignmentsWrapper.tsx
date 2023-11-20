@@ -3,6 +3,8 @@
 import { Fragment, useEffect, useState } from "react";
 import { Assignment } from "./Assignment";
 import { vEvent } from "@/lib/viskum/vEvent";
+import { H3 } from "@/components/ui/h3";
+import { P } from "@/components/ui/p";
 
 type Props = { strAssignments: string };
 
@@ -22,6 +24,7 @@ export function AssignmentsWrapper({ strAssignments }: Props) {
 
   let currWeek = "-1";
   let wasEmpty = false;
+  let currStudentTime = 0;
 
   if (filter === "submitted") {
     assignments = assignments.filter((obj) => obj.status === "Afleveret");
@@ -64,18 +67,28 @@ export function AssignmentsWrapper({ strAssignments }: Props) {
           </p>
         </div>
       )}
-      {assignments.map((assignment, index) => {
+      {assignments.map((assignment) => {
         const addWeek = currWeek !== assignment.week;
         if (addWeek) {
+          currStudentTime = 0;
           currWeek = assignment.week;
+          for (let i = 0; i < assignments.length; i++) {
+            const studentTime = Number(
+              assignments[i].studentTime.split(",")[0],
+            );
+            if (assignments[i].week === currWeek && !isNaN(studentTime)) {
+              currStudentTime += studentTime;
+            }
+          }
         }
 
         return (
           <Fragment key={assignment.id}>
             {addWeek && (
-              <p className="w-full pb-2 pt-4 text-xl font-bold">
-                Uge {assignment.week}
-              </p>
+              <H3 className="flex w-full items-end justify-between pb-2 pr-2 pt-4  font-bold md:pr-8">
+                <p>Uge {assignment.week}</p>
+                <P>{currStudentTime} elevtimer</P>
+              </H3>
             )}
             <Assignment addWeek={addWeek} assignment={assignment} />
           </Fragment>
