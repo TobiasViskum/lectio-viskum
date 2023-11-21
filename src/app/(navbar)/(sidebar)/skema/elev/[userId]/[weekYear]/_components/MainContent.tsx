@@ -1,3 +1,4 @@
+import { H3 } from "@/components/ui/h3";
 import { generateTimestamps } from "../_util/generateTimestamps";
 import { Timestamps } from "./Timestamps";
 import { TimestampsLines } from "./TimestampsLines";
@@ -48,12 +49,10 @@ export async function MainContent({ schedulePromise, userId }: Props) {
                 return (
                   <div
                     key={week.date}
-                    className="flex min-w-full flex-col gap-y-2 pb-4 sm:min-w-1/2 lg:min-w-1/3 xl:min-w-1/4 2xl:min-w-1/5"
+                    className="flex h-32 min-w-full flex-col gap-y-2 pb-4 sm:min-w-1/2 lg:min-w-1/3 xl:min-w-1/4 2xl:min-w-1/5"
                   >
                     <div className="text-center">
-                      <p className="text-lg font-medium text-muted-foreground">
-                        {weekDay}
-                      </p>
+                      <H3 className="">{weekDay}</H3>
                       <p className="text-sm text-muted-foreground">
                         {formattedDate}
                       </p>

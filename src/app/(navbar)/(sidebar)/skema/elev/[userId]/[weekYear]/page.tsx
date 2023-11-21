@@ -9,6 +9,8 @@ import { ScheduleHeader } from "./_components/ScheduleHeader";
 import { Suspense } from "react";
 import { TimestampSkeleton } from "./_components/TimestampSkeleton";
 import { ScheduleHeaderSkeleton } from "./_components/ScheduleHeaderSkeleton";
+import { SmartNavigation } from "@/app/_components/SmartNavigation";
+import { H2 } from "@/components/ui/h2";
 
 type Props = {
   params: { userId: string; weekYear: string };
@@ -51,28 +53,31 @@ export default function SchedulePage({ params }: Props) {
 
   return (
     <ScheduleProvider>
+      <Suspense>
+        <SmartNavigation />
+      </Suspense>
       <div id="schedule-main" className="w-full">
-        <h1 className="pt-4 text-2xl font-bold">
+        <H2 className="pt-2 font-extrabold">
           Uge {searchParamsObj.week}, {searchParamsObj.year}
-        </h1>
+        </H2>
         <div className="py-4">
-          <Suspense
+          {/* <Suspense
             fallback={<ScheduleHeaderSkeleton userId={params.userId} />}
-          >
-            <ScheduleHeader
-              schedulePromise={schedulePromise}
-              searchParamsObj={searchParamsObj}
-              userId={params.userId}
-            />
-          </Suspense>
+          > */}
+          <ScheduleHeader
+            schedulePromise={schedulePromise}
+            searchParamsObj={searchParamsObj}
+            userId={params.userId}
+          />
+          {/* </Suspense> */}
         </div>
         <div className="relative flex w-full rounded-md">
-          <Suspense fallback={<TimestampSkeleton />}>
-            <MainContent
-              schedulePromise={schedulePromise}
-              userId={params.userId}
-            />
-          </Suspense>
+          {/* <Suspense fallback={<TimestampSkeleton />}> */}
+          <MainContent
+            schedulePromise={schedulePromise}
+            userId={params.userId}
+          />
+          {/* </Suspense> */}
         </div>
       </div>
       <FetchAdjacentWeeks
