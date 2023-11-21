@@ -58,11 +58,7 @@ export function MainClientHandler() {
     const target = e.target as HTMLButtonElement | null;
 
     const href = target?.getAttribute("data-lectio-href");
-    if (
-      target &&
-      target.tagName.toLowerCase() === "button" &&
-      typeof href === "string"
-    ) {
+    if (target && target.tagName.toLowerCase() === "button" && href) {
       const name = target.textContent;
 
       if (href.includes("/lectio/")) {
@@ -73,15 +69,23 @@ export function MainClientHandler() {
             const json = (await r.json()) as RegularAPIResponse<string>;
 
             if (json.status === "success" && name) {
+              const byteCharacters = atob(json.data);
+              const byteNumbers = new Array(byteCharacters.length);
+              for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+              }
+              const byteArray = new Uint8Array(byteNumbers);
+              const blob = new Blob([byteArray]);
+
               const link = document.createElement("a");
-              link.href = json.data;
+              link.href = URL.createObjectURL(blob);
               link.target = "_blank";
               link.download = name;
               link.click();
             }
             throw new Error("Error");
           })
-          .catch(() => new Error("Error"));
+          .catch((e) => new Error(e));
 
         toast.promise(promise, {
           loading: "Henter fra Lectio... (0%)",

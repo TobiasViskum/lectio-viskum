@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
           const base64 = Buffer.from(arrayBuffer).toString("base64");
           const fullSrc = `data:${contentType};base64,${base64}`;
 
-          return fullSrc;
+          return base64;
         } catch {
           return null;
         }
