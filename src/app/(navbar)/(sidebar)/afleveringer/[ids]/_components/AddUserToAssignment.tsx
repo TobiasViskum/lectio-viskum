@@ -9,6 +9,7 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
+import { H3 } from "@/components/ui/h3";
 import {
   Popover,
   PopoverContent,
@@ -18,6 +19,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { CheckIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -35,6 +37,7 @@ export function AddUserToAssignment({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   async function handleClick() {
     setIsLoading(true);
@@ -44,29 +47,30 @@ export function AddUserToAssignment({
     )?.studentId;
 
     if (newUserId) {
-      const res = await fetch("/api/add-user-to-assignment", {
+      const res = await fetch("/api/post-user-assignment-action", {
         method: "POST",
         body: JSON.stringify({
           assignmentId: assignmentId,
           newUserId: newUserId,
         }),
       }).catch((e) => {
-        console.log(e);
         return null;
       });
       if (res) {
         const result = (await res.json()) as RegularAPIResponse<{
-          addedUser: boolean;
+          isSuccess: boolean;
         }>;
 
         if (result.status === "error") {
           toast.error("Der skete en fejl");
         } else {
-          if (result.data.addedUser) {
-            toast.success("Tilføjede elev til aflevering!");
+          router.refresh();
+          if (result.data.isSuccess) {
+            toast.success("Tilføjede elev til afleveringen!");
           } else {
-            toast.error("Elev har allerede en aflevering");
+            toast.error("Der skete en fejl, da dataen ikke er opdateret");
           }
+          setValue("");
         }
       } else {
         toast.error("Der skete en fejl");
@@ -87,9 +91,7 @@ export function AddUserToAssignment({
   return (
     <div className="flex flex-col gap-y-2">
       {inSidebar ? (
-        <Badge variant={"secondary"} className="w-fit text-muted-foreground">
-          Tilføj medlem:
-        </Badge>
+        <H3>Tilføj medlem</H3>
       ) : (
         <p className="text-xs text-muted-foreground">TILFØJ MEDLEM</p>
       )}
@@ -103,7 +105,7 @@ export function AddUserToAssignment({
               aria-expanded={open}
               className={cn(
                 "h-auto justify-between text-xs",
-                inSidebar ? "w-44" : "w-52",
+                inSidebar ? "w-full" : "w-52",
               )}
             >
               <div className="flex w-full items-center text-left">
@@ -151,7 +153,7 @@ export function AddUserToAssignment({
           disabled={isLoading || value === ""}
           className={cn(
             "flex h-8 gap-x-2 px-0 py-0 text-xs",
-            inSidebar ? "w-44" : "w-24",
+            inSidebar ? "w-full" : "w-24",
           )}
         >
           {isLoading ? "Tilføjer.." : "Tilføj"}

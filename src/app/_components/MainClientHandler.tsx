@@ -54,7 +54,6 @@ export function MainClientHandler() {
   }, [path, router]);
 
   async function handleClick(e: MouseEvent) {
-    e.preventDefault();
     const target = e.target as HTMLButtonElement | null;
 
     const href = target?.getAttribute("data-lectio-href");
@@ -62,6 +61,7 @@ export function MainClientHandler() {
       const name = target.textContent;
 
       if (href.includes("/lectio/")) {
+        e.preventDefault();
         const promise = fetch(
           `/api/get-lectio-file?href=${encodeURIComponent(href)}`,
         )

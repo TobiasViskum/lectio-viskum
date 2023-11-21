@@ -17,8 +17,10 @@ export function UploadButton({ assignmentId, inSidebar = false }: Props) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   async function doPostAssignment() {
+    setIsUploading(true);
     const formData = new FormData();
     if (file !== null) {
       formData.append("fileData", file);
@@ -48,6 +50,7 @@ export function UploadButton({ assignmentId, inSidebar = false }: Props) {
       toast.error("Der er ikke valgt nogen fil");
     }
     setFile(null);
+    setIsUploading(false);
   }
 
   return (
@@ -77,39 +80,43 @@ export function UploadButton({ assignmentId, inSidebar = false }: Props) {
         </button>
         <Button
           id="close"
-          variant={"destructive"}
+          variant={"ghost"}
           onClick={() => {
             setFile(null);
             if (inputRef.current) inputRef.current.value = "";
           }}
           className={cn(
-            "absolute right-0 aspect-square h-8 w-8 rounded-sm bg-transparent p-0 text-xs text-foreground",
+            "absolute right-0 aspect-square h-8 w-8 rounded-sm bg-transparent p-0 text-xs text-foreground hover:bg-red-500",
             file === null ? "hidden" : "grid place-items-center",
           )}
         >
-          <X />
+          <X className="text-red-500 transition-colors group-hover:text-foreground" />
         </Button>
-        <input
-          ref={inputRef}
-          type="file"
-          onChange={(e) => {
-            if (e.target.files) {
-              setFile(e.target.files[0]);
-            } else {
-              setFile(null);
-              if (inputRef.current) inputRef.current.value = "";
-            }
-          }}
-          className="hidden"
-        />
       </div>
       <Button
+        loading={isUploading}
         onClick={doPostAssignment}
-        className={cn("h-8 text-xs", inSidebar ? "w-full" : "w-20")}
+        className={cn(
+          "flex h-8 gap-x-2 text-xs",
+          inSidebar ? "w-full" : "w-20",
+        )}
         disabled={file === null}
       >
-        Upload
+        {isUploading ? "Uploader..." : "Upload"}
       </Button>
+      <input
+        ref={inputRef}
+        type="file"
+        onChange={(e) => {
+          if (e.target.files) {
+            setFile(e.target.files[0]);
+          } else {
+            setFile(null);
+            if (inputRef.current) inputRef.current.value = "";
+          }
+        }}
+        className="hidden"
+      />
     </div>
   );
 }

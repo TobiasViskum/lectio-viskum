@@ -1,25 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { lectioAPI } from "./lib/lectio-api";
 
 export async function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
   const requestHeaders = new Headers(req.headers);
   requestHeaders.set("x-url", pathname + search);
-
-  let xSidebar: XSidebar = "none";
-
-  requestHeaders.set("x-sidebar", "none");
-
-  if (req.nextUrl.pathname === "/afleveringer") {
-    xSidebar = "all-assignments";
-  } else if (req.nextUrl.pathname.includes("/afleveringer/")) {
-    xSidebar = "assignment";
-  } else if (req.nextUrl.pathname.includes("/elevfeedback")) {
-    xSidebar = "student-feedback";
-  } else if (req.nextUrl.pathname.includes("/modul/")) {
-    xSidebar = "lesson";
-  }
-  requestHeaders.set("x-sidebar", xSidebar);
 
   const cookies = req.cookies;
   const username = cookies.get("username")?.value;
@@ -42,43 +26,6 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL(`/skema/elev/${userId}`, req.url), {
       headers: requestHeaders,
     });
-  }
-
-  if (req.nextUrl.pathname === "/opdater-adgang") {
-    const res = await lectioAPI.getIsAuthenticated({
-      username: username,
-      password: password,
-      schoolCode: schoolCode,
-    });
-
-    if (res && res.isAuthenticated) {
-      const expireDate = new Date();
-      expireDate.setFullYear(expireDate.getFullYear() + 1);
-      const response = NextResponse.redirect(new URL("/forside", req.url), {
-        headers: requestHeaders,
-      });
-
-      response.cookies.set({
-        name: "lectioCookies",
-        value: res.lectioCookies,
-        path: "/",
-        expires: expireDate,
-      });
-      response.cookies.set({
-        name: "userId",
-        value: res.studentId,
-        path: "/",
-        expires: expireDate,
-      });
-      return response;
-    } else {
-      return NextResponse.redirect(
-        new URL("/log-ind?redirected=true", req.url),
-        {
-          headers: requestHeaders,
-        },
-      );
-    }
   }
 
   if (lectioCookies) {

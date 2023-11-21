@@ -9,6 +9,7 @@ type Props = {
   size?: "small" | "normal" | "large";
   disableHover?: boolean;
   linkToSchedule?: boolean;
+  removable?: boolean;
 };
 
 export function Student({

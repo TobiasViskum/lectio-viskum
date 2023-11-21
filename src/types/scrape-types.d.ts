@@ -98,7 +98,7 @@ type FullAssignment = Prettify<{
   gradeSystem: string;
   assignmentId: string;
   teacher: Teacher;
-  students: Student[];
+  students: (Student & { isRemovable: boolean })[];
   groupMembersToAdd: { name: string; studentId: string }[];
   studentTime: number;
   dueTo: Date;

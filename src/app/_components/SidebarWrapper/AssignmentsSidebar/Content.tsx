@@ -1,6 +1,8 @@
 "use client";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import { H2 } from "@/components/ui/h2";
+import { H3 } from "@/components/ui/h3";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { vEvent } from "@/lib/viskum/vEvent";
@@ -50,15 +52,15 @@ export function Content({ strAssignments }: Props) {
   return (
     <div className="flex flex-col gap-y-6 px-1">
       <div className="flex flex-col gap-y-2">
-        <h3 className="text-muted-foreground">Søg:</h3>
+        <H2>Søg</H2>
         <Input
-          placeholder="Search..."
+          placeholder="Navn..."
           value={search}
           onChange={(e) => handleInput(e.target.value)}
         />
       </div>
       <div className="flex flex-col gap-y-4">
-        <h3 className="text-muted-foreground">Filtrér:</h3>
+        <H2>Filtre</H2>
         <div className="flex flex-col gap-y-5 px-1">
           <div className="group flex w-full items-center justify-between">
             <div className="flex justify-center gap-x-2">

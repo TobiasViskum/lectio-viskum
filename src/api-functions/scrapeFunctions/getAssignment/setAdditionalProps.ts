@@ -18,7 +18,7 @@ export async function setAdditionalProps(
       if (studentId !== "") {
         const foundStudent = await getStudentById({ userId: studentId });
         if (foundStudent !== null && typeof foundStudent !== "string") {
-          assignment.students.push(foundStudent);
+          assignment.students.push({ ...foundStudent, isRemovable: false });
         }
       }
     } else if (i === 2) {

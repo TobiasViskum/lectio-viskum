@@ -1,14 +1,18 @@
-export function getAddUserToAssignmentForm(
+export function getUserActionAssignmentForm(
   __EVENTVALIDATION: string,
   __VIEWSTATEY_KEY: string,
   masterFooterValue: string,
   userId: string,
+  deleteIndex?: number,
 ) {
   let form = new FormData();
 
   form.append("time", "0");
-  form.append("__EVENTTARGET", "m$Content$groupStudentAddBtn");
-  form.append("__EVENTARGUMENT", "");
+  form.append(
+    "__EVENTTARGET",
+    deleteIndex ? "m$Content$groupMembersGV" : "m$Content$groupStudentAddBtn",
+  );
+  form.append("__EVENTARGUMENT", deleteIndex ? `DEL$${deleteIndex}` : "");
   form.append("__LASTFOCUS", "");
   form.append("__SCROLLPOSITION", "");
   form.append("__VIEWSTATEY_KEY", __VIEWSTATEY_KEY);

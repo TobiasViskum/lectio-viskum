@@ -6,13 +6,14 @@ export async function setGroupInformation(
 ) {
   let studentPromises: Promise<Student | string | null>[] = [];
 
-  const $spans = $(
-    "table#m_Content_groupMembersGV > tbody > tr:not(:first-child) > td > span",
+  const $trs = $(
+    "table#m_Content_groupMembersGV > tbody > tr:not(:first-child)",
   );
 
-  for (let i = 0; i < $spans.length; i++) {
-    const span = $spans[i];
-    const $span = $(span);
+  for (let i = 0; i < $trs.length; i++) {
+    const tr = $trs[i];
+    const $tr = $(tr);
+    const $span = $tr.find("td:nth-child(1) > span");
     const id = ($span.attr("data-lectiocontextcard") || "").replace("S", "");
     if (
       id !== "" &&
@@ -24,9 +25,14 @@ export async function setGroupInformation(
   const students = await Promise.all(studentPromises);
   for (let i = 0; i < students.length; i++) {
     const student = students[i];
+
     if (student !== null && typeof student !== "string") {
-      assignment.students.push(student);
+      assignment.students.push({ ...student, isRemovable: false });
     }
+  }
+  for (let i = 0; i < assignment.students.length; i++) {
+    const isRemovable = $($trs[i]).find("td:nth-child(2) > a").length >= 1;
+    assignment.students[i].isRemovable = isRemovable;
   }
 
   const $select = $("select#m_Content_groupStudentAddDD > option");

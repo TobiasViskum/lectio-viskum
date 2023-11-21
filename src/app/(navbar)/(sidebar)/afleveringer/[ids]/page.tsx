@@ -68,13 +68,7 @@ export default async function AssignmentPage({ params, searchParams }: Props) {
   );
 
   return (
-    <SidebarWrapper
-      component={
-        <Suspense fallback={<p>Loading</p>}>
-          <AssignmentSidebar />
-        </Suspense>
-      }
-    >
+    <SidebarWrapper component={<AssignmentSidebar />}>
       <div className="space-y-6 pt-6">
         {/* <Suspense
           fallback={<AssignmentTitleSkeleton title={searchParams.title} />}
@@ -181,9 +175,9 @@ export default async function AssignmentPage({ params, searchParams }: Props) {
               {assignment.documents.map((doc) => {
                 return (
                   <div className="flex items-center space-x-2" key={doc.href}>
-                    <File className="text-link aspect-square h-5 min-h-[20px] w-5 min-w-[20px]" />
+                    <File className="aspect-square h-5 min-h-[20px] w-5 min-w-[20px] text-link" />
                     <button
-                      className="text-link overflow-x-hidden text-ellipsis whitespace-nowrap text-xs hover:underline xs:text-sm"
+                      className="overflow-x-hidden text-ellipsis whitespace-nowrap text-xs text-link hover:underline xs:text-sm"
                       data-lectio-href={doc.href}
                     >
                       {doc.name}
