@@ -32,13 +32,12 @@ export function Submit({ submit }: Props) {
         />
         <div className="flex flex-col justify-center gap-y-0.5">
           <p className="text-lg font-medium">{submit.submitter.name}</p>
-          <Link
-            href={submit.document.href}
-            target="_blank"
+          <button
+            data-lectio-href={submit.document.href}
             className="text-link break-all text-sm [text-wrap:balance] hover:underline"
           >
             {submit.document.name}
-          </Link>
+          </button>
         </div>
       </div>
       {submit.comment !== "" && (

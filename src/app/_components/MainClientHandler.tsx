@@ -1,15 +1,9 @@
 "use client";
 
-import { downloadAsset } from "@/lib/downloadAsset";
 import { debounce } from "@/util";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
-
-function deleteCookie(name: string) {
-  // document.cookie = name + "=" + ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
-  // console.log("delete:", name);
-}
 
 export function MainClientHandler() {
   const path = usePathname();
@@ -60,36 +54,34 @@ export function MainClientHandler() {
   }, [path, router]);
 
   async function handleClick(e: MouseEvent) {
-    const target = e.target as HTMLAnchorElement | null;
+    e.preventDefault();
+    const target = e.target as HTMLButtonElement | null;
 
-    if (target && target.tagName.toLowerCase() === "a") {
-      const href = target.href;
-      const name = target.text;
+    const href = target?.getAttribute("data-lectio-href");
+    if (
+      target &&
+      target.tagName.toLowerCase() === "button" &&
+      typeof href === "string"
+    ) {
+      const name = target.textContent;
 
       if (href.includes("/lectio/")) {
-        function toHtmlClass(str: string) {
-          str = str.replace(/http[s]?:\/\//, "");
-          str = str.replace(/\W/g, "_");
-          str = str.replace(/^[^a-zA-Z]+/, "");
-          return str;
-        }
+        const promise = fetch(
+          `/api/get-lectio-file?href=${encodeURIComponent(href)}`,
+        )
+          .then(async (r) => {
+            const json = (await r.json()) as RegularAPIResponse<string>;
 
-        const toastId = toHtmlClass(`toast-${href}-${name}`);
-        e.preventDefault();
-        async function downloadAssetWithCheck() {
-          const downloader = downloadAsset(href, name);
-          for await (const progress of downloader) {
-            const existingToast = document.querySelector(
-              `.${toastId} > div:nth-child(2) > div`,
-            );
-            if (existingToast) {
-              existingToast.textContent = `Henter fra Lectio... (${+progress.toFixed(
-                0,
-              )}%)`;
+            if (json.status === "success" && name) {
+              const link = document.createElement("a");
+              link.href = json.data;
+              link.target = "_blank";
+              link.download = name;
+              link.click();
             }
-          }
-        }
-        const promise = downloadAssetWithCheck();
+            throw new Error("Error");
+          })
+          .catch(() => new Error("Error"));
 
         toast.promise(promise, {
           loading: "Henter fra Lectio... (0%)",
@@ -99,18 +91,6 @@ export function MainClientHandler() {
           error: (res) => {
             return "Der skete en fejl";
           },
-          finally: () => {
-            console.log(document.cookie);
-
-            // deleteCookie("ASP.NET_SessionId");
-            // deleteCookie("BaseSchoolUrl");
-            // deleteCookie("isloggedin3");
-            // deleteCookie("autologinkey");
-            // deleteCookie("LastAuthenticatedPageLoad");
-            // deleteCookie("lectiogsc");
-          },
-
-          className: toastId,
         });
       }
     }

@@ -16,13 +16,12 @@ export async function AssignmentFilesSkeleton() {
           const key = `${item.href}-${item.name}`;
           return (
             <li key={key} className="flex ">
-              <Link
-                href={item.href}
-                target="_blank"
+              <button
+                data-lectio-href={item.href}
                 className="text-link text-sm hover:underline"
               >
                 {item.name}
-              </Link>
+              </button>
             </li>
           );
         })}

@@ -21,13 +21,12 @@ export async function AssignmentFiles() {
           const key = `${item.href}-${item.name}`;
           return (
             <li key={key} className="flex ">
-              <Link
-                href={item.href}
-                target="_blank"
+              <button
+                data-lectio-href={item.href}
                 className="text-link break-all text-sm [text-wrap:balance] hover:underline"
               >
                 {item.name}
-              </Link>
+              </button>
             </li>
           );
         })}

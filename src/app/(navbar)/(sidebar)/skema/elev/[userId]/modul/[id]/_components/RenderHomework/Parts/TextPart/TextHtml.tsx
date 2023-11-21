@@ -1,7 +1,5 @@
-import { DocumentButton } from "@/components/global/DocumentButton";
 import { cn } from "@/lib/utils";
 import { urlify } from "@/util/urlify";
-import Link from "next/link";
 
 export function TextHtml({ content }: { content: LessonText }) {
   if (content.href === "") {
@@ -22,19 +20,17 @@ export function TextHtml({ content }: { content: LessonText }) {
   } else if (content.href !== "") {
     if (content.href.includes("/lectio/")) {
       return (
-        <DocumentButton
+        <button
           className={cn(content.isTitle ? "text-lg" : "text-sm")}
-          strDocument={JSON.stringify({
-            name: content.text,
-            href: content.href,
-          })}
-        />
+          data-lectio-href={content.href}
+        >
+          {content.text}
+        </button>
       );
     } else {
       return (
-        <Link
-          href={content.href}
-          target="_blank"
+        <button
+          data-lectio-href={content.href}
           className={cn(
             content.isTitle ? "text-lg" : "text-sm",
             // content.isBold ? "" : "font-light",

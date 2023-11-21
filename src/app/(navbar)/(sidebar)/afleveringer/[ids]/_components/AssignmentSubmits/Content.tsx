@@ -64,13 +64,12 @@ export function Content({ assignment }: { assignment: FullAssignment }) {
                         <p className="text-xs text-muted-foreground">
                           {formattedDate}
                         </p>
-                        <Link
-                          href={submit.document.href}
-                          target="_blank"
+                        <button
+                          data-lectio-href={submit.document.href}
                           className="text-link text-sm hover:underline"
                         >
                           {submit.document.name}
-                        </Link>
+                        </button>
                         {submit.comment !== "" && (
                           <div className="pt-1">
                             <p className="text-sm">Note:</p>

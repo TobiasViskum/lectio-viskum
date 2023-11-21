@@ -84,31 +84,31 @@ export default async function AssignmentPage({ params, searchParams }: Props) {
         <H1>{assignment.title}</H1>
         <div className="grid max-w-2xl grid-cols-2 gap-y-6 text-xs xs:text-sm">
           <div className="border-l border-l-foreground pl-2 text-muted-foreground opacity-80">
-            <div className="font-bold">Klasse:</div>
+            <div className="font-bold text-foreground">Klasse:</div>
             <div className="">
               {[assignment.subject, assignment.class].join(", ")}
             </div>
           </div>
           <div className="border-l border-l-foreground pl-2 text-muted-foreground opacity-80">
-            <div className="font-bold">Frist:</div>
+            <div className="font-bold text-foreground">Frist:</div>
             <div className="">{formattedDate}</div>
           </div>
           <div className="border-l border-l-foreground pl-2 text-muted-foreground opacity-80">
-            <div className="font-bold">Status:</div>
+            <div className="font-bold text-foreground">Status:</div>
             <div className="">{assignment.status}</div>
           </div>
           <div className="border-l border-l-foreground pl-2 text-muted-foreground opacity-80">
-            <div className="font-bold">Fravær:</div>
+            <div className="font-bold text-foreground">Fravær:</div>
             <div className="">
               {isAssignmentDue ? assignment.absence : "0%"}
             </div>
           </div>
           <div className="border-l border-l-foreground pl-2 text-muted-foreground opacity-80">
-            <div className="font-bold">Afventer:</div>
+            <div className="font-bold text-foreground">Afventer:</div>
             <div className="">{assignment.awaiter}</div>
           </div>
           <div className="border-l border-l-foreground pl-2 text-muted-foreground opacity-80">
-            <div className="font-bold">Karakterskala:</div>
+            <div className="font-bold text-foreground">Karakterskala:</div>
             <div className="">{assignment.gradeSystem}</div>
           </div>
         </div>
@@ -182,12 +182,12 @@ export default async function AssignmentPage({ params, searchParams }: Props) {
                 return (
                   <div className="flex items-center space-x-2" key={doc.href}>
                     <File className="text-link aspect-square h-5 min-h-[20px] w-5 min-w-[20px]" />
-                    <Link
+                    <button
                       className="text-link overflow-x-hidden text-ellipsis whitespace-nowrap text-xs hover:underline xs:text-sm"
-                      href={doc.href}
+                      data-lectio-href={doc.href}
                     >
                       {doc.name}
-                    </Link>
+                    </button>
                   </div>
                 );
               })}

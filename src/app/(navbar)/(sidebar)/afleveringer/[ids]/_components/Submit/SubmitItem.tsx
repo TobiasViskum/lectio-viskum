@@ -37,12 +37,12 @@ export function SubmitItem({
           {submit.document.href !== "" && (
             <div className="flex w-full items-center space-x-1 overflow-hidden">
               <File className="text-link aspect-square h-4 min-h-[16px] w-4 min-w-[16px]" />
-              <Link
-                href={submit.document.href}
+              <button
+                data-lectio-href={submit.document.href}
                 className="text-link line-clamp-1 text-sm font-medium hover:underline"
               >
                 {submit.document.name}
-              </Link>
+              </button>
             </div>
           )}
           {submit.document.href === "" && submit.comment !== "" && (
