@@ -11,6 +11,7 @@ import { TimestampSkeleton } from "./_components/TimestampSkeleton";
 import { ScheduleHeaderSkeleton } from "./_components/ScheduleHeaderSkeleton";
 import { SmartNavigation } from "@/app/_components/SmartNavigation";
 import { H2 } from "@/components/ui/h2";
+import { getAllSchoolClasses } from "@/api-functions/scrapeFunctions/getAllSchoolClasses";
 
 type Props = {
   params: { userId: string; weekYear: string };
@@ -50,6 +51,8 @@ export default function SchedulePage({ params }: Props) {
     week: searchParamsObj.week,
     year: searchParamsObj.year,
   });
+
+  getAllSchoolClasses();
 
   return (
     <ScheduleProvider>

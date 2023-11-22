@@ -28,7 +28,10 @@ export async function getAuthenticatedPage({ page, specificPage }: Props) {
 
   const schoolCode = getLectioProps().schoolCode;
 
-  const targetPageContent = await fetchCookie(
+  const timeoutPromise = new Promise<null>((resolve) => {
+    setTimeout(() => resolve(null), 1000);
+  });
+  const targetPageContentPromise = fetchCookie(
     `${baseUrl}/${schoolCode}/${targetPage}`,
     {
       method: "GET",
@@ -63,6 +66,11 @@ export async function getAuthenticatedPage({ page, specificPage }: Props) {
     .catch((err) => {
       return null;
     });
+
+  const targetPageContent = await Promise.race([
+    timeoutPromise,
+    targetPageContentPromise,
+  ]);
 
   return targetPageContent;
 }

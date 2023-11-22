@@ -88,7 +88,7 @@ export function MainClientHandler() {
           .catch((e) => new Error(e));
 
         toast.promise(promise, {
-          loading: "Henter fra Lectio... (0%)",
+          loading: "Henter fra Lectio...",
           success: (res) => {
             return "Download startet!";
           },
