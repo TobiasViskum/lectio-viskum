@@ -6,12 +6,14 @@ import { Suspense } from "react";
 import { CacheRefresher } from "./_components/CacheRefresher";
 import { getFrontPageInformation } from "@/api-functions/scrapeFunctions/getFrontPageInformation";
 import { cn } from "@/lib/utils";
+import { H2 } from "@/components/ui/h2";
 
 export default async function Homepage() {
   const { userId } = getLectioProps();
   const studentPromise = lectioAPI.getStudent.byId({
     userId: userId,
   });
+
   const frontPageInformationPromise = getFrontPageInformation();
 
   const [student, frontPageInformation] = await Promise.all([
@@ -29,7 +31,7 @@ export default async function Homepage() {
         <Student student={student} size="large" disableHover />
       </div>
       <div>
-        <h2 className="py-2 text-3xl font-semibold">Aktuel information</h2>
+        <H2 className="py-2">Aktuel information</H2>
         <div className="flex w-max max-w-md flex-col gap-y-6">
           {frontPageInformation.importantInformation.map((section) => {
             return (

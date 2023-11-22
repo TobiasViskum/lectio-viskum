@@ -16,3 +16,6 @@ export function getAllTeachersTag(schoolCode: string) {
 export function getAllSubjectsTag(schoolCode: string) {
   return `all-subjects:${schoolCode}`;
 }
+export function getAllSchoolClassesTag(schoolCode: string) {
+  return `all-school-classes:${schoolCode}`;
+}

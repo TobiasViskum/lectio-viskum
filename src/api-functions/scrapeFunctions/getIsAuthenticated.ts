@@ -35,6 +35,9 @@ export async function getIsAuthenticated({
             password: password,
           });
         } else {
+          if (text.includes("Server Error")) {
+            return "Forbidden access";
+          }
           return null;
         }
       } catch {
@@ -45,8 +48,8 @@ export async function getIsAuthenticated({
       return null;
     });
 
-  if (form === null) {
-    return null;
+  if (form === null || typeof form === "string") {
+    return form;
   }
 
   const cookies = await fetchCookie(`${baseUrl}/${schoolCode}/login.aspx`, {
@@ -56,6 +59,7 @@ export async function getIsAuthenticated({
   })
     .then(async (res) => {
       const text = await res.text();
+
       if (text.includes("Log ind")) {
         return {
           isAuthenticated: false,

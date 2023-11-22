@@ -52,8 +52,6 @@ export default function SchedulePage({ params }: Props) {
     year: searchParamsObj.year,
   });
 
-  getAllSchoolClasses();
-
   return (
     <ScheduleProvider>
       <Suspense>
