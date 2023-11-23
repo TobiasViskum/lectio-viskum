@@ -30,10 +30,13 @@ export default async function Messages() {
                       <div className="h-3 w-3 rounded-full bg-blue-400" />
                     )}
                   </div>
-                  <div className="flex h-full w-full rounded-md py-1 group-[:hover:not(:has(#checkbox:hover))]:bg-accent">
-                    <div className="grid aspect-square h-fit w-8 place-items-center gap-y-2 p-1">
+                  <div className="flex h-full w-full rounded-md group-[:hover:not(:has(#checkbox:hover))]:bg-accent group-[:hover:not(:has(#favorite:hover))]:bg-accent">
+                    <div className="md:item flex aspect-square h-fit w-fit flex-col place-items-center justify-center gap-2 p-1 md:flex-row">
                       <Checkbox id="checkbox" className="hover:data" />
-                      <StarIcon className="h-6 w-6 p-0.5 text-orange-500" />
+                      <StarIcon
+                        id="favorite"
+                        className="h-6 w-6 p-0.5 text-orange-500"
+                      />
                     </div>
                     <div className="flex flex-col gap-x-10 py-1 pl-2 md:flex-row">
                       <p
@@ -44,8 +47,7 @@ export default async function Messages() {
                             : "font-bold text-muted-foreground",
                         )}
                       >
-                        {message.sender}dsaf klasjf kasjfk asjfk ajskf jasfj
-                        askjf asjf kajsdkf j
+                        {message.sender}
                       </p>
                       <p
                         className={cn(
