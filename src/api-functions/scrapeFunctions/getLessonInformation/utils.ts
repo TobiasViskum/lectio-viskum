@@ -156,7 +156,9 @@ async function setDescription($article: cheerio.Cheerio, $: cheerio.Root) {
           const href = $elem.attr(attr)!;
           if (href.includes("/lectio/")) {
             $elem.replaceWith(
-              `<button data-lectio-href="${href}" class="${styleMap["a"]}">`,
+              `<button data-lectio-href="${href}" class="${
+                styleMap["a"]
+              }">${$elem.text().trim()}</button>`,
             );
           }
         }
