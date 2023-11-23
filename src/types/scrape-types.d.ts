@@ -50,7 +50,6 @@ type Lesson = Prettify<{
   classrooms: string[];
   classes: string[];
   title: string;
-  subjects: string[];
   hasNote: boolean;
   hasHomework: boolean;
   hasOtherContent: boolean;
@@ -63,14 +62,13 @@ type Lesson = Prettify<{
 type Week = Prettify<{
   lessons: Lesson[];
   notes: { text: string; lessonId: string }[];
-  date: date;
+  date: Date;
 }>;
 
 type Assignment = Prettify<{
   week: string;
   class: string;
   href: string;
-  subject: string;
   title: string;
   dueTo: string;
   studentTime: string;
@@ -93,7 +91,6 @@ type FullAssignment = Prettify<{
   title: string;
   documents: LectioDocument[];
   description: string[];
-  subject: string;
   class: string;
   gradeSystem: string;
   assignmentId: string;

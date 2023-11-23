@@ -8,9 +8,6 @@ import { getTitle } from "./getTitle";
 import { getRedisClient } from "@/lib/get-redis-client";
 import { getScheduleTag } from "@/api-functions/getTags";
 import { getTimeInMs } from "@/util/getTimeInMs";
-import { getSubjects } from "../getSubjects";
-import { getSubjectArray } from "./getSubjectArray";
-import { getAllSubjects } from "../getAllSubjects";
 
 type Props = {
   week: string;
@@ -29,6 +26,13 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
 
     if (foundCache && new Date().getTime() < foundCache.expires) {
       // await client.quit();
+      // for (let week of foundCache.data) {
+      //   week.date = new Date(week.date);
+      //   for (let lesson of week.lessons) {
+      //     lesson.time.startDate = new Date(lesson.time.startDate);
+      //     lesson.time.endDate = new Date(lesson.time.endDate);
+      //   }
+      // }
       // return foundCache.data;
     }
   }
@@ -62,7 +66,6 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
     { lessons: [], notes: [], date: new Date() },
     { lessons: [], notes: [], date: new Date() },
   ];
-  const allSubjects = await getAllSubjects();
 
   for (let i = 0; i < $trs.length; i++) {
     const tr = $trs[i];
@@ -77,12 +80,14 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
         const dayMonthMatch = $td
           .text()
           .match(/[a-z]+ \(([0-9]{1,2})\/([0-9]{1,2})\)/i);
-        if (dayMonthMatch) {
+        if (dayMonthMatch && j <= 4) {
           const day = Number(dayMonthMatch[1]);
           const month = Number(dayMonthMatch[2]);
           const numYear = Number(year);
+
           if (!isNaN(day) && !isNaN(month) && !isNaN(numYear)) {
             const date = new Date(numYear, month - 1, day);
+
             weekSchedule[j].date = date;
           }
         }
@@ -104,7 +109,7 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
             textPieces.push($span.text());
           }
           const text = textPieces.join(" ").trim();
-          if (text !== "") {
+          if (text !== "" && j <= 4) {
             weekSchedule[j].notes.push({
               text: text,
               lessonId: lessonId,
@@ -122,8 +127,6 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
 
         const lessons: Lesson[] = [];
 
-        let subjectPromises: Promise<string[]>[] = [];
-
         for (let l = 0; l < $lessons.length; l++) {
           const elem = $lessons[l];
           const $elem = $(elem);
@@ -135,7 +138,6 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
             teachers: [],
             classrooms: [""],
             classes: [],
-            subjects: [],
             title: "",
             hasNote: false,
             hasHomework: false,
@@ -195,9 +197,6 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
             lesson.teachers = getTeachers(info);
             lesson.classrooms = getClassroom(info);
             lesson.classes = getClass(info);
-            const res = await getSubjects(getSubjectArray(info), allSubjects);
-
-            lesson.subjects = res;
             lesson.title = getTitle(info);
             lesson.hasNote = info.includes("Note:");
             lesson.hasHomework = info.includes("Lektier:");
@@ -207,17 +206,9 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
             );
           }
 
-          if (
-            lesson.subjects.length === 1 &&
-            lesson.classes.length === 1 &&
-            lesson.subjects[0] === lesson.classes[0]
-          ) {
-            lesson.classes = [""];
-          }
-
           lessons.push(lesson);
         }
-        weekSchedule[j].lessons = lessons;
+        if (j <= 4) weekSchedule[j].lessons = lessons;
       }
     }
   }
@@ -239,6 +230,53 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
   if (isWeekEmpty) {
     if (client) await client.quit();
     return "No data";
+  }
+
+  for (let week of weekSchedule) {
+    for (let i = 0; i < week.lessons.length; i++) {
+      const lesson = week.lessons[i];
+      const startNum =
+        lesson.time.startDate.getHours() +
+        lesson.time.startDate.getMinutes() / 60;
+      const endNum =
+        lesson.time.endDate.getHours() + lesson.time.endDate.getMinutes() / 60;
+      // const startDate = lesson.time.
+
+      let newOverlappingLessons = 0;
+      let newPosition = 0;
+      for (let j = 0; j < week.lessons.length; j++) {
+        const lesson2 = week.lessons[j];
+        if (lesson.id !== lesson2.id) {
+          const startNum2 =
+            lesson2.time.startDate.getHours() +
+            lesson2.time.startDate.getMinutes() / 60;
+          const endNum2 =
+            lesson2.time.endDate.getHours() +
+            lesson2.time.endDate.getMinutes() / 60;
+
+          // const startDateCheck = lesson.tim
+          const startCheck = startNum === startNum2;
+          const endCheck = endNum === endNum2;
+          const startInsideCheck = startNum > startNum2 && startNum < endNum2;
+          const endInsideCheck = endNum > startNum2 && endNum < endNum2;
+
+          if (startCheck || endCheck || startInsideCheck || endInsideCheck) {
+            newOverlappingLessons += 1;
+          }
+        }
+      }
+
+      // if (newOverlappingLessons < lesson.styling.overlappingLessons) {
+      //   const difference =
+      //     lesson.styling.overlappingLessons - newOverlappingLessons;
+      //   lesson.styling.overlappingLessons = newOverlappingLessons;
+
+      //   lesson.styling.position = Math.max(
+      //     0,
+      //     lesson.styling.position - difference,
+      //   );
+      // }
+    }
   }
 
   if (client) {

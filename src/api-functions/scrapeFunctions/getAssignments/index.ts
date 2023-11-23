@@ -14,8 +14,8 @@ export async function getAssignments() {
     const foundCache = (await client.json.get(tag)) as RedisCache<Assignment[]>;
 
     if (foundCache && new Date().getTime() < foundCache.expires) {
-      await client.quit();
-      return foundCache.data;
+      // await client.quit();
+      // return foundCache.data;
     }
   }
 

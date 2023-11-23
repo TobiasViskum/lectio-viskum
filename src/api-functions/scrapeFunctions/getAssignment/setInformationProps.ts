@@ -1,7 +1,5 @@
 import { getDate } from "@/util/schedule/getDate";
 import { titleMap } from ".";
-import { getAllSubjects } from "../getAllSubjects";
-import { getSubjects } from "../getSubjects";
 import { getTeacherById } from "../getTeacherById";
 
 export async function setInformationProps(
@@ -9,8 +7,6 @@ export async function setInformationProps(
   assignment: FullAssignment,
 ) {
   const $_tr = $("div#m_Content_registerAfl_pa > table > tbody > tr");
-
-  const allSubjects = await getAllSubjects();
 
   for (let i = 0; i < $_tr.length; i++) {
     const tr = $_tr[i];
@@ -60,11 +56,7 @@ export async function setInformationProps(
         }
       }
     } else if (foundTitle === "class") {
-      assignment.subject = getSubjects(
-        [$td.find("span").text()],
-        allSubjects,
-      )[0];
-      assignment.class = $td.find("span").text().split(" ")[0];
+      assignment.class = $td.find("span").text();
     } else if (foundTitle === "gradeSystem") {
       assignment.gradeSystem = $td.find("span").text();
     } else if (foundTitle === "teacher") {

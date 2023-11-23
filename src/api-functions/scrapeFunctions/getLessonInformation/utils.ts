@@ -96,10 +96,10 @@ async function setDescription($article: cheerio.Cheerio, $: cheerio.Root) {
     a: "text-link hover:underline cursor-pointer",
     ul: "pl-12 list-disc",
     ol: "pl-12 list-decimal",
-    table: "text-xs @container",
+    table: "text-xs",
     tbody: "text-xs rounded-md overflow-x-hidden",
-    tr: "text-xs @sm:text-2xs first:border-t border-b",
-    td: "text-xs @sm:text-2xs py-2 md:px-2 first:border-l border-r",
+    tr: "text-xs first:border-t border-b",
+    td: "text-xs py-2 md:px-2 first:border-l border-r",
     iframe: "w-full",
   };
 
@@ -152,7 +152,14 @@ async function setDescription($article: cheerio.Cheerio, $: cheerio.Root) {
           }
         }
 
-        if (attr === "href") continue;
+        if (attr === "href") {
+          const href = $elem.attr(attr)!;
+          if (href.includes("/lectio/")) {
+            $elem.replaceWith(
+              `<button data-lectio-href="${href}" class="${styleMap["a"]}">`,
+            );
+          }
+        }
         if (attr === "width") continue;
         if (attr === "height") continue;
         if (attr === "target") continue;

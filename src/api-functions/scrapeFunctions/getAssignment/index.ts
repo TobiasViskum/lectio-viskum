@@ -72,7 +72,6 @@ export async function getAssignment({ assignmentId }: Props) {
     title: "",
     documents: [],
     description: [],
-    subject: "",
     class: "",
     gradeSystem: "",
     teacher: { name: "", initials: "", teacherId: "", imgSrc: "", imgUrl: "" },

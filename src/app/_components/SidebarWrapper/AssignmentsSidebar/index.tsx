@@ -1,6 +1,6 @@
 import { Content } from "./Content";
 import { NoDataSkeleton } from "./NoDataSkeleton";
-import { getPageState } from "@/app/(navbar)/(sidebar)/afleveringer/page-state";
+import { getPageState } from "@/app/(navbar)/afleveringer/page-state";
 
 export async function AssignmentsSidebar() {
   const pageState = getPageState();

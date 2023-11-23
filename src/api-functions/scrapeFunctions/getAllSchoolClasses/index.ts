@@ -3,7 +3,6 @@ import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { load } from "cheerio";
 import { standardFetchOptions } from "@/api-functions/standardFetchOptions";
 import { getLastAuthenticatedCookie } from "@/api-functions/getLastAuthenticatedCookie";
-import { getSchoolClassForm } from "@/api-functions/getPage/getForm/get-school-class-form";
 import { getRedisClient } from "@/lib/get-redis-client";
 import { getAllSchoolClassesTag } from "@/api-functions/getTags";
 import { getTimeInMs } from "@/util/getTimeInMs";

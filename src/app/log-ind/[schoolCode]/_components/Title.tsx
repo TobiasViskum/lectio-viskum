@@ -40,5 +40,13 @@ export function Title({ schoolPromise, name }: Props) {
     verifySchool();
   }, [schoolPromise, router, name]);
 
-  return <>{schoolName === null ? <TitleSkeleton /> : <H1>{schoolName}</H1>}</>;
+  return (
+    <>
+      {schoolName === null ? (
+        <TitleSkeleton />
+      ) : (
+        <H1 className="text-center">{schoolName}</H1>
+      )}
+    </>
+  );
 }

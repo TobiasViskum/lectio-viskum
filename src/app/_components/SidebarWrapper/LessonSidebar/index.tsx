@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Content } from "./Content";
 import { LoadingDots } from "@/components/loading-components/LoadingDots";
-import { getPageState } from "@/app/(navbar)/(sidebar)/skema/elev/[userId]/modul/[id]/page-state";
+import { getPageState } from "@/app/(navbar)/skema/elev/[userId]/modul/[id]/page-state";
 
 export async function LessonSidebar() {
   // const [lesson, setLesson] = useState<FullLesson | null>(null);

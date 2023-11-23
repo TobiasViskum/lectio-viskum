@@ -1,4 +1,4 @@
-import { getPageState } from "@/app/(navbar)/(sidebar)/skema/elev/[userId]/modul/[id]/page-state";
+import { getPageState } from "@/app/(navbar)/skema/elev/[userId]/modul/[id]/page-state";
 import { LoadingDots } from "@/components/loading-components/LoadingDots";
 import { Input } from "@/components/ui/input";
 

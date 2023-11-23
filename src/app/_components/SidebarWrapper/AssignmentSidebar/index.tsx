@@ -1,6 +1,6 @@
-import { AddUserToAssignment } from "@/app/(navbar)/(sidebar)/afleveringer/[ids]/_components/AddUserToAssignment";
-import { UploadButton } from "@/app/(navbar)/(sidebar)/afleveringer/[ids]/_components/UploadAssignment/UploadButton";
-import { getPageState } from "@/app/(navbar)/(sidebar)/afleveringer/[ids]/page-state";
+import { AddUserToAssignment } from "@/app/(navbar)/afleveringer/[ids]/_components/AddUserToAssignment";
+import { UploadButton } from "@/app/(navbar)/afleveringer/[ids]/_components/UploadAssignment/UploadButton";
+import { getPageState } from "@/app/(navbar)/afleveringer/[ids]/page-state";
 import { Teacher } from "@/components/global/Teacher";
 import { H2 } from "@/components/ui/h2";
 import { Separator } from "@/components/ui/separator";
