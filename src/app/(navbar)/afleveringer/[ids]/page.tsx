@@ -75,7 +75,7 @@ export default async function AssignmentPage({ params, searchParams }: Props) {
         >
           <AssignmentTitle title={searchParams.title} />
         </Suspense> */}
-        <H1 className="pt-6">{assignment.title}</H1>
+        <H1>{assignment.title}</H1>
         <div className="grid max-w-2xl grid-cols-2 gap-y-6 text-xs xs:text-sm">
           <div className="border-l border-l-foreground pl-2 text-muted-foreground opacity-80">
             <div className="font-bold text-foreground">Klasse:</div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { capitalizeFirstLetter } from "@/util/capitalizeFirstLetter";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Fragment } from "react";
@@ -54,6 +55,22 @@ export function SmartNavigation() {
         });
       }
     }
+  } else if (path.includes("/beskeder/")) {
+    const secondPath = path.split("/")[2];
+
+    linkPath.push({
+      href: "/beskeder",
+      name: "Beskeder",
+    });
+    linkPath.push({
+      href: `/beskeder/${secondPath}`,
+      name: capitalizeFirstLetter(secondPath),
+    });
+  } else if (path.includes("/beskeder")) {
+    linkPath.push({
+      href: "/beskeder",
+      name: "Beskeder",
+    });
   }
 
   let linkTw = "hover:underline hover:text-blue-600 ";

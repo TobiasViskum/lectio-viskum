@@ -24,7 +24,7 @@ export default function AssignmentsPage() {
       }
     >
       <div>
-        <H1 className="pt-6">Afleveringer</H1>
+        <H1>Afleveringer</H1>
         <div className="sticky top-12 z-40 block bg-black bg-opacity-50 pb-4 pt-6 backdrop-blur-sm md:hidden ">
           <Suspense fallback={<FilterButtonsSkeleton />}>
             <FilterButtons />

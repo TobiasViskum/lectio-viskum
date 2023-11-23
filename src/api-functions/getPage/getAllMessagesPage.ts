@@ -2,6 +2,7 @@ import { load } from "cheerio";
 import { getAuthenticatedPage } from ".";
 import { getAllMessagesForm } from "./getForm/all-messages-form";
 import { standardFetchOptions } from "../standardFetchOptions";
+import { getLastAuthenticatedCookie } from "../getLastAuthenticatedCookie";
 
 export async function getAllMessagesPage() {
   const res = await getAuthenticatedPage({
@@ -31,6 +32,7 @@ export async function getAllMessagesPage() {
         method: "POST",
         body: form,
         ...standardFetchOptions,
+        headers: { Cookie: getLastAuthenticatedCookie() },
       },
     ).then(async (res) => {
       try {

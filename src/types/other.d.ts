@@ -51,6 +51,7 @@ type Pages =
   | "messages-newest"
   | "messages-unread"
   | "messages-personal"
+  | "messages-favorites"
   | "messages-all"
   | "messages-deleted"
   | "studyPlan-calender"
@@ -70,6 +71,12 @@ type GetPageReturn =
     }
   | null;
 
-type MessagesTypes = "all" | "unread" | "personal" | "newest" | "deleted";
+type MessagesTypes =
+  | "all"
+  | "unread"
+  | "personal"
+  | "newest"
+  | "deleted"
+  | "favorites";
 
 type CacheMap<T = any> = Map<string, { data: T; expires: number }>;

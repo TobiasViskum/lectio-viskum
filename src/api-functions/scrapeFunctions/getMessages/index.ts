@@ -3,14 +3,6 @@ import { getAuthenticatedPage } from "../../getPage/getAuthenticatedPage";
 import { getAllMessagesPage } from "../../getPage/getAllMessagesPage";
 import { getMessageInformation } from "./utils";
 
-type Message = {
-  title: string;
-  latestSender: string;
-  sender: string;
-  receivers: string;
-  latestChange: string;
-};
-
 type Props = { type: MessagesTypes };
 
 export async function getMessages({ type }: Props) {
@@ -20,6 +12,7 @@ export async function getMessages({ type }: Props) {
     deleted: "messages-deleted",
     newest: "messages-newest",
     unread: "messages-unread",
+    favorites: "messages-favorites",
   } as const;
 
   let res: GetPageReturn = null;
@@ -42,34 +35,20 @@ export async function getMessages({ type }: Props) {
     return "No data";
   }
 
-  const allGroupReceivers = Array.from(
-    $(
-      'div[lec-node-id="-20"] > div[lec-role="ltv-sublist"] > div > div > a > div',
-    ),
-  ).map((value, index) => {
-    const $value = $(value);
-    return $value.text();
-  });
+  let messages: Message[] = [];
+  const $messages = $(
+    "#s_m_Content_Content_threadGV_ctl00 > tbody > tr:not(:first-child)",
+  );
 
-  const messages: Message[] = $(
-    "#s_m_Content_Content_threadGV_ctl00 > tbody > tr:not([class])",
-  )
-    .map((_index, _elem) => {
-      const $_elem = $(_elem);
-      const message = $_elem
-        .map((index, elem) => {
-          const $elem = $(elem);
-          const messageInformation = getMessageInformation(
-            $elem,
-            allGroupReceivers,
-          );
+  for (let i = 0; i < $messages.length; i++) {
+    const tr = $messages[i];
+    const $tr = $(tr);
 
-          return messageInformation;
-        })
-        .get();
-      return message;
-    })
-    .get();
+    const messageInformation = getMessageInformation($tr);
+    if (messageInformation) {
+      messages.push(messageInformation);
+    }
+  }
 
   if (messages.length === 0) {
     return "No data";

@@ -14,6 +14,7 @@ import { getWeekAndYear } from "@/util/getWeekAndYear";
 import {
   BookmarkIcon,
   CalendarIcon,
+  EnvelopeClosedIcon,
   PaperPlaneIcon,
 } from "@radix-ui/react-icons";
 
@@ -76,6 +77,15 @@ export function NavbarSheet() {
               <p className="text-lg">Lektier</p>
             </Link>
             {/* </SheetClose> */}
+
+            <Link
+              role="link"
+              href={"/beskeder/nyeste"}
+              className="s flex items-center gap-x-2 rounded-md px-3 py-1.5 hover:bg-accent"
+            >
+              <EnvelopeClosedIcon className="h-5 w-5" />
+              <p className="text-lg">Beskeder</p>
+            </Link>
           </div>
         </SheetContent>
       </Sheet>

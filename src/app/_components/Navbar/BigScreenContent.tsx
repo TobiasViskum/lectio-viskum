@@ -56,7 +56,7 @@ export function BigScreenContent() {
       </div>
       <div>
         <Link
-          href={"/beskeder"}
+          href={"/beskeder/beskeder"}
           className="flex items-center gap-x-2 rounded-md px-4 py-2 text-sm font-semibold hover:bg-accent"
         >
           Beskeder

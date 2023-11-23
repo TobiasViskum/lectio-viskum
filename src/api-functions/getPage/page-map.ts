@@ -17,11 +17,12 @@ export function getPageFromMap({ page }: Props) {
     "grades-messages": "grades/grade_karakterblad.aspx",
     "borrowed-books": "BD/UserReservations.aspx",
     questionnaire: "spoergeskema/spoergeskema_rapport.aspx",
-    "messages-newest": "beskeder2.aspx?selectedfolderid=-70",
-    "messages-unread": "beskeder2.aspx?selectedfolderid=-40",
-    "messages-all": "beskeder2.aspx?selectedfolderid=-30",
-    "messages-personal": "beskeder2.aspx?selectedfolderid=-10",
-    "messages-deleted": "beskeder2.aspx?selectedfolderid=-60",
+    "messages-newest": "beskeder2.aspx?mappeid=-70",
+    "messages-unread": "beskeder2.aspx?mappeid=-40",
+    "messages-all": "beskeder2.aspx?mappeid=-30",
+    "messages-personal": "beskeder2.aspx?mappeid=-10",
+    "messages-deleted": "beskeder2.aspx?mappeid=-60",
+    "messages-favorites": "beskeder2.aspx?mappeid=-50",
 
     teachers:
       "subnav/members.aspx?holdelementid=35338545824&showteachers=1&showstudents=1&reporttype=classpicture",

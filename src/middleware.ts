@@ -51,7 +51,7 @@ export const config = {
     "/afleveringer/:path*",
     "/forside",
     "/opdater-adgang",
-    "/beskeder",
+    "/beskeder/:path*",
     "/indstillinger",
     "/lektier",
   ],

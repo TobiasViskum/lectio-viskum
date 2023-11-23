@@ -35,7 +35,9 @@ export function MainClientHandler() {
                   });
                 }
               } else {
-                router.refresh();
+                if (!window.location.href.includes("notFound=true")) {
+                  // router.refresh();
+                }
               }
             }
           })

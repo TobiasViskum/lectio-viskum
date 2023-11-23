@@ -181,3 +181,14 @@ type FrontPageInformation = Prettify<{
     nextHomework: { title: string; dueTo: Date; schoolClass: SchoolClass }[];
   };
 }>;
+
+type Message = Prettify<{
+  title: string;
+  latestSender: string;
+  sender: string;
+  receivers: string;
+  latestChange: string;
+  isUnread: boolean;
+  id: string;
+  eventArgument: { [key: string]: string };
+}>;
