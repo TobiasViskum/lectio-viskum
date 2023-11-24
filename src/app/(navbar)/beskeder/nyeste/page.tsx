@@ -30,19 +30,20 @@ export default async function Messages() {
                   <div
                     role="button"
                     tabIndex={0}
-                    className="flex min-h-[60px] w-full items-center gap-x-2 rounded-md px-2 py-2 lg:min-h-[48px] xl:gap-x-6 [&:hover:not(:has(#iconsHolder:hover))]:bg-accent"
+                    className="flex min-h-[60px] w-full items-center gap-x-2 rounded-md px-2 py-2 transition-colors @container lg:min-h-[48px] xl:gap-x-6 [&:hover:not(:has(#iconsHolder:hover))]:bg-accent"
                   >
                     <div
-                      className="flex flex-col justify-center gap-x-2 gap-y-1 lg:flex-row lg:items-center lg:justify-start"
+                      className="flex h-full flex-col justify-center gap-x-2 gap-y-1 lg:flex-row lg:items-center lg:justify-start"
                       id="iconsHolder"
                     >
                       <Checkbox className="m-0.5 h-4 w-4" />
                       <StarIcon className="h-5 w-5 text-orange-500" />
                     </div>
-                    <div className="flex flex-col items-center gap-y-1.5 text-left lg:flex-row">
+                    <div className="flex flex-col items-start gap-y-1.5 text-left lg:flex-row lg:items-center">
                       <p
                         className={cn(
-                          "w-80 min-w-[320px] items-center overflow-x-hidden text-ellipsis whitespace-nowrap text-sm lg:w-44 lg:min-w-[176px]",
+                          "items-center overflow-x-hidden text-ellipsis whitespace-nowrap text-sm ",
+                          "w-[min(70cqw,400px)] [@media(min-width:1024px)]:w-[min(30cqw,300px)]",
                           message.isUnread
                             ? "font-extrabold text-foreground"
                             : "font-bold text-muted-foreground",
@@ -52,7 +53,7 @@ export default async function Messages() {
                       </p>
                       <p
                         className={cn(
-                          "w-full text-sm lg:pl-4",
+                          "w-[min(70cqw,400px)] overflow-x-hidden text-ellipsis whitespace-nowrap text-sm lg:pl-4 [@media(min-width:1024px)]:w-[min(50cqw,400px)]",
                           message.isUnread
                             ? "text-foreground"
                             : "text-muted-foreground",
@@ -62,11 +63,14 @@ export default async function Messages() {
                       </p>
                     </div>
 
-                    <div className="ml-auto mr-4 flex items-center justify-end opacity-50">
-                      <p className="text-xs text-muted-foreground ">
-                        {message.latestChange}
-                      </p>
-                      <ChevronRight className="h-5 min-h-[20px] w-5 min-w-[20px] text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:scale-110" />
+                    <div
+                      className={cn(
+                        "ml-auto flex items-center justify-end text-muted-foreground",
+                        message.isUnread ? "opacity-90" : "opacity-50",
+                      )}
+                    >
+                      <p className="w-max text-xs">{message.latestChange}</p>
+                      <ChevronRight className="h-5 min-h-[20px] w-5 min-w-[20px] transition-transform group-hover:translate-x-1 group-hover:scale-110" />
                     </div>
                   </div>
                 </div>

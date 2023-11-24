@@ -36,7 +36,7 @@ export function MainClientHandler() {
                 }
               } else {
                 if (!window.location.href.includes("notFound=true")) {
-                  // router.refresh();
+                  router.refresh();
                 }
               }
             }
