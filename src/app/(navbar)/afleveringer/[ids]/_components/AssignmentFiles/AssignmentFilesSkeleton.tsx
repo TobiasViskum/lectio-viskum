@@ -16,10 +16,7 @@ export async function AssignmentFilesSkeleton() {
           const key = `${item.href}-${item.name}`;
           return (
             <li key={key} className="flex ">
-              <button
-                data-lectio-href={item.href}
-                className="text-link text-sm hover:underline"
-              >
+              <button data-lectio-href={item.href} className="link text-sm">
                 {item.name}
               </button>
             </li>

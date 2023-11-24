@@ -7,7 +7,7 @@ type Props = { type: MessagesTypes };
 
 export async function getMessages({ type }: Props) {
   const typeMap = {
-    personal: "messages-personal",
+    sent: "messages-sent",
     all: "messages-all",
     deleted: "messages-deleted",
     newest: "messages-newest",

@@ -45,7 +45,7 @@ export async function getAuthenticatedPage({ page, specificPage }: Props) {
       try {
         const text = await res.text();
 
-        if (text.includes("Log ind")) {
+        if (res.url.includes("login.apsx")) {
           return "Not authenticated";
         } else if (text.includes("Der opstod en ukendt fejl")) {
           const school = await getSchoolBySchoolCode({

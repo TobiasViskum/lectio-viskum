@@ -1,17 +1,19 @@
-import { SidebarWrapper } from "@/app/_components/SidebarWrapper";
 import { H1 } from "@/components/ui/h1";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default function MessagesPage() {
+  redirect("/beskeder/nyeste");
+
   return (
-    <SidebarWrapper component={<p></p>}>
+    <div>
       <H1>Beskeder</H1>
       <div>
         <p>Vælg beskedtype:</p>
-        <Link href={"/beskeder/nyeste"} className="text-link hover:underline">
+        <Link href={"/beskeder/nyeste"} className="link">
           Nyeste
         </Link>
       </div>
-    </SidebarWrapper>
+    </div>
   );
 }

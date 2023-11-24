@@ -52,7 +52,6 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
     if (client) await client.quit();
     return res;
   }
-
   const $ = res.$;
 
   const $trs = $(

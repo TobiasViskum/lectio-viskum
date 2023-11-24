@@ -175,7 +175,7 @@ export default async function AssignmentPage({ params, searchParams }: Props) {
                   <div className="flex items-center space-x-2" key={doc.href}>
                     <File className="aspect-square h-5 min-h-[20px] w-5 min-w-[20px] text-link" />
                     <button
-                      className="overflow-x-hidden text-ellipsis whitespace-nowrap text-xs text-link hover:underline xs:text-sm"
+                      className="link overflow-x-hidden text-ellipsis whitespace-nowrap text-xs xs:text-sm"
                       data-lectio-href={doc.href}
                     >
                       {doc.name}

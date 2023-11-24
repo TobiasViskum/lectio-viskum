@@ -50,7 +50,7 @@ type Pages =
   | "questionnaire"
   | "messages-newest"
   | "messages-unread"
-  | "messages-personal"
+  | "messages-sent"
   | "messages-favorites"
   | "messages-all"
   | "messages-deleted"
@@ -74,7 +74,7 @@ type GetPageReturn =
 type MessagesTypes =
   | "all"
   | "unread"
-  | "personal"
+  | "sent"
   | "newest"
   | "deleted"
   | "favorites";

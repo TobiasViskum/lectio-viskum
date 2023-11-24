@@ -34,7 +34,7 @@ export function TextHtml({ content }: { content: LessonText }) {
           className={cn(
             content.isTitle ? "text-lg" : "text-sm",
             // content.isBold ? "" : "font-light",
-            "text-link hover:underline  ",
+            "link",
           )}
           dangerouslySetInnerHTML={{ __html: content.text }}
         />

@@ -1,10 +1,11 @@
-import { load } from "cheerio";
+import { getLectioProps } from "@/lib/auth/getLectioProps";
 import { getAuthenticatedPage } from ".";
-import { getAllMessagesForm } from "./getForm/all-messages-form";
+import { getMessageForm } from "./getForm/get-message-form";
 import { standardFetchOptions } from "../standardFetchOptions";
 import { getLastAuthenticatedCookie } from "../getLastAuthenticatedCookie";
+import { load } from "cheerio";
 
-export async function getAllMessagesPage() {
+export async function getMessagePage(messageId: string) {
   const res = await getAuthenticatedPage({
     page: "messages-all",
   });
@@ -21,20 +22,16 @@ export async function getAllMessagesPage() {
   const masterFooterValue = $('input[name="masterfootervalue"]').val();
 
   if (__VIEWSTATEY_KEY && masterFooterValue) {
-    const form = getAllMessagesForm({
-      __VIEWSTATEY_KEY: __VIEWSTATEY_KEY,
-      masterFooterValue: masterFooterValue,
-    });
+    const schoolCode = getLectioProps().schoolCode;
+    const url = `https://www.lectio.dk/lectio/${schoolCode}/beskeder2.aspx?mappeid=-30`;
+    const form = getMessageForm(messageId, __VIEWSTATEY_KEY, masterFooterValue);
 
-    const pageContent = await fetchCookie(
-      "https://www.lectio.dk/lectio/243/beskeder2.aspx?mappeid=-30",
-      {
-        method: "POST",
-        body: form,
-        ...standardFetchOptions,
-        headers: { Cookie: getLastAuthenticatedCookie() },
-      },
-    )
+    return await fetchCookie(url, {
+      method: "POST",
+      body: form,
+      ...standardFetchOptions,
+      headers: { Cookie: getLastAuthenticatedCookie() },
+    })
       .then(async (res) => {
         const text = await res.text();
         if (text.includes("Log ind")) {
@@ -46,9 +43,6 @@ export async function getAllMessagesPage() {
         }
       })
       .catch(() => null);
-
-    return pageContent;
-  } else {
-    return null;
   }
+  return null;
 }

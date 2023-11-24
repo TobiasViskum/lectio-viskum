@@ -66,7 +66,7 @@ export function Content({ assignment }: { assignment: FullAssignment }) {
                         </p>
                         <button
                           data-lectio-href={submit.document.href}
-                          className="text-sm text-link hover:underline"
+                          className="link text-sm"
                         >
                           {submit.document.name}
                         </button>

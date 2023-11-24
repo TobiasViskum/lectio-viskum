@@ -20,7 +20,7 @@ export function getPageFromMap({ page }: Props) {
     "messages-newest": "beskeder2.aspx?mappeid=-70",
     "messages-unread": "beskeder2.aspx?mappeid=-40",
     "messages-all": "beskeder2.aspx?mappeid=-30",
-    "messages-personal": "beskeder2.aspx?mappeid=-10",
+    "messages-sent": "beskeder2.aspx?mappeid=-80",
     "messages-deleted": "beskeder2.aspx?mappeid=-60",
     "messages-favorites": "beskeder2.aspx?mappeid=-50",
 

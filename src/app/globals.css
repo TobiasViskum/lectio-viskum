@@ -68,6 +68,9 @@
   body {
     @apply bg-black text-foreground;
   }
+  .link {
+    @apply text-link hover:text-blue-600 hover:underline;
+  }
 }
 
 #schedule-main {

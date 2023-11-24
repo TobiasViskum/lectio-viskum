@@ -126,13 +126,13 @@ export async function Lesson({ lesson, timestamps, userId }: Props) {
           {lesson.title !== "" && (
             <div
               className={cn(
-                `@[124px]:semibold flex flex-wrap items-start gap-x-1.5 break-words break-all font-bold  leading-3 transition-colors ${getTitleSize()}`,
+                `flex flex-wrap items-start gap-x-1.5 break-words break-all font-bold leading-3 transition-colors ${getTitleSize()}`,
 
                 textColor,
                 hoverTextColor,
               )}
             >
-              {lesson.title}
+              <p>{lesson.title}</p>
 
               <Icons />
             </div>

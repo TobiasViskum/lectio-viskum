@@ -189,6 +189,6 @@ type Message = Prettify<{
   receivers: string;
   latestChange: string;
   isUnread: boolean;
+  isFavorite: boolean;
   id: string;
-  eventArgument: { [key: string]: string };
 }>;

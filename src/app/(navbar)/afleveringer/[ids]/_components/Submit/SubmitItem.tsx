@@ -36,10 +36,10 @@ export function SubmitItem({
 
           {submit.document.href !== "" && (
             <div className="flex w-full items-center space-x-1 overflow-hidden">
-              <File className="text-link aspect-square h-4 min-h-[16px] w-4 min-w-[16px]" />
+              <File className="aspect-square h-4 min-h-[16px] w-4 min-w-[16px] text-link" />
               <button
                 data-lectio-href={submit.document.href}
-                className="text-link line-clamp-1 text-sm font-medium hover:underline"
+                className="link line-clamp-1 text-sm font-medium"
               >
                 {submit.document.name}
               </button>
