@@ -13,7 +13,7 @@ export function getMessageInformation($elem: cheerio.Cheerio) {
   const latestSender = $elem.children().eq(4).children().eq(0).attr("title");
   const sender = $elem.children().eq(5).children().eq(0).attr("title");
   const receivers = $elem.children().eq(6).children().eq(0).attr("title");
-  const latestChange = formatLatestChange($elem.children().eq(7).text());
+  const latestChange = $elem.children().eq(7).text();
 
   const onClickStr = $elem.find(".buttonlink > a").attr("onclick") || "";
   const idMatch = onClickStr.match(/_([0-9]+)/);
@@ -32,15 +32,4 @@ export function getMessageInformation($elem: cheerio.Cheerio) {
   } else {
     return null;
   }
-}
-
-function formatLatestChange(latestChange: string) {
-  return latestChange
-    .replace("ma", "Mandag")
-    .replace("ti", "Tirsdag")
-    .replace("on", "Onsdag")
-    .replace("to", "Torsdag")
-    .replace("fr", "Fredag")
-    .replace("lø", "Lørdag")
-    .replace("sø", "Søndag");
 }
