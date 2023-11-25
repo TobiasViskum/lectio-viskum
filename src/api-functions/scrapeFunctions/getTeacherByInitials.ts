@@ -12,5 +12,5 @@ export async function getTeacherByInitials({ initials }: Props) {
 
   if (foundTeacher) return foundTeacher;
 
-  return undefined;
+  return null;
 }

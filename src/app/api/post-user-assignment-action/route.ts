@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
   const __EVENTVALIDATION = $("#__EVENTVALIDATION").val();
   const masterfootervalue = $("input[name='masterfootervalue']").val();
 
-  if (__EVENTVALIDATION && __EVENTVALIDATION && masterfootervalue) {
+  if (__EVENTVALIDATION && __VIEWSTATEY_KEY && masterfootervalue) {
     const form = getUserActionAssignmentForm(
       __EVENTVALIDATION,
       __VIEWSTATEY_KEY,

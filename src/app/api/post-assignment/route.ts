@@ -72,7 +72,9 @@ export async function POST(req: NextRequest) {
       const __ev = $("#__EVENTVALIDATION").val();
       const __vsk = $("#__VIEWSTATEY_KEY").val();
 
-      return { __EVENTVALIDATION: __ev, __VIEWSTATEY_KEY: __vsk };
+      if (__ev && __vsk)
+        return { __EVENTVALIDATION: __ev, __VIEWSTATEY_KEY: __vsk };
+      return null;
     })
     .catch(() => null);
 

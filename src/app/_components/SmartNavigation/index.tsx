@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { capitalizeFirstLetter } from "@/util/capitalizeFirstLetter";
-import { ArrowLeft, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Fragment } from "react";
@@ -80,7 +80,12 @@ export function SmartNavigation() {
   return (
     <div className="flex items-center gap-x-2 pt-4 text-sm">
       <button
-        onClick={() => router.back()}
+        onClick={() => {
+          // const prevUrl = searchParams.get("prevUrl");
+          // console.log(prevUrl);
+          // router.push(prevUrl)
+          router.back();
+        }}
         className="link flex items-center whitespace-nowrap rounded-md"
       >
         <ChevronLeft className="h-5 w-5" />

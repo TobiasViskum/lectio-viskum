@@ -192,3 +192,19 @@ type Message = Prettify<{
   isFavorite: boolean;
   id: string;
 }>;
+
+type MessageChat = Prettify<{
+  title: string;
+  date: Date;
+  sender: Student | Teacher | string;
+  content: string;
+  attachedFiles: LectioDocument[];
+  edits: Date[];
+}>;
+
+type FullMessage = Prettify<{
+  sender: string;
+  receivers: string;
+  title: string;
+  chat: MessageChat[];
+}>;

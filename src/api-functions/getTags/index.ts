@@ -19,3 +19,9 @@ export function getAllSubjectsTag(schoolCode: string) {
 export function getAllSchoolClassesTag(schoolCode: string) {
   return `all-school-classes:${schoolCode}`;
 }
+export function getMessagesTag(
+  userId: string,
+  type: "favorites" | "newest" | "sent",
+) {
+  return `messages:${type}:${userId}`;
+}

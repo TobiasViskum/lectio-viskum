@@ -1,22 +1,6 @@
 import { getMessagePage } from "@/api-functions/getPage/getMessagePage";
-import { urlify } from "@/util/urlify";
 import { getMessageSender } from "../getMessageSender";
-
-type MessageChat = {
-  title: string;
-  date: Date;
-  sender: Student | Teacher;
-  content: string;
-  attachedFiles: LectioDocument[];
-  edits: Date[];
-};
-
-type FullMessage = {
-  sender: string;
-  receivers: string;
-  title: string;
-  chat: MessageChat[];
-};
+import { getAllTeachers } from "..";
 
 const editRegex =
   /Redigeret af .* ([0-9]{1,2}\/[0-9]{1,2}-[0-9]{4} [0-9]{1,2}:[0-9]{1,2})/;
@@ -30,6 +14,10 @@ export async function getMessage(messageId: string) {
   if (res === "Not authenticated") return res;
   if (res === "Forbidden access") return res;
   if (res === "Invalid school") return res;
+
+  const allTeachers = await getAllTeachers();
+  if (allTeachers === null || typeof allTeachers === "string") return null;
+
   const $ = res.$;
 
   const message: FullMessage = {
@@ -38,12 +26,6 @@ export async function getMessage(messageId: string) {
     title: "",
     chat: [],
   };
-
-  const $div1 = $("#Modtagere > div");
-  const sender = $div1.find("span").text();
-
-  message.sender = sender;
-  message.receivers = $div1.text().replace(sender, "").trim();
 
   const $gridRowMessages = $(
     "#s_m_Content_Content_MessageThreadCtrl_MessagesGV > tbody > tr > td > div#GridRowMessage",
@@ -59,19 +41,22 @@ export async function getMessage(messageId: string) {
 
     const chat: MessageChat = {
       title: "",
-      sender: { imgSrc: "", imgUrl: "", name: "" } as Student | Teacher,
+      sender: "",
       date: new Date(1970),
       content: "",
       edits: [],
       attachedFiles: [],
     };
 
-    const senderName = $senderDiv.find("span").text();
-    const foundSender = await getMessageSender(senderName);
+    const senderName = $senderDiv.find("span").text().trim();
+    const foundSender = allTeachers.find((obj) =>
+      obj.name.includes(senderName.split(" (")[0]),
+    );
+
     if (foundSender) {
       chat.sender = foundSender;
     } else {
-      chat.sender.name = senderName;
+      chat.sender = senderName.replace(/ [0-9]{2}\)/, ")");
     }
 
     getDate($senderDiv, chat);
@@ -108,7 +93,7 @@ export async function getMessage(messageId: string) {
                 .trim()}</button>`,
             );
           } else {
-            $elem.attr("class", "link");
+            $elem.attr("class", "link break-all");
           }
         }
       }
@@ -128,6 +113,23 @@ export async function getMessage(messageId: string) {
 
     message.chat.push(chat);
   }
+
+  const $div1 = $("#Modtagere > div");
+  $div1.find("br").replaceWith(", ");
+  const sender = $(
+    "#s_m_Content_Content_MessageThreadCtrl_MessagesGV > tbody > tr:first-child > td > #GridRowMessage > div:first-child > span",
+  ).text();
+
+  message.sender = sender;
+
+  message.receivers = $div1
+    .text()
+    .replace(sender, "")
+    .replace("\n", ", ")
+    .replace(/^[,\s]+|[,\s]+$/g, "")
+    .replaceAll("Holdet ", "")
+    .replaceAll("Gruppen ", "")
+    .trim();
 
   return message;
 }

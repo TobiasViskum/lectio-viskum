@@ -12,6 +12,7 @@ import { getTeacherByInitials } from "@/api-functions/scrapeFunctions/getTeacher
 import { getNewestMessages } from "./getNewestMessages";
 import { getSentMessages } from "./getSentMessages";
 import { getFavoriteMessages } from "./getFavoriteMessages";
+import { getMessageById } from "./getMessageById";
 
 const lectioAPI = {
   getSchool: getSchool,
@@ -36,7 +37,7 @@ const lectioAPI = {
     newest: getNewestMessages,
     sent: getSentMessages,
     favorites: getFavoriteMessages,
-    // byId: getMessageById
+    byId: getMessageById,
   },
 };
 

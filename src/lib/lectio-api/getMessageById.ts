@@ -1,18 +1,18 @@
-// import "server-only";
-// import { processResult } from "./processResult";
-// import { validateResult } from "./validateResult";
-// import { getMessages } from "@/api-functions/scrapeFunctions/getMessages";
+import "server-only";
+import { processResult } from "./processResult";
+import { validateResult } from "./validateResult";
+import { getMessage } from "@/api-functions/scrapeFunctions/getMessage";
 
-// type MainType = Prettify<Message[]>;
+type MainType = Prettify<FullMessage>;
 
-// export async function getSentMessages() {
-//   const result = await getMessages({ type: "sent" });
-//   const processedResult = processResult<MainType>(result);
+export async function getMessageById(messageId: string) {
+  const result = await getMessage(messageId);
+  const processedResult = processResult<MainType>(result);
 
-//   validateResult(processedResult);
+  validateResult(processedResult);
 
-//   const data =
-//     processedResult.status === "success" ? processedResult.data : null;
+  const data =
+    processedResult.status === "success" ? processedResult.data : null;
 
-//   return data;
-// }
+  return data;
+}

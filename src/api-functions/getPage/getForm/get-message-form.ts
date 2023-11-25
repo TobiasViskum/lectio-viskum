@@ -20,7 +20,7 @@ export function getMessageForm(
   form.append("__SCROLLPOSITIONY", "0");
   form.append("__VIEWSTATEENCRYPTED", "");
   form.append("s$m$searchinputfield", "");
-  form.append("s$m$Content$Content$ListGridSelectionTree$folders", "-30");
+  form.append("s$m$Content$Content$ListGridSelectionTree$folders", "-50");
   form.append("s$m$Content$Content$MarkChkDD", "-1");
   form.append("s$m$Content$Content$SPSearchText$tb", "");
   form.append("masterfootervalue", masterfootervalue);

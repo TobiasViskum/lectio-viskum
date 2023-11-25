@@ -8,8 +8,7 @@ import { getNote } from "./getNote";
 import { getTimeInMs } from "@/util/getTimeInMs";
 import { getTeachers } from "../getSchedule/getTeachers";
 import { getClassInformation } from "../getClassInformation";
-import { getTeacherById } from "..";
-import { getTeacherByInitials } from "../getTeacherByInitials";
+import { getAllTeachers } from "..";
 import { getTime } from "../getSchedule/getTime";
 
 type Props = { lessonId: string; userId: string };
@@ -46,6 +45,8 @@ export async function getLessonInformation({ lessonId, userId }: Props) {
     classes: [],
     classrooms: [],
   };
+  const allTeachers = await getAllTeachers();
+  if (allTeachers === null || typeof allTeachers === "string") return null;
 
   const $infoDiv = $("a.s2skemabrik.lec-context-menu-instance");
   const info = $infoDiv.attr("data-additionalinfo");
@@ -62,8 +63,8 @@ export async function getLessonInformation({ lessonId, userId }: Props) {
 
     for (let i = 0; i < additionalInfo.teachers.length; i++) {
       const initials = additionalInfo.teachers[i].initials;
-      const foundTeacher = await getTeacherByInitials({ initials: initials });
-      if (foundTeacher && typeof foundTeacher !== "string") {
+      const foundTeacher = allTeachers.find((obj) => obj.initials === initials);
+      if (foundTeacher) {
         additionalInfo.teachers[i] = foundTeacher;
       }
     }
@@ -80,8 +81,8 @@ export async function getLessonInformation({ lessonId, userId }: Props) {
       "",
     );
 
-    const foundTeacher = await getTeacherById({ teacherId: teacherId });
-    if (foundTeacher && typeof foundTeacher !== "string") {
+    const foundTeacher = allTeachers.find((obj) => obj.teacherId === teacherId);
+    if (foundTeacher) {
       const existingIndex = additionalInfo.teachers.findIndex((t) => {
         return (
           t.initials.toLocaleLowerCase() ===

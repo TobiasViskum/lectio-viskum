@@ -101,6 +101,7 @@ export async function getStudentById({ userId }: Props) {
       data: data,
       expires: new Date().getTime() + getTimeInMs({ days: 1 }),
     });
+    await client.hSet("usernames", name, studentId);
   }
 
   if (client) await client.quit();
