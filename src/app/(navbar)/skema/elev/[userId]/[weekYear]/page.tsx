@@ -46,9 +46,8 @@ export default function SchedulePage({ params }: Props) {
 
   return (
     <ScheduleProvider>
-      <Suspense>
-        <SmartNavigation />
-      </Suspense>
+      <SmartNavigation />
+
       <div id="schedule-main" className="w-full">
         <H2 className="pt-2 font-extrabold">
           Uge {searchParamsObj.week}, {searchParamsObj.year}

@@ -79,6 +79,7 @@ export async function getLessonInformation({ lessonId, userId }: Props) {
       "T",
       "",
     );
+
     const foundTeacher = await getTeacherById({ teacherId: teacherId });
     if (foundTeacher && typeof foundTeacher !== "string") {
       const existingIndex = additionalInfo.teachers.findIndex((t) => {

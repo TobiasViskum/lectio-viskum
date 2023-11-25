@@ -8,15 +8,29 @@ export function getTeachers(info: string): Teacher[] {
     const teachers = info.substring(i + offset, i + strLength);
     if (teachers.includes("(") && teachers.includes(")")) {
       const split = teachers.split(" (");
-      return [{ name: split[0], initials: split[1].replace(")", ""), teacherId: "", imgUrl: "", imgSrc: "" }];
+      return [
+        {
+          name: split[0],
+          initials: split[1].replace(")", ""),
+          teacherId: "",
+          imgUrl: "",
+          imgSrc: "",
+        },
+      ];
     } else {
       const split = teachers.split(", ");
       let nTeachers: Teacher[] = [];
       split.forEach((str) => {
-        nTeachers.push({ name: "", initials: str, teacherId: "", imgSrc: "", imgUrl: "" });
+        nTeachers.push({
+          name: "",
+          initials: str,
+          teacherId: "",
+          imgSrc: "",
+          imgUrl: "",
+        });
       });
       return nTeachers;
     }
   }
-  return [{ name: "", initials: "", teacherId: "", imgSrc: "", imgUrl: "" }];
+  return [];
 }

@@ -9,6 +9,9 @@ import { getAssignmentByHref } from "./getAssignmentById";
 import { getLessonById } from "./getLesson";
 import { getTeacherById } from "@/api-functions/scrapeFunctions";
 import { getTeacherByInitials } from "@/api-functions/scrapeFunctions/getTeacherByInitials";
+import { getNewestMessages } from "./getNewestMessages";
+import { getSentMessages } from "./getSentMessages";
+import { getFavoriteMessages } from "./getFavoriteMessages";
 
 const lectioAPI = {
   getSchool: getSchool,
@@ -29,6 +32,12 @@ const lectioAPI = {
   //   byId: getTeacherById,
   //   byInitials: getTeacherByInitials,
   // },
+  getMessage: {
+    newest: getNewestMessages,
+    sent: getSentMessages,
+    favorites: getFavoriteMessages,
+    // byId: getMessageById
+  },
 };
 
 export { lectioAPI };

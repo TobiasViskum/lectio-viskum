@@ -15,9 +15,8 @@ export function SidebarWrapper({ children, component }: Props) {
         </div>
       </div>
       <div className="flex flex-col gap-y-6">
-        <Suspense>
-          <SmartNavigation />
-        </Suspense>
+        <SmartNavigation />
+
         {children}
       </div>
     </div>

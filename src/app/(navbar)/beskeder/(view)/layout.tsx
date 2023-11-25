@@ -24,12 +24,15 @@ export default function MessagesLayout({ children }: { children: ReactNode }) {
               Nyeste
               <ChevronRight className="min-h-[20px] min-w-[20px]" />
             </Link>
-            <Link href="/beskeder/alle" className="link flex items-center">
-              Alle
+            <Link href="/beskeder/sendte" className="link flex items-center">
+              Sendte
               <ChevronRight className="min-h-[20px] min-w-[20px]" />
             </Link>
-            <Link href="/beskeder/ulaeste" className="link flex items-center">
-              Ulæste
+            <Link
+              href="/beskeder/favoritter"
+              className="link flex items-center"
+            >
+              Favoritter
               <ChevronRight className="min-h-[20px] min-w-[20px]" />
             </Link>
           </div>
