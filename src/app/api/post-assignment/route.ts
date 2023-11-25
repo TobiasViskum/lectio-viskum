@@ -112,6 +112,7 @@ export async function POST(req: NextRequest) {
           return { __EVENTVALIDATION: __ev, __VIEWSTATEY_KEY: __vsk };
         })
         .catch(() => null);
+
       if (v2 !== null) {
         const finalResult = await fetch(url2, {
           headers: { Cookie: getLastAuthenticatedCookie() },

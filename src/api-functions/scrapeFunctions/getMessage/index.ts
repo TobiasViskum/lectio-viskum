@@ -1,6 +1,6 @@
 import { getMessagePage } from "@/api-functions/getPage/getMessagePage";
-import { getStudentById, getTeacherById } from "..";
 import { urlify } from "@/util/urlify";
+import { getMessageSender } from "../getMessageSender";
 
 type MessageChat = {
   title: string;
@@ -66,7 +66,13 @@ export async function getMessage(messageId: string) {
       attachedFiles: [],
     };
 
-    await getSender($senderDiv, chat);
+    const senderName = $senderDiv.find("span").text();
+    const foundSender = await getMessageSender(senderName);
+    if (foundSender) {
+      chat.sender = foundSender;
+    } else {
+      chat.sender.name = senderName;
+    }
 
     getDate($senderDiv, chat);
 
@@ -75,7 +81,9 @@ export async function getMessage(messageId: string) {
     );
 
     const title = $messageDiv
-      .find(".message-replysum-header-menu > div:first-child > div")
+      .find(
+        ".message-replysum-header-menu > div:first-child > .message-thread-message-header",
+      )
       .text()
       .trim();
     if (i === 0) message.title = title;
@@ -100,8 +108,7 @@ export async function getMessage(messageId: string) {
                 .trim()}</button>`,
             );
           } else {
-            const newLink = urlify(href);
-            $elem.replaceWith(newLink);
+            $elem.attr("class", "link");
           }
         }
       }
@@ -125,29 +132,6 @@ export async function getMessage(messageId: string) {
   return message;
 }
 
-async function getSender($senderDiv: cheerio.Cheerio, chat: MessageChat) {
-  let senderId = (
-    $senderDiv.find("span").attr("data-lectiocontextcard") || ""
-  ).replace("U", "");
-  if (!isNaN(Number(senderId))) {
-    senderId = (Number(senderId) - 1).toString();
-  }
-
-  if (senderId) {
-    const foundTeacher = await getTeacherById({ teacherId: senderId });
-
-    if (foundTeacher === null || typeof foundTeacher === "string") {
-      const foundStudent = await getStudentById({ userId: senderId });
-      if (foundStudent !== null && typeof foundStudent !== "string") {
-        chat.sender = foundStudent;
-      }
-    } else {
-      chat.sender = foundTeacher;
-    }
-  } else {
-    chat.sender.name = $senderDiv.find("span").text().trim();
-  }
-}
 async function getDate($senderDiv: cheerio.Cheerio, chat: MessageChat) {
   const dateMatch = $senderDiv.text().match(dateRegex);
   if (dateMatch) {
