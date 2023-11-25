@@ -25,15 +25,15 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
     const foundCache = (await client.json.get(tag)) as RedisCache<Week[]>;
 
     if (foundCache && new Date().getTime() < foundCache.expires) {
-      // await client.quit();
-      // for (let week of foundCache.data) {
-      //   week.date = new Date(week.date);
-      //   for (let lesson of week.lessons) {
-      //     lesson.time.startDate = new Date(lesson.time.startDate);
-      //     lesson.time.endDate = new Date(lesson.time.endDate);
-      //   }
-      // }
-      // return foundCache.data;
+      await client.quit();
+      for (let week of foundCache.data) {
+        week.date = new Date(week.date);
+        for (let lesson of week.lessons) {
+          lesson.time.startDate = new Date(lesson.time.startDate);
+          lesson.time.endDate = new Date(lesson.time.endDate);
+        }
+      }
+      return foundCache.data;
     }
   }
 
