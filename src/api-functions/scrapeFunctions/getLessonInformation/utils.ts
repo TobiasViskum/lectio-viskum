@@ -161,6 +161,7 @@ async function setDescription($article: cheerio.Cheerio, $: cheerio.Root) {
               }">${$elem.text().trim()}</button>`,
             );
           }
+          continue;
         }
         if (attr === "width") continue;
         if (attr === "height") continue;
