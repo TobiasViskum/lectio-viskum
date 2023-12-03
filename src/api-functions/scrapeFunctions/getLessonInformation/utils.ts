@@ -93,7 +93,7 @@ async function setDescription($article: cheerio.Cheerio, $: cheerio.Root) {
     h5: "",
     h6: "",
     p: "text-foreground",
-    a: "text-link hover:underline cursor-pointer",
+    a: "text-link hover:underline cursor-pointer text-left",
     ul: "pl-12 list-disc",
     ol: "pl-12 list-decimal",
     table: "text-xs",
