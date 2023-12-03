@@ -6,27 +6,25 @@ import { getRedisClient } from "@/lib/get-redis-client";
 import { load } from "cheerio";
 import { NextRequest, NextResponse } from "next/server";
 
-function getFirstForm(fileData: any, ev: string, vsk: string) {
+function getFirstForm(fileData: any, folder: string, ev: string, vsk: string) {
   let formData = new FormData();
-
-  formData.append("__VIEWSTATEENCRYPTED", "");
-  formData.append("__EVENTVALIDATION", ev);
   formData.append("time", "0");
   formData.append("__LASTFOCUS", "");
-  formData.append("__VIEWSTATEX", "");
-  formData.append("ctl00$Content$selectContentHiddenArg", "");
-  formData.append("__VIEWSTATEY_KEY", vsk);
-  formData.append("ctl00$Content$unittestInjectFileHidden", "");
-  formData.append("LectioPostbackId", "");
   formData.append("__EVENTTARGET", "ctl00$Content$newfileOK");
-  formData.append("ctl00$Content$fileUpload", "1");
-  formData.append("ctl00$Content$saveHomeworkHidden", "");
-  formData.append("__SCROLLPOSITION", "");
-  formData.append("__VIEWSTATE", "");
   formData.append("__EVENTARGUMENT", "");
-
+  formData.append("__SCROLLPOSITION", "");
+  formData.append("__VIEWSTATEY_KEY", vsk);
+  formData.append("__VIEWSTATEX", "");
+  formData.append("__VIEWSTATE", "");
+  formData.append("__VIEWSTATEENCRYPTED", "");
+  formData.append("__EVENTVALIDATION", ev);
+  formData.append("ctl00$Content$saveHomeworkHidden", "");
+  formData.append("ctl00$Content$unittestInjectFileHidden", "");
+  formData.append("ctl00$Content$FolderTreeView2$folders", folder);
+  formData.append("ctl00$Content$selectContentHiddenArg", "");
+  formData.append("ctl00$Content$fileUpload", "1");
   formData.append("ctl00$Content$fileUpload_up", fileData, fileData.name);
-
+  formData.append("LectioPostbackId", "");
   return formData;
 }
 function getSecondForm(arg: string, ev: string, vsk: string) {
@@ -58,7 +56,7 @@ export async function POST(req: NextRequest) {
   const schoolCode = lectioProps.schoolCode;
   const userId = lectioProps.userId;
   const year = new Date().getFullYear();
-  const url1 = `https://www.lectio.dk/lectio/${schoolCode}/documentchoosercontent.aspx?year=${year}&ispublic=1&showcheckbox=0&mode=pickfile`;
+  const url1 = `https://www.lectio.dk/lectio/${schoolCode}/documentchoosercontent.aspx?year=${year}&ispublic=0&showcheckbox=0&mode=pickfile`;
   const url2 = `https://www.lectio.dk/lectio/${schoolCode}/ElevAflevering.aspx?elevid=${userId}&exerciseid=${assignmentId}`;
 
   const textContent = await fetch(url1, {
@@ -71,9 +69,14 @@ export async function POST(req: NextRequest) {
       const $ = load(text);
       const __ev = $("#__EVENTVALIDATION").val();
       const __vsk = $("#__VIEWSTATEY_KEY").val();
+      const folder = $("#ctl00_Content_FolderTreeView2_folders").val();
 
       if (__ev && __vsk)
-        return { __EVENTVALIDATION: __ev, __VIEWSTATEY_KEY: __vsk };
+        return {
+          __EVENTVALIDATION: __ev,
+          __VIEWSTATEY_KEY: __vsk,
+          folder: folder,
+        };
       return null;
     })
     .catch(() => null);
@@ -85,6 +88,7 @@ export async function POST(req: NextRequest) {
       ...standardFetchOptions,
       body: getFirstForm(
         fileData,
+        textContent.folder,
         textContent.__EVENTVALIDATION,
         textContent.__VIEWSTATEY_KEY,
       ),
