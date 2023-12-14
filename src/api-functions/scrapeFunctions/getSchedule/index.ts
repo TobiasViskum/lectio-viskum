@@ -122,7 +122,7 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
       for (let j = 0; j < $containers.length; j++) {
         const container = $containers[j];
         const $container = $(container);
-        const $lessons = $container.find("a[data-additionalinfo]");
+        const $lessons = $container.find("a[data-tooltip]");
 
         const lessons: Lesson[] = [];
 
@@ -178,7 +178,7 @@ export async function getSchedule({ week, year, teacherId, studentId }: Props) {
 
           const idRegex = /absid=([0-9]+)/i;
           const idMath = href.match(idRegex);
-          const info = $elem.attr("data-additionalinfo");
+          const info = $elem.attr("data-tooltip");
           let status: LessonStatus = "normal";
           if (idMath && info) {
             status = info.includes("Ændret!")
