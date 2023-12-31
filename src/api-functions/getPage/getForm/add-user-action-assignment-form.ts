@@ -15,9 +15,9 @@ export function getUserActionAssignmentForm(
   form.append("__EVENTARGUMENT", deleteIndex ? `DEL$${deleteIndex}` : "");
   form.append("__LASTFOCUS", "");
   form.append("__SCROLLPOSITION", "");
-  form.append("__VIEWSTATEX", "");
+  form.append("__VIEWSTATEX", deleteIndex ? "" : __VIEWSTATE);
   form.append("__VIEWSTATEY_KEY", deleteIndex ? __VIEWSTATE : "");
-  form.append("__VIEWSTATE", deleteIndex ? "" : __VIEWSTATE);
+  form.append("__VIEWSTATE", "");
   form.append("__VIEWSTATEENCRYPTED", "");
   form.append("__EVENTVALIDATION", __EVENTVALIDATION);
   form.append("s$m$searchinputfield", "");
