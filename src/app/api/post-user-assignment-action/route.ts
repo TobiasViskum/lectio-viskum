@@ -36,14 +36,20 @@ export async function POST(req: NextRequest) {
   }
   const $ = res.$;
   const fetchCookie = res.fetchCookie;
-  const __VIEWSTATEY_KEY = $("#__VIEWSTATEY_KEY").val();
+  let __VIEWSTATE: string | null = null;
+  if (deleteIndex) {
+    __VIEWSTATE = $("#__VIEWSTATEY_KEY").val();
+  } else {
+    __VIEWSTATE = $("#__VIEWSTATEX").val();
+  }
+
   const __EVENTVALIDATION = $("#__EVENTVALIDATION").val();
   const masterfootervalue = $("input[name='masterfootervalue']").val();
 
-  if (__EVENTVALIDATION && __VIEWSTATEY_KEY && masterfootervalue) {
+  if (__EVENTVALIDATION && __VIEWSTATE && masterfootervalue) {
     const form = getUserActionAssignmentForm(
       __EVENTVALIDATION,
-      __VIEWSTATEY_KEY,
+      __VIEWSTATE,
       masterfootervalue,
       newUserId,
       deleteIndex,
