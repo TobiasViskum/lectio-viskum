@@ -49,7 +49,7 @@ export async function getLessonInformation({ lessonId, userId }: Props) {
   if (allTeachers === null || typeof allTeachers === "string") return null;
 
   const $infoDiv = $("a.s2skemabrik.lec-context-menu-instance");
-  const info = $infoDiv.attr("data-additionalinfo");
+  const info = $infoDiv.attr("data-tooltip");
   if (info) {
     additionalInfo.title = getTitle(info);
     additionalInfo.classrooms = getClassroom(info);

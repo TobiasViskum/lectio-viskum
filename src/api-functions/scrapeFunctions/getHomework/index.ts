@@ -34,7 +34,7 @@ export async function getHomework() {
     const tr = $trs[i];
     const $tr = $(tr);
     const $lesson = $tr.find("td:nth-child(2) > a");
-    const info = $lesson.attr("data-additionalinfo") || "";
+    const info = $lesson.attr("data-tooltip") || "";
     const splitInfo = info.split("\n");
     for (let j = 0; j < splitInfo.length; j++) {
       const infoText = splitInfo[j];
