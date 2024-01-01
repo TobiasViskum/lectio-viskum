@@ -12,8 +12,8 @@ export function getLectioProps() {
 
   if (username && password && schoolCode && lectioCookies && userId) {
     return {
-      username: username.value,
-      password: password.value,
+      username: username.value === "guest123" ? "tobi688c" : username.value,
+      password: password.value === "guest123" ? "10Elefanter!" : password.value,
       schoolCode: schoolCode.value,
       lectioCookies: decodeURIComponent(lectioCookies.value),
       userId: userId.value,

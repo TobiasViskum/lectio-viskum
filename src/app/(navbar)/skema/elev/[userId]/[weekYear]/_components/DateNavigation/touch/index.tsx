@@ -3,13 +3,11 @@
 import TooltipHover from "@/components/global/TooltipHover";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { ScheduleContext } from "../../../schedule-context";
-import { cn } from "@/lib/utils";
 
 export function DateNavigationTouch() {
   const context = useContext(ScheduleContext);
-  const [day, setDay] = useState(0);
 
   function handleClick(action: "forwards" | "backwards") {
     context.changeDay(action);

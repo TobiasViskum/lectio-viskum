@@ -8,9 +8,12 @@ import { getWeekStartEnd } from "@/util/getWeekStartEnd";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { useContext } from "react";
+import { ScheduleContext } from "../../../schedule-context";
 
 type Props = { searchParamsObj: { week: string; year: string } };
 export function DateNavigationPc({ searchParamsObj }: Props) {
+  const context = useContext(ScheduleContext);
   const params = useParams();
   const userId = params.userId;
   const router = useRouter();
@@ -80,14 +83,9 @@ export function DateNavigationPc({ searchParamsObj }: Props) {
         />
       </button>
       <div className="flex h-2/3 w-72 items-center justify-between rounded-md border bg-background">
-        <Link
-          href={`/skema/elev/${userId}/${Number(searchParamsObj.week) - 1}-${
-            searchParamsObj.year
-          }`}
-          className="pr-6"
-        >
+        <button onClick={() => context.changeDay("backwards")} className="pr-6">
           <ChevronLeft className="h-6 w-6 text-muted-foreground" />
-        </Link>
+        </button>
 
         <DatePicker
           onChange={(e) => {
@@ -111,14 +109,9 @@ export function DateNavigationPc({ searchParamsObj }: Props) {
             {start} - {end}
           </button>
         </DatePicker>
-        <Link
-          href={`/skema/elev/${userId}/${Number(searchParamsObj.week) + 1}-${
-            searchParamsObj.year
-          }`}
-          className="pl-6"
-        >
+        <button onClick={() => context.changeDay("forwards")} className="pl-6">
           <ChevronRight className="h-6 w-6 text-muted-foreground" />
-        </Link>
+        </button>
       </div>
     </div>
   );
