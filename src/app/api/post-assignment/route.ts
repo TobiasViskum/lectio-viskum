@@ -27,23 +27,24 @@ function getFirstForm(fileData: any, folder: string, ev: string, vsk: string) {
   formData.append("LectioPostbackId", "");
   return formData;
 }
-function getSecondForm(arg: string, ev: string, vsk: string) {
+function getSecondForm(arg: string, ev: string, vsk: string, vsk2: string) {
   let form = new FormData();
-  form.append("__EVENTTARGET", "m$Content$choosedocument");
-  form.append("__LASTFOCUS", "");
-  form.append("masterfootervalue", "X1!ÆØÅ");
   form.append("time", "0");
-  form.append("m$Content$choosedocument$selectedDocumentId", arg);
+  form.append("__EVENTTARGET", "m$Content$choosedocument");
   form.append("__EVENTARGUMENT", "documentId");
-  form.append("__VIEWSTATEX", "");
-  form.append("m$Content$CommentsTB$tb", "");
-  form.append("s$m$searchinputfield", "");
-  form.append("__VIEWSTATE", "");
-  form.append("__EVENTVALIDATION", ev);
-  form.append("__VIEWSTATEENCRYPTED", "");
-  form.append("LectioPostbackId", "");
+  form.append("__LASTFOCUS", "");
   form.append("__SCROLLPOSITION", "");
-  form.append("__VIEWSTATEY_KEY", vsk);
+  form.append("__VIEWSTATEX", vsk);
+  form.append("__VIEWSTATEY_KEY", vsk2);
+  form.append("__VIEWSTATE", "");
+  form.append("__VIEWSTATEENCRYPTED", "");
+  form.append("__EVENTVALIDATION", ev);
+  form.append("s$m$searchinputfield", "");
+  form.append("m$Content$CommentsTB$tb", "");
+  form.append("m$Content$choosedocument$selectedDocumentId", arg);
+
+  form.append("masterfootervalue", "X1!ÆØÅ");
+  form.append("LectioPostbackId", "");
   return form;
 }
 
@@ -55,9 +56,33 @@ export async function POST(req: NextRequest) {
   const lectioProps = getLectioProps();
   const schoolCode = lectioProps.schoolCode;
   const userId = lectioProps.userId;
-  const year = new Date().getFullYear();
-  const url1 = `https://www.lectio.dk/lectio/${schoolCode}/documentchoosercontent.aspx?year=${year}&ispublic=0&showcheckbox=0&mode=pickfile`;
+  let year = new Date().getFullYear();
+  let form2Info = {
+    __EVENTVALIDATION: "",
+    __VIEWSTATEY_KEY: "",
+    __VIEWSTATEX: "",
+  };
+
   const url2 = `https://www.lectio.dk/lectio/${schoolCode}/ElevAflevering.aspx?elevid=${userId}&exerciseid=${assignmentId}`;
+
+  await fetch(url2, {
+    headers: { Cookie: getLastAuthenticatedCookie() },
+    method: "GET",
+    ...standardFetchOptions,
+  })
+    .then(async (r) => {
+      const text = await r.text();
+      const $ = load(text);
+      form2Info.__VIEWSTATEY_KEY = $("#__VIEWSTATEX").val();
+      form2Info.__EVENTVALIDATION = $("#__EVENTVALIDATION").val();
+      form2Info.__VIEWSTATEY_KEY = $("#__VIEWSTATEY_KEY").val();
+
+      year = Number($("select#m_ChooseTerm_term > option").val());
+      console.log(year);
+    })
+    .catch(() => null);
+
+  const url1 = `https://www.lectio.dk/lectio/${schoolCode}/documentchoosercontent.aspx?year=${year}&ispublic=0&showcheckbox=0&mode=pickfile`;
 
   const textContent = await fetch(url1, {
     headers: { Cookie: getLastAuthenticatedCookie() },
@@ -82,16 +107,18 @@ export async function POST(req: NextRequest) {
     .catch(() => null);
 
   if (textContent !== null && fileData && assignmentId) {
+    const firstForm = getFirstForm(
+      fileData,
+      textContent.folder,
+      textContent.__EVENTVALIDATION,
+      textContent.__VIEWSTATEY_KEY,
+    );
+
     const arg = await fetch(url1, {
       headers: { Cookie: getLastAuthenticatedCookie() },
       method: "POST",
       ...standardFetchOptions,
-      body: getFirstForm(
-        fileData,
-        textContent.folder,
-        textContent.__EVENTVALIDATION,
-        textContent.__VIEWSTATEY_KEY,
-      ),
+      body: firstForm,
     })
       .then(async (r) => {
         const text = await r.text();
@@ -113,18 +140,28 @@ export async function POST(req: NextRequest) {
           const text = await r.text();
           const $ = load(text);
           const __ev = $("#__EVENTVALIDATION").val();
-          const __vsk = $("#__VIEWSTATEY_KEY").val();
 
-          return { __EVENTVALIDATION: __ev, __VIEWSTATEY_KEY: __vsk };
+          return {
+            __EVENTVALIDATION: __ev,
+            __VIEWSTATEY_KEY: form2Info.__VIEWSTATEY_KEY,
+            __VIEWSTATEX: form2Info.__VIEWSTATEX,
+          };
         })
         .catch(() => null);
 
       if (v2 !== null) {
+        const secondForm = getSecondForm(
+          arg,
+          v2.__EVENTVALIDATION,
+          v2.__VIEWSTATEX,
+          v2.__VIEWSTATEY_KEY,
+        );
+
         const finalResult = await fetch(url2, {
           headers: { Cookie: getLastAuthenticatedCookie() },
           method: "POST",
           ...standardFetchOptions,
-          body: getSecondForm(arg, v2.__EVENTVALIDATION, v2.__VIEWSTATEY_KEY),
+          body: secondForm,
         })
           .then(async (r) => {
             const text = await r.text();
