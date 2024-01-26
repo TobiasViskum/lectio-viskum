@@ -11,7 +11,7 @@
     "lint": "next lint",
     "deploy": "pnpm run build && git add . && git commit -m \"Update\" && git push",
     "git-store": "git config --global credential.helper store",
-    "startup": "git stash && git pull origin main --rebase && npm i && npm run build && npm start"
+    "startup": "git pull origin main --rebase && npm i && npm run build && npm start"
   },
   "dependencies": {
     "@mdxeditor/editor": "^1.9.0",
@@ -47,7 +47,7 @@
     "react-dom": "^18",
     "redis": "^4.6.10",
     "server-only": "^0.0.1",
-    "sharp": "^0.32.6",
+    "sharp": "^0.33.2",
     "sonner": "^1.0.3",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
