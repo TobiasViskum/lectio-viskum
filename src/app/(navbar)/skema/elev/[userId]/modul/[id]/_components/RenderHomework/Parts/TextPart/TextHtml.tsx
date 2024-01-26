@@ -12,7 +12,6 @@ export function TextHtml({ content }: { content: LessonText }) {
           content.isTitle
             ? "text-lg text-foreground"
             : "text-sm text-foreground",
-          // content.isBold ? "" : "font-light",
         )}
         style={{ color: content.color }}
       />
@@ -31,11 +30,7 @@ export function TextHtml({ content }: { content: LessonText }) {
       return (
         <button
           data-lectio-href={content.href}
-          className={cn(
-            content.isTitle ? "text-lg" : "text-sm",
-            // content.isBold ? "" : "font-light",
-            "link",
-          )}
+          className={cn(content.isTitle ? "text-lg" : "text-sm", "link")}
           dangerouslySetInnerHTML={{ __html: content.text }}
         />
       );

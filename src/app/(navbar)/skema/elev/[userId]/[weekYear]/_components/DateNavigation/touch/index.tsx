@@ -25,52 +25,6 @@ export function DateNavigationTouch() {
         </Button>
       </TooltipHover>
 
-      {/* {[0, 1, 2, 3, 4].map((num) => {
-        return (
-          <Button
-            onClick={() => setDay(num)}
-            key={num}
-            disableAnimation
-            variant={"secondary"}
-            className={cn(
-              "flex h-12 w-full flex-col bg-primary-foreground text-center",
-            )}
-          >
-            <p
-              className={cn(
-                "text-xs transition-all",
-                day === num
-                  ? "text-blue-400 opacity-100"
-                  : "text-muted-foreground opacity-50",
-              )}
-            >
-              mandag
-            </p>
-            <p
-              className={cn(
-                "hidden font-bold transition-all",
-                day === num ? "text-blue-400 opacity-100" : "opacity-80",
-              )}
-            >
-              {new Intl.DateTimeFormat("da-dk", {
-                day: "2-digit",
-                month: "long",
-              }).format(new Date())}
-            </p>
-            <p
-              className={cn(
-                "font-bold transition-all",
-                day === num ? "text-blue-400 opacity-100" : "opacity-80",
-              )}
-            >
-              {new Intl.DateTimeFormat("da-dk", {
-                day: "2-digit",
-              }).format(new Date())}
-            </p>
-          </Button>
-        );
-      })} */}
-
       <TooltipHover html={<p>{"⌘⇧→"}</p>}>
         <Button
           variant={"outline"}

@@ -1,5 +1,5 @@
 import { H1 } from "@/components/ui/h1";
-import { Fragment } from "react";
+import { Fragment, Suspense } from "react";
 import { Message } from "./Message";
 import { Separator } from "@/components/ui/separator";
 import { H3 } from "@/components/ui/h3";
